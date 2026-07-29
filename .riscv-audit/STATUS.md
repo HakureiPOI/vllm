@@ -21,17 +21,31 @@
 
 ## 发现汇总
 
-### 候选缺陷
+新增候选问题 2 个；跟踪中的已知开放问题 2 个；已知限制或设计问题 1 个。
 
-| 编号 | 标题 | 可信度 | 状态 | 对应调研案例 |
-|---|---|---|---|---|
-| F001 | `vfncvt.f.f.w` / `vfncvtbf16.f.f.w` 缩窄浮点转换使用动态舍入模式 | 高 | 新发现 | 无（#47983 未覆盖） |
-| F002 | `vfcvt_x_f_v_i32` 浮点转整数使用动态舍入模式 | 高 | 待修复 | 案例 B（#47983 OPEN） |
-| F003 | `_riscv_supports_rvv()` `/proc/cpuinfo` fallback 可产生假阳性 | 高 | 待修复 | 案例 A5（#48487 OPEN） |
-| F004 | 交叉编译时 `cat /proc/cpuinfo` 与 `find_isa` 未被守卫 | 中 | 待修复 | 案例 A3 残留 |
-| F005 | BF16 能力检测未迁移到 native probe | 中 | 待修复 | 案例 A BF16（#45243 背景） |
+### 新的候选问题
 
-### 已修复问题（去重记录）
+| 编号 | 标题 | 可信度 | 状态 |
+|---|---|---|---|
+| F001 | FP32→FP16/BF16 缩窄转换未显式固定舍入模式 | 机制高，缺陷结论中 | 需要行为与语义验证 |
+| F004 | RISC-V 交叉编译使用构建主机 /proc/cpuinfo 判断目标 FP16/BF16 能力 | 中高 | 构建链问题较明确，修复设计待完善 |
+
+### 已知且已有开放 PR
+
+| 编号 | 标题 | 上游 PR | 状态 |
+|---|---|---|---|
+| F002 | `vfcvt_x_f_v_i32` 浮点转整数使用动态舍入模式 | #47983 OPEN | `tracked-upstream` `known-open-pr` |
+| F003 | `_riscv_supports_rvv()` `/proc/cpuinfo` fallback 可产生假阳性 | #48487 OPEN | `tracked-upstream` `behavior-reproduced` `known-open-pr` |
+
+### 已知限制或待研究设计问题
+
+| 编号 | 标题 | 分类 |
+|---|---|---|
+| F005 | RISC-V BF16 优化依赖 cpuinfo 或显式 override，内核漏报时默认构建可能无法启用 BF16 优化 | `known limitation` `configuration usability` `performance feature detection` |
+
+详见 `analyses/open-questions/bf16-detection-cpuinfo-override.md`。
+
+### 当前基线已修复或已排除
 
 详见 `analyses/dedup-already-fixed.md`：
 
@@ -46,7 +60,8 @@
 
 ## 下一步
 
-1. 对 F001-F005 进行深度验证（编译/运行测试）
-2. 对证据充分的问题创建 `fix/riscv-xxx` 修复分支
-3. 继续审计 `csrc/cpu/micro_gemm/` 和量化路径
-4. 检查 CI 配置中是否有 RISC-V 覆盖
+1. F001：编写最小独立验证程序，检查编译器是否将非 `_rm` intrinsic 优化为静态 RNE
+2. F004：完善修复设计，区分目标基础架构/可选扩展/本机自动探测三个层次
+3. F002/F003：持续跟踪 #47983 和 #48487 的上游合并状态
+4. 继续审计 `csrc/cpu/micro_gemm/` 和量化路径
+5. 检查 CI 配置中是否有 RISC-V 覆盖

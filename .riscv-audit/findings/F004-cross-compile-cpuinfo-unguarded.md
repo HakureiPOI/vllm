@@ -1,119 +1,208 @@
-# F004: 交叉编译时 `cat /proc/cpuinfo` 与 `find_isa` 未被守卫
+# F004: RISC-V 交叉编译使用构建主机 /proc/cpuinfo 判断目标 FP16/BF16 能力，可能导致 RVV 构建失败或静默退化为标量构建
 
 ## 1. 问题标题
 
-CMake 在交叉编译时无条件执行 `cat /proc/cpuinfo` 并用其结果设置 RISC-V 能力标志，导致构建主机信息污染目标构建。
+CMake 在交叉编译时无条件执行 `cat /proc/cpuinfo` 并用其结果设置 RISC-V FP16/BF16 能力标志，导致构建主机信息污染目标构建配置。
 
 ## 2. 涉及位置
 
 - `cmake/cpu_extension.cmake:60-67` — 无条件 `cat /proc/cpuinfo`（仅 macOS 豁免）
 - `cmake/cpu_extension.cmake:109-110` — `find_isa` 查找 `zvfhmin`/`zvfbfmin`，基于上述 cpuinfo
-- `cmake/cpu_extension.cmake:203-204` — VLEN 自动检测**已**守卫 `CMAKE_CROSSCOMPILING`（#47532 修复）
-
-关键代码：
-
-```cmake
-# 行 60-67：无条件读 /proc/cpuinfo（仅 macOS 豁免）
-if (NOT MACOSX_FOUND)
-    execute_process(COMMAND cat /proc/cpuinfo
-                    RESULT_VARIABLE CPUINFO_RET
-                    OUTPUT_VARIABLE CPUINFO)
-    if (NOT CPUINFO_RET EQUAL 0)
-        message(FATAL_ERROR "Failed to check CPU features via /proc/cpuinfo")
-    endif()
-endif()
-
-# 行 109-110：基于构建主机 cpuinfo 设置 RISC-V 标志
-find_isa(${CPUINFO} "zvfhmin" RVV_FP16_FOUND)
-find_isa(${CPUINFO} "zvfbfmin" RVV_BF16_FOUND)
-
-# 行 203-204：VLEN 检测已守卫（#47532 修复）
-if(CMAKE_CROSSCOMPILING)
-    message(STATUS "Cross-compiling: skipping VLEN auto-detection from /proc/cpuinfo")
-```
+- `cmake/cpu_extension.cmake:19` — `ENABLE_RVV_BF16` 环境变量（BF16 override）
+- `cmake/cpu_extension.cmake:122-128` — BF16 override 逻辑
+- `cmake/cpu_extension.cmake:200-232` — VLEN 自动检测（已守卫 `CMAKE_CROSSCOMPILING`）
+- `cmake/cpu_extension.cmake:234-252` — MARCH_FLAGS 选择逻辑
 
 ## 3. 问题描述
 
-#47532 修复了 VLEN 自动检测的交叉编译问题（行 203-204 加 `CMAKE_CROSSCOMPILING` 守卫），但**未修复**上游的 `cat /proc/cpuinfo`（行 60-67）和 `find_isa` 调用（行 109-110）。
+### 变量传播链
 
-交叉编译时，`CMAKE_SYSTEM_NAME` 反映**目标**系统。若目标为 Linux（riscv64），`MACOSX_FOUND=FALSE`，CMake 在**构建主机**上执行 `cat /proc/cpuinfo`：
+```
+构建主机 /proc/cpuinfo
+  → CPUINFO 变量 (行 62)
+  → find_isa(CPUINFO, "zvfhmin") → RVV_FP16_FOUND (行 109)
+  → find_isa(CPUINFO, "zvfbfmin") → RVV_BF16_FOUND (行 110)
+  → if(RVV_BF16_FOUND) → MARCH_FLAGS = rv64gcv_zvfh_zfbfmin_zvfbfmin_zvl${VLLM_RVV_VLEN}b (行 239-241)
+  → elseif(RVV_FP16_FOUND) → MARCH_FLAGS = rv64gcv_zvfh_zvl${VLLM_RVV_VLEN}b (行 242-244)
+  → else() → MARCH_FLAGS = rv64gc (行 246-247) ← 标量！
+  → list(APPEND CXX_COMPILE_FLAGS ${MARCH_FLAGS}) (行 253)
+  → RVV 优化代码是否被编译取决于 -march 中是否含 v/zvfh/zvfbfmin
+```
 
-- **x86 Linux → riscv64**：`cat /proc/cpuinfo` 成功，返回 x86 cpuinfo。`find_isa("zvfhmin")` / `find_isa("zvfbfmin")` 在 x86 cpuinfo 中找不到 → `RVV_FP16_FOUND=OFF` / `RVV_BF16_FOUND=OFF`。结果"正确但出于偶然"——因为 x86 cpuinfo 不含 RISC-V 字符串，而非因为正确检测了目标能力。
-- **macOS → riscv64**：`cat /proc/cpuinfo` 失败（macOS 无 `/proc/cpuinfo`）→ `FATAL_ERROR`。**构建失败。**
+### 已确认事实
+
+- `cat /proc/cpuinfo`（行 60-67）在 `NOT MACOSX_FOUND` 时无条件执行，不检查 `CMAKE_CROSSCOMPILING`。
+- `find_isa`（行 109-110）使用上述 cpuinfo 结果设置 `RVV_FP16_FOUND` 和 `RVV_BF16_FOUND`。
+- VLEN 自动检测（行 200-232）**已**守卫 `CMAKE_CROSSCOMPILING`（#47532 修复），但 `cat /proc/cpuinfo` 和 `find_isa` **未**守卫。
+- BF16 有 `VLLM_CPU_RVV_BF16` 环境变量 override（行 19, 122-128）。
+- FP16 **无**显式 override 环境变量。
+
+### 场景区分
+
+#### 场景 A：macOS 主机 → riscv64-linux 交叉编译
+
+- `CMAKE_SYSTEM_NAME = "Linux"`（目标系统），`MACOSX_FOUND = FALSE`。
+- `cat /proc/cpuinfo` 在 macOS 上失败（无 `/proc/cpuinfo`）。
+- `CPUINFO_RET != 0` → `FATAL_ERROR "Failed to check CPU features via /proc/cpuinfo"`（行 65）。
+- **后果**：构建失败，无法配置。
+
+#### 场景 B：x86 Linux 主机 → riscv64-linux 交叉编译
+
+- `CMAKE_SYSTEM_NAME = "Linux"`，`MACOSX_FOUND = FALSE`。
+- `cat /proc/cpuinfo` 成功，返回 x86 cpuinfo。
+- `find_isa(CPUINFO, "zvfhmin")` → x86 cpuinfo 中无此字符串 → `RVV_FP16_FOUND = OFF`。
+- `find_isa(CPUINFO, "zvfbfmin")` → x86 cpuinfo 中无此字符串 → `RVV_BF16_FOUND = OFF`。
+- VLEN 自动检测被 `CMAKE_CROSSCOMPILING` 守卫跳过（行 203-204）。
+- 若用户设 `-DVLLM_RVV_VLEN=128`：
+  - `VLLM_RVV_VLEN > 0` → 进入行 234 分支。
+  - `RVV_BF16_FOUND = OFF` → 跳过行 239。
+  - `RVV_FP16_FOUND = OFF` → 跳过行 242。
+  - `else()` → `MARCH_FLAGS = -march=rv64gc`（行 246-247）← **标量！**
+  - 即使设了 `VLLM_RVV_VLEN=128`，仍产出标量 `rv64gc` 构建。
+- 若用户额外设 `VLLM_CPU_RVV_BF16=1`：
+  - `RVV_BF16_FOUND = ON`（行 126）。
+  - `MARCH_FLAGS = rv64gcv_zvfh_zfbfmin_zvfbfmin_zvl128b`（行 241）。
+  - 包含 `zvfh`，FP16 也被启用。
+  - **后果**：BF16 override 同时启用 FP16，构建正确。
+- 若用户只设 `VLLM_RVV_VLEN=128` 但不设 `VLLM_CPU_RVV_BF16=1`：
+  - **后果**：静默退化为标量构建，无 RVV kernel。
+
+#### 场景 C：x86 Linux 主机，用户未设任何 RISC-V 参数
+
+- `VLLM_RVV_VLEN` 未定义，`CMAKE_CROSSCOMPILING` 跳过自动检测。
+- `RVV_FP16_FOUND = OFF`，`RVV_BF16_FOUND = OFF`。
+- 行 226 条件 `NOT DEFINED VLLM_RVV_VLEN AND (RVV_FP16_FOUND OR RVV_BF16_FOUND)` → 两者均 OFF → 不触发 FATAL_ERROR。
+- `VLLM_RVV_VLEN` 未定义 → 行 234 条件 `VLLM_RVV_VLEN AND VLLM_RVV_VLEN GREATER 0` → FALSE。
+- 进入 `else()` → `MARCH_FLAGS = -march=rv64gc`（行 250-251）← 标量。
+- **后果**：静默退化为标量构建，无告警。
+
+### FP16 override 缺失
+
+当前 CMake 中：
+- BF16 有 `VLLM_CPU_RVV_BF16` 环境变量 override（行 19）。
+- FP16 **无**对应的环境变量 override。
+- 用户若只想启用 FP16（不含 BF16），交叉编译时无法通过环境变量实现。
+- BF16 override 会同时启用 FP16（因为 `-march` 包含 `zvfh`），但这不是显式的 FP16 override。
+
+### BF16 override 覆盖范围
+
+`VLLM_CPU_RVV_BF16=1` 在以下场景有效：
+- 场景 B（x86 → riscv64）：可正确启用 BF16+FP16+RVV。
+- 场景 A（macOS → riscv64）：无效，因为 `cat /proc/cpuinfo` 在 override 之前就 FATAL_ERROR。
 
 ## 4. 触发条件
 
-- 交叉编译到 RISC-V（`CMAKE_SYSTEM_PROCESSOR=riscv64`，`CMAKE_CROSSCOMPILING=TRUE`）
-- 构建主机为 macOS：直接 FATAL_ERROR
-- 构建主机为 x86 Linux：`RVV_FP16_FOUND`/`RVV_BF16_FOUND` 被设为 OFF（正确但出于偶然），用户需手动设 `VLLM_CPU_RVV_BF16=1` 和 `VLLM_RVV_VLEN=128/256`
+- 交叉编译到 RISC-V（`CMAKE_SYSTEM_PROCESSOR=riscv64`，`CMAKE_CROSSCOMPILING=TRUE`）。
+- 场景 A（macOS 主机）：直接 FATAL_ERROR。
+- 场景 B/C（x86 Linux 主机）：`RVV_FP16_FOUND`/`RVV_BF16_FOUND` 被设为 OFF，用户需手动设 `VLLM_CPU_RVV_BF16=1` 和 `VLLM_RVV_VLEN=128/256`。
 
 ## 5. 调用链与证据
 
-```
-cmake -DCMAKE_SYSTEM_PROCESSOR=riscv64 ...
-  → execute_process(cat /proc/cpuinfo)     [行 61-63]  ← 构建主机 cpuinfo
-    → macOS: 失败 → FATAL_ERROR           [行 65]
-    → x86: 成功，CPUINFO = x86 cpuinfo
-  → find_isa(CPUINFO, "zvfhmin")          [行 109]    ← 在 x86 cpuinfo 中查找
-    → RVV_FP16_FOUND = OFF
-  → find_isa(CPUINFO, "zvfbfmin")         [行 110]    ← 在 x86 cpuinfo 中查找
-    → RVV_BF16_FOUND = OFF
-  → if(CMAKE_CROSSCOMPILING) skip VLEN    [行 203]    ← #47532 修复，正确跳过
-  → if(NOT DEFINED VLLM_RVV_VLEN AND (RVV_FP16_FOUND OR RVV_BF16_FOUND))  [行 226]
-    → 两者均 OFF，不触发 FATAL_ERROR
-  → scalar build                           [行 249-252]
-```
+见上方"变量传播链"和"场景区分"。
 
 ### #47532 修复范围
 
-#47532（MERGED）仅在行 203 加了 `CMAKE_CROSSCOMPILING` 守卫，**未**守卫行 60-67 和行 109-110。
+#47532（MERGED）仅在行 203 加了 `CMAKE_CROSSCOMPILING` 守卫，**未**守卫行 60-67 和行 109-110。本发现是 #47532 修复的残留部分。
 
 ## 6. 潜在影响
 
-- **macOS 交叉编译失败**：`FATAL_ERROR` 阻断构建。
-- **x86 交叉编译静默降级**：即使目标支持 RVV，也产出 scalar 二进制，用户需手动设环境变量。
+- **macOS 交叉编译失败**：`FATAL_ERROR` 阻断构建配置。
+- **x86 交叉编译静默降级**：即使目标支持 RVV，也产出标量二进制。用户需同时设 `VLLM_RVV_VLEN` 和 `VLLM_CPU_RVV_BF16=1`，且无 FP16-only override。
 - **设计不一致**：VLEN 检测已守卫交叉编译，但能力检测（FP16/BF16）未守卫，同一问题域修复不完整。
 
 ## 7. 去重检查
 
 - **调研文档**：案例 A3（#47532 第②点）记录了交叉编译读构建主机 cpuinfo 的问题。#47532 修复了 VLEN 检测部分，但**未修复** `cat /proc/cpuinfo` 和 `find_isa` 部分。本发现是 A3 的**残留**，非重复。
 - **当前分支**：行 60-67 和 109-110 确认未守卫 `CMAKE_CROSSCOMPILING`。
-- **ARM 同类问题**：`find_isa("asimd")` / `find_isa("bf16")` / `find_isa("i8mm")` 也读同一 CPUINFO，交叉编译到 ARM 同样受影响。本发现聚焦 RISC-V，但修复应一并覆盖 ARM。
+- **ARM 同类问题**：`find_isa("asimd")` / `find_isa("bf16")` / `find_isa("i8mm")` 也读同一 CPUINFO，交叉编译到 ARM 同样受影响。本发现聚焦 RISC-V，但修复设计需考虑跨架构影响。
 
 ## 8. 可信度
 
-**中**。macOS 交叉编译 FATAL_ERROR 路径明确（高可信度）。x86 交叉编译静默降级路径明确但"正确出于偶然"（中可信度）。实际影响取决于用户是否常用 macOS 作为 RISC-V 交叉编译主机。
+```
+中高
+```
+
+macOS 交叉编译 FATAL_ERROR 路径明确（高可信度）。x86 交叉编译静默降级路径的变量传播链完整（高可信度）。实际影响取决于用户是否常用 macOS/x86 作为 RISC-V 交叉编译主机（中可信度）。
 
 ## 9. 验证建议
 
 1. 在 macOS 上配置 RISC-V 交叉编译工具链，运行 `cmake -DCMAKE_SYSTEM_PROCESSOR=riscv64 ...`，确认是否 FATAL_ERROR。
-2. 在 x86 Linux 上交叉编译，检查 `RVV_FP16_FOUND`/`RVV_BF16_FOUND` 是否为 OFF。
-3. 检查 vLLM CI 是否有 macOS 交叉编译 RISC-V 的用例（预计无）。
+2. 在 x86 Linux 上交叉编译，设 `-DVLLM_RVV_VLEN=128` 但不设 `VLLM_CPU_RVV_BF16=1`，检查 `MARCH_FLAGS` 是否为 `rv64gc`（标量）。
+3. 在 x86 Linux 上交叉编译，同时设 `-DVLLM_RVV_VLEN=128` 和 `VLLM_CPU_RVV_BF16=1`，检查 `MARCH_FLAGS` 是否为 `rv64gcv_zvfh_zfbfmin_zvfbfmin_zvl128b`。
 
 ## 10. 修复思路
 
-在 `cat /proc/cpuinfo` 和 `find_isa` 调用前加 `CMAKE_CROSSCOMPILING` 守卫：
+### 设计约束
+
+不得简单将所有 `find_isa()` 放入 `if(NOT CMAKE_CROSSCOMPILING)`，因为 ARM、PowerPC、S390 的架构分支选择也依赖这些变量。全部设为 OFF 可能导致交叉编译直接落入"不支持的 CPU backend"（行 255 FATAL_ERROR）。
+
+修复设计应区分三个层次：
+
+### 层次 1：目标基础架构识别
+
+通过 `CMAKE_SYSTEM_PROCESSOR` 识别目标基础架构（`riscv64`、`aarch64`、`x86_64` 等）。这是已有逻辑，不受交叉编译影响。
+
+### 层次 2：目标可选扩展配置
+
+交叉编译时，用户需通过以下方式之一显式声明目标扩展能力：
+
+#### 方案 A：增加显式 CMake 参数
 
 ```cmake
-if (NOT MACOSX_FOUND AND NOT CMAKE_CROSSCOMPILING)
-    execute_process(COMMAND cat /proc/cpuinfo ...)
-    ...
-endif()
-
-# find_isa 调用也应在非交叉编译时执行
-if (NOT CMAKE_CROSSCOMPILING)
-    find_isa(${CPUINFO} "zvfhmin" RVV_FP16_FOUND)
-    find_isa(${CPUINFO} "zvfbfmin" RVV_BF16_FOUND)
-    find_isa(${CPUINFO} "asimd" ASIMD_FOUND)
-    # ... 其他 find_isa 调用
+set(VLLM_RVV_FP16 $ENV{VLLM_CPU_RVV_FP16})
+set(VLLM_RVV_BF16 $ENV{VLLM_CPU_RVV_BF16})  # 已有
+# 交叉编译时，find_isa 跳过，用户通过环境变量指定
+if(CMAKE_CROSSCOMPILING)
+    if(VLLM_RVV_FP16) set(RVV_FP16_FOUND ON) endif()
+    if(VLLM_RVV_BF16) set(RVV_BF16_FOUND ON) endif()
 endif()
 ```
 
-交叉编译时，所有 `*_FOUND` 变量保持 OFF，用户通过环境变量（`VLLM_CPU_RVV_BF16` 等）显式指定。
+优点：与现有 `VLLM_CPU_RVV_BF16` 模式一致，用户熟悉。
+缺点：需为每个扩展添加独立参数，扩展数量多时不便。
 
-### 修复范围
+#### 方案 B：允许显式提供完整目标 -march
 
-- 改动文件：`cmake/cpu_extension.cmake`
-- 改动行数：约 10-15 行（加守卫 + 调整缩进）
-- 影响所有架构的交叉编译路径（ARM/PowerPC/S390X 同样受益）
-- 可补充 CI 测试（若有 macOS 交叉编译环境）
+```cmake
+set(VLLM_RVV_MARCH $ENV{VLLM_CPU_RVV_MARCH})
+if(VLLM_RVV_MARCH)
+    set(MARCH_FLAGS -march=${VLLM_RVV_MARCH} -mabi=lp64d)
+endif()
+```
+
+优点：用户可一次性指定完整 `-march`（如 `rv64gcv_zvfh_zvfbfmin_zvl128b`），无需逐个扩展配置。
+缺点：用户需了解目标 `-march` 字符串的完整语法。
+
+#### 方案 C：交叉编译时禁止宿主机探测，要求显式声明
+
+```cmake
+if(CMAKE_CROSSCOMPILING)
+    # 不读 /proc/cpuinfo，不调用 find_isa
+    # 要求用户通过 VLLM_RVV_VLEN + VLLM_CPU_RVV_BF16 或 VLLM_RVV_MARCH 显式指定
+    if(NOT DEFINED VLLM_RVV_VLEN AND NOT VLLM_RVV_MARCH)
+        message(FATAL_ERROR "Cross-compiling requires explicit VLLM_RVV_VLEN or VLLM_RVV_MARCH")
+    endif()
+else()
+    # 本机构建：自动探测
+    execute_process(COMMAND cat /proc/cpuinfo ...)
+    find_isa(...)
+endif()
+```
+
+优点：强制用户显式声明，避免静默降级。
+缺点：用户体验略差，但交叉编译本就需显式配置。
+
+### 推荐
+
+方案 C 最安全（强制显式声明，无静默降级），可结合方案 A（添加 `VLLM_CPU_RVV_FP16`）或方案 B（添加 `VLLM_RVV_MARCH`）提供配置接口。
+
+### 与 ARM/PowerPC/S390 的关系
+
+修复应区分：
+- `CMAKE_SYSTEM_PROCESSOR`（目标基础架构，不受交叉编译影响）→ 用于选择架构分支（行 131-256）。
+- `find_isa` 结果（目标可选扩展，交叉编译时不应读宿主机）→ 用于设置 `*_FOUND` 变量。
+- 交叉编译时，`*_FOUND` 变量应通过显式参数设置，而非 `find_isa`。
+
+ARM 的 `find_isa("asimd")` / `find_isa("bf16")` / `find_isa("i8mm")` 同样应受 `CMAKE_CROSSCOMPILING` 守卫，但 ARM 已有 `VLLM_CPU_ARM_BF16` / `VLLM_CPU_ARM_I8MM` override（行 113-121）。RISC-V 的 FP16 缺少对应 override。
+
+本轮只完善设计，不实现修复。

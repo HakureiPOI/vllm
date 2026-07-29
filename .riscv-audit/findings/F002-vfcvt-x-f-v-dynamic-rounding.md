@@ -1,8 +1,12 @@
 # F002: `vfcvt_x_f_v_i32` 浮点转整数使用动态舍入模式
 
+> **状态**：`tracked-upstream` `known-open-pr`
+>
+> 本发现不是本轮新增候选缺陷。#47983（OPEN）已完整覆盖此问题，本文件用于持续跟踪当前基线中问题是否仍存在。
+
 ## 1. 问题标题
 
-RVV 浮点转整数（FP32→INT32）使用非 `_rm` intrinsic 形式，结果依赖 `fcsr.frm` 动态舍入模式。
+RVV 浮点转整数（FP32→INT32）使用非 `_rm` intrinsic 形式，舍入模式依赖 `fcsr.frm`。
 
 ## 2. 涉及位置
 
@@ -10,23 +14,11 @@ RVV 浮点转整数（FP32→INT32）使用非 `_rm` intrinsic 形式，结果�
 - `csrc/cpu/cpu_types_riscv_impl.hpp:787` — `FP32Vec16::exp()` 中 `vfcvt_x_f_v_i32`
 - `csrc/cpu/cpu_types_riscv_impl.hpp:886` — `INT8Vec16::INT8Vec16(const FP32Vec16&)` 中 `vfcvt_x_f_v_i32`
 
-关键代码：
-
-```cpp
-// 行 521 (FP32Vec8::exp)
-fixed_i32x8_t n_int =
-    RVVI(__riscv_vfcvt_x_f_v_i32, LMUL_256)(x_scaled, VEC_ELEM_NUM);
-// 行 787 (FP32Vec16::exp)
-fixed_i32x16_t n_int =
-    RVVI(__riscv_vfcvt_x_f_v_i32, LMUL_512)(x_scaled, VEC_ELEM_NUM);
-// 行 886 (INT8Vec16 构造)
-auto i32_vec =
-    RVVI(__riscv_vfcvt_x_f_v_i32, LMUL_512)(vec.reg, VEC_ELEM_NUM);
-```
-
 ## 3. 问题描述
 
 `vfcvt.x.f.v` 将 FP32 转为 INT32，需要舍入。非 `_rm` 变体读 `fcsr.frm` 动态舍入模式。若 `frm` 被改变，相同输入得到不同 INT32 结果。
+
+#47983 作者在 Spacemit X100 实测，`frm` 从 RNE 改为其他模式时，42.2% 的 INT8 值发生变化（提交者自报结果，未独立复现）。
 
 ## 4. 触发条件
 
@@ -57,27 +49,23 @@ FP32 计算结果 → INT8Vec16(vec)
   → reg = vnclip_wx_i8(i16_vec, 0, __RISCV_VXRM_RNU)        // 行 889，显式整数舍入
 ```
 
-注意：`vnclip` 已使用显式 `__RISCV_VXRM_RNU`，但上游 `vfcvt_x_f_v_i32` 未使用显式舍入。
+`vnclip` 已使用显式 `__RISCV_VXRM_RNU`，但上游 `vfcvt_x_f_v_i32` 未使用显式舍入。
 
 ### ISA 依据
 
 RISC-V ISA Manual：`vfcvt.x.f.v` 的舍入由 `frm` 字段决定。
 
-### 提交者报告（#47983）
-
-#47983 作者在 Spacemit X100 实测，`frm` 从 RNE 改为其他模式时，42.2% 的 INT8 值发生变化（提交者自报，未独立复现）。
-
 ## 6. 潜在影响
 
-- **exp() 非确定性**：`frm` 非 RNE 时，`x * inv_ln2` 的整数舍入不同，导致 exp 多项式分解不同，最终结果微小偏差。
+- **exp() 非确定性**：`frm` 非 RNE 时，`x * inv_ln2` 的整数舍入不同，导致 exp 多项式分解不同。
 - **INT8 量化非确定性**：`frm` 非 RNE 时，FP32→INT32 舍入不同，影响 INT8 量化输出。
 - **可复现性**：结果依赖调用历史，难以调试。
 
 ## 7. 去重检查
 
-- **调研文档**：案例 B（#47983）完整覆盖此问题。
+- **上游 PR**：#47983（OPEN）完整覆盖此问题，包含提交者实测数据。
 - **当前分支**：3 处 `vfcvt_x_f_v_i32` 确认存在，#47983 未合并。
-- **F001 关系**：F001 覆盖 `vfncvt`（FP32→FP16/BF16），本发现覆盖 `vfcvt_x_f_v_i32`（FP32→INT32），两者是 #47983 的补集与本体。
+- **F001 关系**：F001 覆盖 `vfncvt`（FP32→FP16/BF16），本发现覆盖 `vfcvt_x_f_v_i32`（FP32→INT32），两者是不同转换类型。
 
 ## 8. 可信度
 
@@ -85,10 +73,10 @@ RISC-V ISA Manual：`vfcvt.x.f.v` 的舍入由 `frm` 字段决定。
 
 ## 9. 验证建议
 
-见 F001 验证建议。额外：在 Spacemit X100 上用 `fesetround` 改变 `frm`，跑 INT8 量化模型对比输出。
+见 #47983 PR 描述。提交者已在 Spacemit X100 上验证。
 
 ## 10. 修复思路
 
 #47983 已提出修复：将 3 处 `vfcvt_x_f_v_i32` 改为 `_rm` 变体，传入 `__RISCV_FRM_RNE`。
 
-建议将 F001（4 处 `vfncvt`）与本发现（3 处 `vfcvt_x_f_v_i32`）合并为一个 PR，共 7 处修改，根因相同，修复方式一致。
+本文件仅跟踪上游 PR 状态，不提出独立修复方案。
