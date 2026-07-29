@@ -1,4 +1,6 @@
-# F004: RISC-V 交叉编译使用构建主机 /proc/cpuinfo 判断目标 FP16/BF16 能力，可能导致 RVV 构建失败或用户显式请求的 RVV 构建生成标量二进制
+# F004: RISC-V 交叉编译使用构建主机 /proc/cpuinfo 判断目标 FP16/BF16 能力，可能导致 RVV 配置失败或用户显式请求的 RVV 配置生成标量编译命令
+
+> 状态：场景 B `confirmed`（仅配置阶段）；场景 A `not tested`；正式修复尚未设计。
 
 ## 1. 问题标题
 
@@ -41,12 +43,16 @@ CMake 在交叉编译时无条件执行 `cat /proc/cpuinfo` 并用其结果设�
 
 #### 场景 A：macOS 主机 → riscv64-linux 交叉编译
 
+**动态状态：not tested。** 以下结果来自静态变量传播分析。
+
 - `CMAKE_SYSTEM_NAME = "Linux"`（目标系统），`MACOSX_FOUND = FALSE`。
 - `cat /proc/cpuinfo` 在 macOS 上失败（无 `/proc/cpuinfo`）。
 - `CPUINFO_RET != 0` → `FATAL_ERROR "Failed to check CPU features via /proc/cpuinfo"`（行 65）。
 - **后果**：构建失败，无法配置。
 
 #### 场景 B：x86 Linux 主机 → riscv64-linux 交叉编译
+
+**动态状态：confirmed（配置阶段）。**
 
 - `CMAKE_SYSTEM_NAME = "Linux"`，`MACOSX_FOUND = FALSE`。
 - `cat /proc/cpuinfo` 成功，返回 x86 cpuinfo。
@@ -58,14 +64,14 @@ CMake 在交叉编译时无条件执行 `cat /proc/cpuinfo` 并用其结果设�
   - `RVV_BF16_FOUND = OFF` → 跳过行 239。
   - `RVV_FP16_FOUND = OFF` → 跳过行 242。
   - `else()` → `MARCH_FLAGS = -march=rv64gc`（行 246-247）← **标量！**
-  - 即使设了 `VLLM_RVV_VLEN=128`，仍产出标量 `rv64gc` 构建。
+  - 即使设了 `VLLM_RVV_VLEN=128`，vLLM `_C` 目标仍生成使用 `-march=rv64gc` 的编译命令。
 - 若用户额外设 `VLLM_CPU_RVV_BF16=1`：
   - `RVV_BF16_FOUND = ON`（行 126）。
   - `MARCH_FLAGS = rv64gcv_zvfh_zfbfmin_zvfbfmin_zvl128b`（行 241）。
   - 包含 `zvfh`，FP16 也被启用。
-  - **后果**：静态分析表明该 override 应绕过宿主机 cpuinfo 的 BF16 假阴性，按照变量传播链应选择包含 `v`、`zvfh`、`zvfbfmin` 和目标 VLEN 的 `MARCH_FLAGS`，但实际构建结果仍需交叉编译验证。
+  - **动态观察**：该 override 将 `RVV_BF16_FOUND` 设为 ON；vLLM `_C` 和 `dnnl_ext` 生成包含 `v`、`zvfh`、`zvfbfmin` 和 VLEN=128 的编译命令。
 - 若用户只设 `VLLM_RVV_VLEN=128` 但不设 `VLLM_CPU_RVV_BF16=1`：
-  - **后果**：用户显式请求了 RVV（`VLLM_RVV_VLEN=128`）但仍生成标量 `rv64gc` 二进制，无 RVV kernel。
+  - **动态观察**：用户显式请求了 RVV（`VLLM_RVV_VLEN=128`），但 vLLM `_C` 目标仍生成 `-march=rv64gc` 编译命令。未实际编译或检查目标二进制。
 
 #### 场景 C：未声明目标扩展能力时的标量默认行为
 
@@ -92,7 +98,7 @@ CMake 在交叉编译时无条件执行 `cat /proc/cpuinfo` 并用其结果设�
 ### BF16 override 覆盖范围
 
 `VLLM_CPU_RVV_BF16=1` 在以下场景有效：
-- 场景 B（x86 → riscv64）：静态分析表明应选择包含 `v`、`zvfh`、`zvfbfmin` 和目标 VLEN 的 `MARCH_FLAGS`，但实际构建结果仍需交叉编译验证。
+- 场景 B（x86 → riscv64）：配置阶段已动态确认会选择包含 `v`、`zvfh`、`zvfbfmin` 和 VLEN=128 的 `MARCH_FLAGS`。
 - 场景 A（macOS → riscv64）：无效，因为 `cat /proc/cpuinfo` 在 override 之前就 FATAL_ERROR。
 
 ## 4. 触发条件
@@ -112,7 +118,7 @@ CMake 在交叉编译时无条件执行 `cat /proc/cpuinfo` 并用其结果设�
 ## 6. 潜在影响
 
 - **macOS 宿主机交叉编译可能在配置阶段失败**：`FATAL_ERROR` 阻断构建配置。
-- **用户已显式设置 `VLLM_RVV_VLEN` 时，FP16/BF16 能力仍被宿主机 cpuinfo 错误决定**：最终可能生成 `rv64gc` 标量构建，即使用户已请求 RVV。
+- **用户已显式设置 `VLLM_RVV_VLEN` 时，FP16/BF16 能力仍被宿主机 cpuinfo 错误决定**：场景 B 已观察到 vLLM `_C` 生成 `-march=rv64gc` 编译命令，即使用户已请求 RVV。
 - **目标基础架构、目标可选扩展和宿主机自动探测没有被清晰分层**：VLEN 检测已守卫交叉编译，但能力检测（FP16/BF16）未守卫，同一问题域修复不完整。
 
 用户未声明任何目标 RVV 能力而得到标量构建的情况，不属于核心缺陷影响，最多属于配置可用性问题（缺少告警或说明）。
@@ -127,20 +133,47 @@ CMake 在交叉编译时无条件执行 `cat /proc/cpuinfo` 并用其结果设�
 
 ```
 变量传播链可信度：高
-实际构建复现可信度：中
+x86 Linux → riscv64 配置复现可信度：高
+完整编译与目标运行：未验证
+macOS 场景 A：未验证
 ```
 
 **变量传播链可信度（高）**：源码变量传播链已经明确，`cat /proc/cpuinfo` → `find_isa` → `RVV_FP16_FOUND`/`RVV_BF16_FOUND` → `MARCH_FLAGS` 选择路径可从源码直接追踪。
 
-**实际构建复现可信度（中）**：macOS 和 x86 Linux 的实际 CMake 配置结果仍需真实交叉编译环境验证；在实际 vLLM 构建入口中，还需确认是否有上层参数或 toolchain 配置提前覆盖这些变量。
+**x86 Linux → riscv64 配置复现可信度（高）**：真实 vLLM CMake 入口记录了 host/target/cross-compiling 状态、能力变量和 VLEN，并由 target-attributed `compile_commands.json` 证明 `_C`/`dnnl_ext` 的生成命令。该结论不扩展到实际编译、链接、目标运行或性能。
 
-## 9. 验证建议
+## 9. 动态验证证据
 
-1. 在 macOS 上配置 RISC-V 交叉编译工具链，运行 `cmake -DCMAKE_SYSTEM_PROCESSOR=riscv64 ...`，确认是否 FATAL_ERROR。
-2. 在 x86 Linux 上交叉编译，设 `-DVLLM_RVV_VLEN=128` 但不设 `VLLM_CPU_RVV_BF16=1`，检查 `MARCH_FLAGS` 是否为 `rv64gc`（标量）。
-3. 在 x86 Linux 上交叉编译，同时设 `-DVLLM_RVV_VLEN=128` 和 `VLLM_CPU_RVV_BF16=1`，检查 `MARCH_FLAGS` 是否为 `rv64gcv_zvfh_zfbfmin_zvfbfmin_zvl128b`。
+- 验证目录：`.riscv-audit/validation/F004-cross-compile/`
+  （[README](../validation/F004-cross-compile/README.md) / [REPORT](../validation/F004-cross-compile/REPORT.md)）
+- 第一版证据提交：`16659b79de18595dcf17072dfc3486fb948f2a73`
+- 整改后证据提交：`594917a9a9ba082bae1431fbd6b2bd96771dfd4b`
+- 第一轮结果：`results/20260729T074037Z`
 
-## 10. 修复思路
+核心动态观察：
+
+- T1：x86_64 host、riscv64 target、`CMAKE_CROSSCOMPILING=TRUE`、`VLLM_RVV_VLEN=128`、FP16/BF16 均为 OFF；12 条 vLLM `_C` 命令均使用 `-march=rv64gc`。
+- T2：唯一影响配置语义的输入差异为 `VLLM_CPU_RVV_BF16=1`；14 条 `_C` 和 1 条 `dnnl_ext` 命令均使用 `-march=rv64gcv_zvfh_zfbfmin_zvfbfmin_zvl128b -mrvv-vector-bits=zvl -mabi=lp64d`。
+- T2 中另有 170 条 oneDNN 或其子构建命令使用 `-march=rv64gc`；这些命令不属于 vLLM `_C`/`dnnl_ext`，原因未在本轮分析，不纳入 F004 结论。
+- T3 的完整日志记录了预期 VLEN `FATAL_ERROR`。
+
+限制：
+
+- 仅验证配置生成阶段；
+- 未执行真实编译、链接或目标运行；
+- 未生成或检查目标二进制；
+- 未验证性能影响；
+- 未验证 VLEN=256；
+- 未验证 macOS 场景 A；
+- 未验证所有 RISC-V 交叉编译环境。
+
+## 10. 后续验证建议
+
+1. 在 macOS 上配置 RISC-V 交叉编译工具链，确认场景 A 是否在 `/proc/cpuinfo` 检查处失败。
+2. 最小编译一个 `_C` 对象，验证配置生成的 T1/T2 flags 能被交叉编译器实际执行。
+3. 单独验证 VLEN=256；不得从本次 VLEN=128 结果外推。
+
+## 11. 修复思路
 
 ### 设计约束
 
@@ -264,7 +297,7 @@ endif()
 
 ### 推荐
 
-方案 C 最安全（强制显式声明，避免用户显式请求 RVV 后仍生成标量二进制），可结合方案 A（添加 `VLLM_CPU_RVV_FP16`）或方案 B（添加 `VLLM_RVV_MARCH`）提供配置接口。
+方案 C 最安全（强制显式声明，避免用户显式请求 RVV 后仍生成标量编译命令），可结合方案 A（添加 `VLLM_CPU_RVV_FP16`）或方案 B（添加 `VLLM_RVV_MARCH`）提供配置接口。
 
 ### 与 ARM/PowerPC/S390 的关系
 
@@ -275,4 +308,4 @@ endif()
 
 ARM 的 `find_isa("asimd")` / `find_isa("bf16")` / `find_isa("i8mm")` 同样应受 `CMAKE_CROSSCOMPILING` 守卫，但 ARM 已有 `VLLM_CPU_ARM_BF16` / `VLLM_CPU_ARM_I8MM` override（行 113-121）。RISC-V 的 FP16 缺少对应 override。
 
-本轮只完善设计，不实现修复。
+正式修复设计尚未收口；本次状态更新不实现修复。
