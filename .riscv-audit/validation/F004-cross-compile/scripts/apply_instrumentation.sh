@@ -1,73 +1,88 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
-# F004 cross-compile validation: apply log-only instrumentation to cmake/cpu_extension.cmake
-# Does NOT modify any logic, only adds message() calls.
+EXPECTED_REPOSITORY='HakureiPOI/vllm'
+EXPECTED_BASE_COMMIT='57f327ef9c827788c85c0a69c0cf86e446ff27ae'
+EXPECTED_INSTRUMENTED_BLOB='766edb26ee5e29d5b16bd63d25b3d2ed5b1a0aa7'
+EXPECTED_MARKER_COUNT=13
+TARGET_REL='cmake/cpu_extension.cmake'
 
-ROOT="$(cd "$(dirname "$0")/../../../.." && pwd)"
-CMAKE_FILE="$ROOT/cmake/cpu_extension.cmake"
-PATCH_FILE="$ROOT/.riscv-audit/validation/F004-cross-compile/instrumentation/f004-log-only.patch"
+SCRIPT_DIR="$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
+VALIDATION="$ROOT/.riscv-audit/validation/F004-cross-compile"
+PATCH="$VALIDATION/instrumentation/f004-log-only.patch"
+TARGET="$ROOT/$TARGET_REL"
 
-cd "$ROOT"
+ORIGIN="$(git -C "$ROOT" remote get-url origin)"
+if [[ ! "$ORIGIN" =~ (^|[:/])${EXPECTED_REPOSITORY}(\.git)?$ ]]; then
+    echo "unexpected origin: $ORIGIN" >&2
+    exit 1
+fi
 
-# Create a backup
-cp cmake/cpu_extension.cmake cmake/cpu_extension.cmake.bak
+EXPECTED_BLOB="$(
+    git -C "$ROOT" rev-parse "$EXPECTED_BASE_COMMIT:$TARGET_REL"
+)"
+CURRENT_BLOB="$(git -C "$ROOT" hash-object "$TARGET_REL")"
 
-# Insert instrumentation messages at strategic points
-# 1. After the cat /proc/cpuinfo block (after line 67, before find_isa)
-# 2. After the override block (after line 128, before arch detection)
-# 3. After MARCH_FLAGS final selection (after line 253)
+if grep -Fq '[F004] Instrumentation:' "$TARGET"; then
+    echo "instrumentation already applied" >&2
+    exit 1
+fi
 
-python3 -c "
-import re
+if [[ "$CURRENT_BLOB" != "$EXPECTED_BLOB" ]]; then
+    echo "target blob does not match the validated baseline" >&2
+    echo "expected: $EXPECTED_BLOB" >&2
+    echo "current:  $CURRENT_BLOB" >&2
+    exit 1
+fi
 
-with open('cmake/cpu_extension.cmake', 'r') as f:
-    content = f.read()
+if awk '
+    /^--- / { next }
+    /^-/ { exit 1 }
+' "$PATCH"; then
+    :
+else
+    echo "instrumentation patch removes source lines" >&2
+    exit 1
+fi
 
-# Insert point 1: after the cat /proc/cpuinfo block, before find_isa
-# Find the line with 'find_isa(\${CPUINFO} \"Power11\"' and insert before it
-marker1 = 'find_isa(\${CPUINFO} \"Power11\" POWER11_FOUND)'
-inst1 = '''# [F004] Instrumentation: host/target info and cpuinfo status
-message(STATUS \"[F004] CMAKE_CROSSCOMPILING=\${CMAKE_CROSSCOMPILING}\")
-message(STATUS \"[F004] CMAKE_HOST_SYSTEM_NAME=\${CMAKE_HOST_SYSTEM_NAME}\")
-message(STATUS \"[F004] CMAKE_HOST_SYSTEM_PROCESSOR=\${CMAKE_HOST_SYSTEM_PROCESSOR}\")
-message(STATUS \"[F004] CMAKE_SYSTEM_NAME=\${CMAKE_SYSTEM_NAME}\")
-message(STATUS \"[F004] CMAKE_SYSTEM_PROCESSOR=\${CMAKE_SYSTEM_PROCESSOR}\")
-message(STATUS \"[F004] CPUINFO_RET=\${CPUINFO_RET}\")
-message(STATUS \"[F004] MACOSX_FOUND=\${MACOSX_FOUND}\")
+if awk '
+    /^\+\+\+ / { next }
+    /^\+/ {
+        line = substr($0, 2)
+        if (line !~ /^[[:space:]]*$/ &&
+            line !~ /^[[:space:]]*#/ &&
+            line !~ /^[[:space:]]*message\(STATUS /) {
+            exit 1
+        }
+    }
+' "$PATCH"; then
+    :
+else
+    echo "instrumentation patch adds non-observational code" >&2
+    exit 1
+fi
 
-'''
-content = content.replace(marker1, inst1 + marker1)
+git -C "$ROOT" apply --unidiff-zero --check "$PATCH"
+git -C "$ROOT" apply --unidiff-zero "$PATCH"
 
-# Insert point 2: after the override block, before arch detection
-# Find 'if (CMAKE_SYSTEM_PROCESSOR MATCHES \"x86_64|amd64\"' and insert before it
-marker2 = 'if (CMAKE_SYSTEM_PROCESSOR MATCHES \"x86_64|amd64\" OR ENABLE_X86_ISA)'
-inst2 = '''# [F004] Instrumentation: capability flags after find_isa and overrides
-message(STATUS \"[F004] RVV_FP16_FOUND=\${RVV_FP16_FOUND}\")
-message(STATUS \"[F004] RVV_BF16_FOUND=\${RVV_BF16_FOUND}\")
-message(STATUS \"[F004] ENABLE_RVV_BF16=\${ENABLE_RVV_BF16}\")
-message(STATUS \"[F004] VLLM_RVV_VLEN=\${VLLM_RVV_VLEN}\")
+INSTRUMENTED_BLOB="$(git -C "$ROOT" hash-object "$TARGET_REL")"
+if [[ "$INSTRUMENTED_BLOB" != "$EXPECTED_INSTRUMENTED_BLOB" ]]; then
+    echo "applied patch produced an unexpected target blob" >&2
+    exit 1
+fi
 
-'''
-content = content.replace(marker2, inst2 + marker2)
+MARKER_COUNT="$(grep -Fc 'message(STATUS "[F004]' "$TARGET")"
+if [[ "$MARKER_COUNT" -ne "$EXPECTED_MARKER_COUNT" ]]; then
+    echo "unexpected instrumentation marker count: $MARKER_COUNT" >&2
+    exit 1
+fi
 
-# Insert point 3: after MARCH_FLAGS is set, before the else() FATAL_ERROR
-# Find 'message(FATAL_ERROR \"vLLM CPU backend requires' and insert before it
-marker3 = 'message(FATAL_ERROR \"vLLM CPU backend requires'
-inst3 = '''# [F004] Instrumentation: final MARCH_FLAGS
-message(STATUS \"[F004] MARCH_FLAGS=\${MARCH_FLAGS}\")
-message(STATUS \"[F004] CXX_COMPILE_FLAGS=\${CXX_COMPILE_FLAGS}\")
+git -C "$ROOT" apply --unidiff-zero --check -R "$PATCH"
+git -C "$ROOT" diff --check -- "$TARGET_REL"
 
-'''
-content = content.replace(marker3, inst3 + marker3)
-
-with open('cmake/cpu_extension.cmake', 'w') as f:
-    f.write(content)
-
-print('Instrumentation applied successfully.')
-"
-
-# Generate the patch
-git diff -- cmake/cpu_extension.cmake > "$PATCH_FILE"
-
-echo "Patch saved to: $PATCH_FILE"
+echo "instrumentation applied"
+echo "repository: $ROOT"
+echo "origin: $ORIGIN"
+echo "baseline blob: $EXPECTED_BLOB"
+echo "instrumented blob: $INSTRUMENTED_BLOB"

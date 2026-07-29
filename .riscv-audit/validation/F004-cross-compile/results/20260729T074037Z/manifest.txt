@@ -1,0 +1,55 @@
+results_directory=/root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z
+manifest_utc=2026-07-29T09:19:55Z
+git_commit=16659b79de18595dcf17072dfc3486fb948f2a73
+experiment_source_commit=57f327ef9c827788c85c0a69c0cf86e446ff27ae
+source_blob=64df94e947d44da6dd67dd4cd5c90589e215b8b2
+instrumentation_patch_sha256=58bc3c8ac4143e94efc9d18bfffd55bdbdb86dbfd4c68a05057ebf8df0302cf9
+toolchain_sha256=18d8afaa5b7c31f71e89297b3d64dbab307ba1bdf62d2b24b7e3530719388f8b
+run_matrix_sha256=1934d5b6ed244d3aa04eacf5352ce18f59e0f80c451e0bd70862dd1a505af89e
+python=/root/work/vllm-f004-validation/../.venv-vllm-f004/bin/python
+python_version=Python 3.12.3
+python_executable=/root/work/.venv-vllm-f004/bin/python
+torch_version=2.13.0+cpu
+torch_cmake_prefix=/root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/share/cmake
+cmake_version=cmake version 3.28.3
+cxx_compiler_version=riscv64-linux-gnu-g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+artifact_sha256:
+aca6e582784f821d0f4089b60c09a18d48f4922d767345035f11f54288282e62  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T0-scalar/cmake-cache-selected.txt
+d4b888f88075b928cb5574b49d5d32fb71197cacbb8186bee956ad958a1a3da4  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T0-scalar/CMakeCache.txt
+0893bf964bf654479c3cead0ada45bef421d7313ac39dddf87ad1196150587f3  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T0-scalar/compile_commands.json
+ceeadf8c2487bdc96b06e9d6933b429a0f3717819421ba166be9e67310c0a5b8  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T0-scalar/configure.log
+1b4fd328db079421bb62a39baecc10366f9796717f2dcc94f51cad875869e0c5  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T0-scalar/dependency-target-march.tsv
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T0-scalar/exit_code.txt
+f2a2e1b2f413ce39b9ce106bcbc9f5426ad3f2b7b011a32f24b37169c3ecf3b2  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T0-scalar/f004-messages.txt
+81a68ec0345c59835f2d0189fb80934c4f65a9c8fb90fd2eb9c03182388cd4e5  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T0-scalar/march-summary-attributed.txt
+de36708f684f8cccad2ae02f1c0febc942941dfcaa9296c569e729e152ebce39  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T0-scalar/march-values.txt
+1e2312a521ccdad8dc93ed20a41a99f4fba1a191c3d29febcd4d88e671d4bc07  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T0-scalar/vllm-target-march.tsv
+8b96431959d3b52e0977ba95875061f8e5365e5e5f2dbbce2abf516749e60b2a  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T1-vlen128/cmake-cache-selected.txt
+25b6788ddb56ce6bdc4976bbcee5f9e0009044b946dacf034061490a75d361e3  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T1-vlen128/CMakeCache.txt
+149be0369a7d5b85265f2fed273498132493fb37300c6e2b75851a90ea7eb52a  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T1-vlen128/compile_commands.json
+af11c0629648bb38264d5266c2e089f7a060997901f30ca065e1582c32ca8457  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T1-vlen128/configure.log
+1b4fd328db079421bb62a39baecc10366f9796717f2dcc94f51cad875869e0c5  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T1-vlen128/dependency-target-march.tsv
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T1-vlen128/exit_code.txt
+deb38c58abe1377824403327ee7ea2fabb30ed986a72e556eb0073079affbd4d  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T1-vlen128/f004-messages.txt
+81a68ec0345c59835f2d0189fb80934c4f65a9c8fb90fd2eb9c03182388cd4e5  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T1-vlen128/march-summary-attributed.txt
+de36708f684f8cccad2ae02f1c0febc942941dfcaa9296c569e729e152ebce39  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T1-vlen128/march-values.txt
+e605f42f29097587bf28d57c70fc04a9006509c675b3d7617d5c0802dc565ba9  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T1-vlen128/vllm-target-march.tsv
+8b96431959d3b52e0977ba95875061f8e5365e5e5f2dbbce2abf516749e60b2a  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T2-vlen128-bf16/cmake-cache-selected.txt
+f587db92f999e546b8038bd6f6d71287e400bba294d6a00aaf8719763c79450f  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T2-vlen128-bf16/CMakeCache.txt
+7ae05a0a192faf03016b9615f29497f9f0f86dcb4dc06f14400e1887f00e7688  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T2-vlen128-bf16/compile_commands.json
+e373aa4ffb6c091b238abfb36e50ba8407e8dffe0d154850e27ba7fc310e9f0d  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T2-vlen128-bf16/configure.log
+5d7aff49a5fbf58b086aa3c69e6bb97f17e84db674545194ab0d47b75be218db  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T2-vlen128-bf16/dependency-target-march.tsv
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T2-vlen128-bf16/exit_code.txt
+6ff51f07aa222da1635c2680da9f5df6273d3b941096cb43cfdca40e2cd6daf5  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T2-vlen128-bf16/f004-messages.txt
+0cb1f5a25a5368ca49e6b0073cd77f0951dfe5f42977b0d2c002abdcd96a5396  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T2-vlen128-bf16/march-summary-attributed.txt
+9a5a3265e257377e9a7e7d69d2874537acae9c0d54e5c49f823cac15cc69e64f  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T2-vlen128-bf16/march-values.txt
+84b4300a06bac14faa3774e188c93699ff558b6dc9b0ba7f3437cc314e66c031  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T2-vlen128-bf16/vllm-target-march.tsv
+0f0c529462f95f883f787d2ca9feeb9daae120b53e77662ac728b83a32bb9c8e  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T3-bf16-no-vlen/cmake-cache-selected.txt
+bba55c70f49f67ad92ad05e54550412218d6c5ad187cd081711c517e9c35e714  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T3-bf16-no-vlen/CMakeCache.txt
+61b7994570886b1ec9dd1cb20bbe64dd0e966950e1755deee4dd24940dcd2b50  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T3-bf16-no-vlen/configure.log
+1b4fd328db079421bb62a39baecc10366f9796717f2dcc94f51cad875869e0c5  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T3-bf16-no-vlen/dependency-target-march.tsv
+4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T3-bf16-no-vlen/exit_code.txt
+e96ca4c92350195332c03f10a46fa35723e33a44ac2afe89484b2dec3eb42435  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T3-bf16-no-vlen/f004-messages.txt
+dc55096e4de639c6e74477913c51641b5377b4df442e4e341ac060361f5861e0  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T3-bf16-no-vlen/march-summary-attributed.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T3-bf16-no-vlen/march-values.txt
+1b4fd328db079421bb62a39baecc10366f9796717f2dcc94f51cad875869e0c5  /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T3-bf16-no-vlen/vllm-target-march.tsv

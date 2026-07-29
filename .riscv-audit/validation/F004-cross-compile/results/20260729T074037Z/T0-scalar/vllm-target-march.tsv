@@ -1,0 +1,13 @@
+test	target	source_file	output	compiler	march	other_riscv_flags
+T0-scalar	_C	/root/work/vllm-f004-validation/csrc/cpu/sgl-kernels/gemm_int4.cpp	CMakeFiles/_C.dir/csrc/cpu/sgl-kernels/gemm_int4.cpp.o	/usr/bin/riscv64-linux-gnu-g++	-march=rv64gc	-
+T0-scalar	_C	/root/work/vllm-f004-validation/csrc/cpu/activation.cpp	CMakeFiles/_C.dir/csrc/cpu/activation.cpp.o	/usr/bin/riscv64-linux-gnu-g++	-march=rv64gc	-
+T0-scalar	_C	/root/work/vllm-f004-validation/csrc/cpu/sgl-kernels/fla.cpp	CMakeFiles/_C.dir/csrc/cpu/sgl-kernels/fla.cpp.o	/usr/bin/riscv64-linux-gnu-g++	-march=rv64gc	-
+T0-scalar	_C	/root/work/vllm-f004-validation/csrc/cpu/utils.cpp	CMakeFiles/_C.dir/csrc/cpu/utils.cpp.o	/usr/bin/riscv64-linux-gnu-g++	-march=rv64gc	-
+T0-scalar	_C	/root/work/vllm-f004-validation/csrc/cpu/spec_decode_utils.cpp	CMakeFiles/_C.dir/csrc/cpu/spec_decode_utils.cpp.o	/usr/bin/riscv64-linux-gnu-g++	-march=rv64gc	-
+T0-scalar	_C	/root/work/vllm-f004-validation/csrc/cpu/layernorm.cpp	CMakeFiles/_C.dir/csrc/cpu/layernorm.cpp.o	/usr/bin/riscv64-linux-gnu-g++	-march=rv64gc	-
+T0-scalar	_C	/root/work/vllm-f004-validation/csrc/cpu/mla_decode.cpp	CMakeFiles/_C.dir/csrc/cpu/mla_decode.cpp.o	/usr/bin/riscv64-linux-gnu-g++	-march=rv64gc	-
+T0-scalar	_C	/root/work/vllm-f004-validation/csrc/cpu/pos_encoding.cpp	CMakeFiles/_C.dir/csrc/cpu/pos_encoding.cpp.o	/usr/bin/riscv64-linux-gnu-g++	-march=rv64gc	-
+T0-scalar	_C	/root/work/vllm-f004-validation/csrc/cpu/mamba_cpu.cpp	CMakeFiles/_C.dir/csrc/cpu/mamba_cpu.cpp.o	/usr/bin/riscv64-linux-gnu-g++	-march=rv64gc	-
+T0-scalar	_C	/root/work/vllm-f004-validation/csrc/moe/dynamic_4bit_int_moe_cpu.cpp	CMakeFiles/_C.dir/csrc/moe/dynamic_4bit_int_moe_cpu.cpp.o	/usr/bin/riscv64-linux-gnu-g++	-march=rv64gc	-
+T0-scalar	_C	/root/work/vllm-f004-validation/csrc/cpu/cpu_attn.cpp	CMakeFiles/_C.dir/csrc/cpu/cpu_attn.cpp.o	/usr/bin/riscv64-linux-gnu-g++	-march=rv64gc	-
+T0-scalar	_C	/root/work/vllm-f004-validation/csrc/cpu/torch_bindings.cpp	CMakeFiles/_C.dir/csrc/cpu/torch_bindings.cpp.o	/usr/bin/riscv64-linux-gnu-g++	-march=rv64gc	-

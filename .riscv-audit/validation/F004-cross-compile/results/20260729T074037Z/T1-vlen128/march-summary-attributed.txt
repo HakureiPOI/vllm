@@ -1,0 +1,3 @@
+# Summary only; use the target-attributed TSV files as evidence.
+category	target	march	other_riscv_flags
+vllm	_C	-march=rv64gc	-

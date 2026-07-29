@@ -1,0 +1,38 @@
+F004 evidence remediation metadata
+Collected UTC: 2026-07-29T08:54:09Z to 2026-07-29T09:10:50Z
+Host: aliyun validation host, x86_64 Linux
+
+Experiment source baseline / experiment HEAD:
+57f327ef9c827788c85c0a69c0cf86e446ff27ae
+
+First evidence commit:
+16659b79de18595dcf17072dfc3486fb948f2a73
+
+Validated source blob (cmake/cpu_extension.cmake):
+64df94e947d44da6dd67dd4cd5c90589e215b8b2
+
+Python executable used by the recorded CMake caches:
+/root/work/.venv-vllm-f004/bin/python
+Python 3.12.3
+
+PyTorch:
+2.13.0+cpu
+torch CMake prefix:
+/root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/share/cmake
+
+CMake: 3.28.3
+Ninja: 1.11.1
+Cross C compiler: riscv64-linux-gnu-gcc 13.3.0
+Cross C++ compiler: riscv64-linux-gnu-g++ 13.3.0
+
+Original configure.log recovery:
+- All four logs remained in results/20260729T074037Z on the validation host.
+- Their result paths, F004 messages, exit outcomes, and generated build paths
+  match the committed cache, compile database, and exit-code artifacts.
+- The original tracked artifacts were unchanged; only the missing logs and new
+  remediation-derived evidence were added.
+- A credential-pattern scan of the result directory returned no matches.
+
+The absolute /root/work paths identify the original experiment layout. They
+reduce direct portability but are not credentials and do not affect the
+configuration evidence.

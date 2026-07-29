@@ -1,0 +1,8 @@
+CMAKE_BUILD_TYPE:STRING=Release
+CMAKE_TOOLCHAIN_FILE:FILEPATH=/root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/toolchains/riscv64-linux-gnu.cmake
+Torch_DIR:PATH=/root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/share/cmake/Torch
+VLLM_PYTHON_EXECUTABLE:UNINITIALIZED=/root/work/vllm-f004-validation/../.venv-vllm-f004/bin/python
+VLLM_RVV_VLEN:UNINITIALIZED=0
+VLLM_TARGET_DEVICE:STRING=cpu
+CMAKE_GENERATOR:INTERNAL=Ninja
+CMAKE_HOME_DIRECTORY:INTERNAL=/root/work/vllm-f004-validation

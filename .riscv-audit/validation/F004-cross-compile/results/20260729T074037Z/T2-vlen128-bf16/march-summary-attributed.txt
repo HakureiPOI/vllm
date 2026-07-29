@@ -1,0 +1,7 @@
+# Summary only; use the target-attributed TSV files as evidence.
+category	target	march	other_riscv_flags
+dependency	dnnl_common	-march=rv64gc	-
+dependency	dnnl_cpu	-march=rv64gc	-
+dependency	dnnl_cpu_riscv	-march=rv64gc	-
+vllm	_C	-march=rv64gcv_zvfh_zfbfmin_zvfbfmin_zvl128b	-mabi=lp64d -mrvv-vector-bits=zvl
+vllm	dnnl_ext	-march=rv64gcv_zvfh_zfbfmin_zvfbfmin_zvl128b	-mabi=lp64d -mrvv-vector-bits=zvl

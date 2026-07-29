@@ -1,0 +1,82 @@
+-- The CXX compiler identification is GNU 13.3.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/riscv64-linux-gnu-g++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Build type: Release
+-- Target device: cpu
+-- Found Python: /root/work/vllm-f004-validation/../.venv-vllm-f004/bin/python (found version "3.12.3") found components: Interpreter Development.Module Development.SABIModule 
+-- Found python matching: /root/work/vllm-f004-validation/../.venv-vllm-f004/bin/python.
+CMake Warning at /root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/share/cmake/Torch/TorchConfig.cmake:22 (message):
+  library kineto not found.
+Call Stack (most recent call first):
+  /root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/share/cmake/Torch/TorchConfig.cmake:119 (append_torchlib_if_found)
+  CMakeLists.txt:112 (find_package)
+
+
+-- Found Torch: /root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/lib/libtorch.so  
+-- [F004] CMAKE_CROSSCOMPILING=TRUE
+-- [F004] CMAKE_HOST_SYSTEM_NAME=Linux
+-- [F004] CMAKE_HOST_SYSTEM_PROCESSOR=x86_64
+-- [F004] CMAKE_SYSTEM_NAME=Linux
+-- [F004] CMAKE_SYSTEM_PROCESSOR=riscv64
+-- [F004] CPUINFO_RET=0
+-- [F004] MACOSX_FOUND=
+-- RVV BF16 support enabled via VLLM_CPU_RVV_BF16 environment variable
+-- [F004] RVV_FP16_FOUND=OFF
+-- [F004] RVV_BF16_FOUND=ON
+-- [F004] ENABLE_RVV_BF16=1
+-- [F004] VLLM_RVV_VLEN=128
+-- RISC-V detected
+-- RISC-V RVV VLEN=128
+-- BF16 extension detected
+-- Downloading oneDNN from GitHub
+-- The C compiler identification is GNU 13.3.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/riscv64-linux-gnu-gcc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- DNNL_TARGET_ARCH: RV64
+-- DNNL compat: set DNNL_VERBOSE to ONEDNN_VERBOSE with value `ON`
+-- DNNL compat: set DNNL_ENABLE_MAX_CPU_ISA to ONEDNN_ENABLE_MAX_CPU_ISA with value `ON`
+-- DNNL compat: set DNNL_ENABLE_CPU_ISA_HINTS to ONEDNN_ENABLE_CPU_ISA_HINTS with value `ON`
+-- DNNL compat: set DNNL_BUILD_DOC to ONEDNN_BUILD_DOC with value `OFF`
+-- DNNL compat: set DNNL_BUILD_EXAMPLES to ONEDNN_BUILD_EXAMPLES with value `OFF`
+-- DNNL compat: set DNNL_BUILD_TESTS to ONEDNN_BUILD_TESTS with value `OFF`
+-- DNNL compat: set DNNL_ENABLE_JIT_PROFILING to ONEDNN_ENABLE_JIT_PROFILING with value `ON`
+-- DNNL compat: set DNNL_ENABLE_ITT_TASKS to ONEDNN_ENABLE_ITT_TASKS with value `ON`
+-- DNNL compat: set DNNL_AARCH64_USE_ACL to ONEDNN_AARCH64_USE_ACL with value `OFF`
+-- DNNL compat: set DNNL_LIBRARY_TYPE to ONEDNN_LIBRARY_TYPE with value `STATIC`
+-- DNNL compat: set DNNL_ENABLE_WORKLOAD to ONEDNN_ENABLE_WORKLOAD with value `INFERENCE`
+-- DNNL compat: set DNNL_ENABLE_PRIMITIVE to ONEDNN_ENABLE_PRIMITIVE with value `MATMUL;REORDER`
+-- DNNL_LIBRARY_NAME: dnnl
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Found OpenMP_C: -fopenmp (found version "4.5") 
+-- Found OpenMP_CXX: -fopenmp (found version "4.5") 
+-- Found OpenMP: TRUE (found version "4.5")  
+-- Performing Test CAN_COMPILE_RVV_INTRINSICS
+-- Performing Test CAN_COMPILE_RVV_INTRINSICS - Failed
+-- Can compile RVV Intrinsics: FALSE
+-- Can compile Zvfh Intrinsics: FALSE
+-- DNNL_RISCV_USE_RVV_INTRINSICS: FALSE
+-- DNNL_RISCV_USE_ZVFH_INTRINSICS: FALSE
+-- Using RV64 march flag: -march=rv64gc
+-- Found Git: /usr/bin/git (found version "2.43.0") 
+-- Enabled testing coverage: CI
+-- Enabled workload: INFERENCE
+-- Enabled primitives: MATMUL;REORDER
+-- Enabled primitive CPU ISA: ALL
+-- Enabled primitive GPU ISA: ALL
+-- Enabled GeMM kernels ISA: ALL
+-- Primitive cache is enabled
+-- CPU extension compile flags: -fopenmp;-DVLLM_CPU_EXTENSION;-march=rv64gcv_zvfh_zfbfmin_zvfbfmin_zvl128b;-mrvv-vector-bits=zvl;-mabi=lp64d
+-- Generating CPU attention dispatch header
+-- CPU extension source files: csrc/cpu/sgl-kernels/gemm_int4.cpp;csrc/cpu/dnnl_kernels.cpp;csrc/cpu/cpu_wna16.cpp;csrc/cpu/activation.cpp;csrc/cpu/sgl-kernels/fla.cpp;csrc/cpu/utils.cpp;csrc/cpu/spec_decode_utils.cpp;csrc/cpu/layernorm.cpp;csrc/cpu/mla_decode.cpp;csrc/cpu/pos_encoding.cpp;csrc/cpu/mamba_cpu.cpp;csrc/moe/dynamic_4bit_int_moe_cpu.cpp;csrc/cpu/cpu_attn.cpp;csrc/cpu/torch_bindings.cpp
+-- Enabling C extension.
+-- Configuring done (51.8s)
+-- Generating done (0.0s)
+-- Build files have been written to: /root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T2-vlen128-bf16/build
