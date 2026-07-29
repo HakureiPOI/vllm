@@ -11,7 +11,7 @@ ISA Manual — Vector Extension：
 
 RVV 浮点向量指令使用 `fcsr.frm` CSR 控制舍入模式。
 
-参考：<https://docs.riscv.org/reference/isa/v20260120/unpriv/v-ext.html>
+参考：<https://docs.riscv.org/reference/isa/unpriv/v-st-ext.html>
 
 ## RISC-V BF16 Extension
 
@@ -21,7 +21,7 @@ ISA Manual — Zvfbfmin/Zvfbfwma Extension：
 - `zvfbfmin`：BF16 向量加载/存储扩展
 - `zvfbfwma`：BF16 宽化乘加扩展
 
-参考：<https://docs.riscv.org/reference/isa/v20260120/unpriv/zvfbfmin-zvfbfwma-ext.html>
+参考：<https://docs.riscv.org/reference/isa/unpriv/bfloat16.html>
 
 ## RISC-V Vector C Intrinsics Specification
 
@@ -29,7 +29,12 @@ ISA Manual — Zvfbfmin/Zvfbfwma Extension：
 
 **RISC-V Vector C Intrinsics Specification v1.0** 是 implicit/explicit rounding intrinsic 语义的权威来源。
 
-参考：<https://github.com/riscv-non-isa/rvv-intrinsic-doc>
+首要来源（RISC-V 官方 Ratified Specifications Library）：
+- Vector C Intrinsics 入口：<https://docs.riscv.org/reference/vector-c-intrinsics/index.html>
+- v1.0 规范正文：<https://docs.riscv.org/reference/vector-c-intrinsics/v1.0/rvv-intrinsic-spec.html>
+
+辅助来源（规范 GitHub 仓库，源码和版本历史）：
+- <https://github.com/riscv-non-isa/rvv-intrinsic-doc>
 
 ### ISA 规范与 intrinsic 规范的区别
 
