@@ -1,4 +1,4 @@
-# F004: RISC-V 交叉编译使用构建主机 /proc/cpuinfo 判断目标 FP16/BF16 能力，可能导致 RVV 构建失败或静默退化为标量构建
+# F004: RISC-V 交叉编译使用构建主机 /proc/cpuinfo 判断目标 FP16/BF16 能力，可能导致 RVV 构建失败或用户显式请求的 RVV 构建生成标量二进制
 
 ## 1. 问题标题
 
@@ -65,16 +65,21 @@ CMake 在交叉编译时无条件执行 `cat /proc/cpuinfo` 并用其结果设�
   - 包含 `zvfh`，FP16 也被启用。
   - **后果**：BF16 override 同时启用 FP16，构建正确。
 - 若用户只设 `VLLM_RVV_VLEN=128` 但不设 `VLLM_CPU_RVV_BF16=1`：
-  - **后果**：静默退化为标量构建，无 RVV kernel。
+  - **后果**：用户显式请求了 RVV（`VLLM_RVV_VLEN=128`）但仍生成标量 `rv64gc` 二进制，无 RVV kernel。
 
-#### 场景 C：x86 Linux 主机，用户未设任何 RISC-V 参数
+#### 场景 C：未声明目标扩展能力时的标量默认行为
+
+用户未提供目标 VLEN、FP16、BF16 或完整目标 ISA。构建系统最终选择 `rv64gc`。
 
 - `VLLM_RVV_VLEN` 未定义，`CMAKE_CROSSCOMPILING` 跳过自动检测。
 - `RVV_FP16_FOUND = OFF`，`RVV_BF16_FOUND = OFF`。
 - 行 226 条件 `NOT DEFINED VLLM_RVV_VLEN AND (RVV_FP16_FOUND OR RVV_BF16_FOUND)` → 两者均 OFF → 不触发 FATAL_ERROR。
 - `VLLM_RVV_VLEN` 未定义 → 行 234 条件 `VLLM_RVV_VLEN AND VLLM_RVV_VLEN GREATER 0` → FALSE。
-- 进入 `else()` → `MARCH_FLAGS = -march=rv64gc`（行 250-251）← 标量。
-- **后果**：静默退化为标量构建，无告警。
+- 进入 `else()` → `MARCH_FLAGS = -march=rv64gc`（行 250-251）。
+
+该行为本身**不作为 F004 的缺陷证据**，因为构建系统缺少足够信息，无法安全假设目标硬件支持 RVV。选择标量 `rv64gc` 是未声明目标扩展时的安全默认行为。
+
+该场景反映的是交叉编译配置接口和提示信息仍可改进：构建系统可以更明确地提示用户如何声明目标 RVV 能力，但不能仅凭未启用 RVV 就认定为错误。
 
 ### FP16 override 缺失
 
@@ -106,9 +111,11 @@ CMake 在交叉编译时无条件执行 `cat /proc/cpuinfo` 并用其结果设�
 
 ## 6. 潜在影响
 
-- **macOS 交叉编译失败**：`FATAL_ERROR` 阻断构建配置。
-- **x86 交叉编译静默降级**：即使目标支持 RVV，也产出标量二进制。用户需同时设 `VLLM_RVV_VLEN` 和 `VLLM_CPU_RVV_BF16=1`，且无 FP16-only override。
-- **设计不一致**：VLEN 检测已守卫交叉编译，但能力检测（FP16/BF16）未守卫，同一问题域修复不完整。
+- **macOS 宿主机交叉编译可能在配置阶段失败**：`FATAL_ERROR` 阻断构建配置。
+- **用户已显式设置 `VLLM_RVV_VLEN` 时，FP16/BF16 能力仍被宿主机 cpuinfo 错误决定**：最终可能生成 `rv64gc` 标量构建，即使用户已请求 RVV。
+- **目标基础架构、目标可选扩展和宿主机自动探测没有被清晰分层**：VLEN 检测已守卫交叉编译，但能力检测（FP16/BF16）未守卫，同一问题域修复不完整。
+
+用户未声明任何目标 RVV 能力而得到标量构建的情况，不属于核心缺陷影响，最多属于配置可用性问题（缺少告警或说明）。
 
 ## 7. 去重检查
 
@@ -119,10 +126,13 @@ CMake 在交叉编译时无条件执行 `cat /proc/cpuinfo` 并用其结果设�
 ## 8. 可信度
 
 ```
-中高
+变量传播链可信度：高
+实际构建复现可信度：中
 ```
 
-macOS 交叉编译 FATAL_ERROR 路径明确（高可信度）。x86 交叉编译静默降级路径的变量传播链完整（高可信度）。实际影响取决于用户是否常用 macOS/x86 作为 RISC-V 交叉编译主机（中可信度）。
+**变量传播链可信度（高）**：源码变量传播链已经明确，`cat /proc/cpuinfo` → `find_isa` → `RVV_FP16_FOUND`/`RVV_BF16_FOUND` → `MARCH_FLAGS` 选择路径可从源码直接追踪。
+
+**实际构建复现可信度（中）**：macOS 和 x86 Linux 的实际 CMake 配置结果仍需真实交叉编译环境验证；在实际 vLLM 构建入口中，还需确认是否有上层参数或 toolchain 配置提前覆盖这些变量。
 
 ## 9. 验证建议
 
@@ -189,12 +199,12 @@ else()
 endif()
 ```
 
-优点：强制用户显式声明，避免静默降级。
+优点：强制用户显式声明，避免用户显式请求 RVV 后仍生成标量二进制。
 缺点：用户体验略差，但交叉编译本就需显式配置。
 
 ### 推荐
 
-方案 C 最安全（强制显式声明，无静默降级），可结合方案 A（添加 `VLLM_CPU_RVV_FP16`）或方案 B（添加 `VLLM_RVV_MARCH`）提供配置接口。
+方案 C 最安全（强制显式声明，避免用户显式请求 RVV 后仍生成标量二进制），可结合方案 A（添加 `VLLM_CPU_RVV_FP16`）或方案 B（添加 `VLLM_RVV_MARCH`）提供配置接口。
 
 ### 与 ARM/PowerPC/S390 的关系
 

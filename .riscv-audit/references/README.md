@@ -3,18 +3,20 @@
 ## RISC-V V Extension
 
 ISA Manual — Vector Extension：
-- `vfcvt.x.f.v`：FP→INT 转换，舍入由 `frm` 决定
-- `vfcvt.f.x.v`：INT→FP 转换，大值需舍入（由 `frm` 决定）
-- `vfncvt.f.f.w`：FP32→FP16 缩窄转换，舍入由 `frm` 决定
+- `vfcvt.x.f.v`：FP→INT 转换，使用 `fcsr.frm` 控制舍入
+- `vfcvt.f.x.v`：INT→FP 转换，大值需舍入（使用 `fcsr.frm`）
+- `vfncvt.f.f.w`：FP32→FP16 缩窄转换，使用 `fcsr.frm` 控制舍入
 - `vfwcvt.f.f.v`：FP16→FP32 宽化转换，精确（无舍入）
-- `fcsr.frm` 字段：舍入模式控制（000=RNE, 001=RTZ, 010=RDN, 011=RUP, 100=RMM, 111=dynamic）
+- `fcsr.frm` 字段：舍入模式控制（RNE, RTZ, RDN, RUP, RMM）
+
+RVV 浮点向量指令使用 `fcsr.frm` CSR 控制舍入模式。
 
 参考：<https://docs.riscv.org/reference/isa/v20260120/unpriv/v-ext.html>
 
 ## RISC-V BF16 Extension
 
 ISA Manual — Zvfbfmin/Zvfbfwa Extension：
-- `vfncvtbf16.f.f.w`：FP32→BF16 缩窄转换，舍入由 `frm` 决定
+- `vfncvtbf16.f.f.w`：FP32→BF16 缩窄转换，使用 `fcsr.frm` 控制舍入
 - `vfwcvtbf16.f.f.v`：BF16→FP32 宽化转换，精确（无舍入）
 - `zvfbfmin`：BF16 向量加载/存储扩展
 - `zvfbfwa`：BF16 宽化算术扩展
@@ -28,29 +30,27 @@ GCC/Clang RVV intrinsic API：
 ### 隐式舍入 intrinsic（非 `_rm` 变体）
 
 - 如 `__riscv_vfncvt_f_f_w_f16m2(op, vl)`
-- 映射到 `vfncvt.f.f.w` 指令，编码 `rm=111`（dynamic）
-- 运行时读 `fcsr.frm` 字段确定舍入模式
-- 在 `FENV_ACCESS` OFF（C/C++ 默认）下，编译器可假设 `fcsr.frm` 未被修改
+- 属于 implicit rounding intrinsic
+- 在默认浮点环境下使用规范规定的默认舍入语义
+- 当浮点环境访问被启用时，遵循当前浮点环境和 `fcsr.frm`
+- 具体机器码和 CSR 管理由编译器按照 Vector C Intrinsics 规范实现
 
 ### 显式舍入 intrinsic（`_rm` 变体）
 
 - 如 `__riscv_vfncvt_f_f_w_f16m2_rm(op, rmode, vl)`
-- 同样映射到 `vfncvt.f.f.w` 指令，但舍入模式直接编码到指令 `rm` 字段
-- 不读 `fcsr.frm`，行为与浮点环境无关
+- 属于 explicit rounding intrinsic，要求使用参数指定的舍入模式
 - `rmode` 参数取值：`__RISCV_FRM_RNE`、`__RISCV_FRM_RTZ`、`__RISCV_FRM_RDN`、`__RISCV_FRM_RUP`、`__RISCV_FRM_RMM`
+- 编译器可能通过设置 `fcsr.frm`、临时保存旧 `fcsr.frm`、执行向量转换、恢复旧 `fcsr.frm` 的方式实现
+- 或采用其他符合规范的 CSR 管理方式
+- `_rm` intrinsic 可能因此引入额外的 `frm` 保存和恢复开销
 
 ### `FENV_ACCESS` 相关语义
 
-- C/C++ 标准默认 `FENV_ACCESS` 为 OFF
-- `FENV_ACCESS` OFF 时，编译器可假设浮点环境未被修改
-- 若代码在 `FENV_ACCESS` OFF 下修改 `fcsr.frm`（如 `fesetround()`），行为未定义
-- `#pragma STDC FENV_ACCESS ON` 显式开启浮点环境访问，编译器不再优化 `fcsr.frm` 读取
-
-### ISA 指令行为与 C intrinsic 语义的区别
-
-- ISA 指令（如 `vfncvt.f.f.w`）的 `rm=111` 编码在硬件层面始终读 `fcsr.frm`
-- C intrinsic 的非 `_rm` 变体在源码层面读 `fcsr.frm`，但编译器可在 `FENV_ACCESS` OFF 下优化为静态编码
-- `_rm` 变体在源码层面和编译层面都不读 `fcsr.frm`
+- C/C++ 标准 `FENV_ACCESS` 的默认状态影响编译器对浮点环境的假设
+- `FENV_ACCESS` OFF（C/C++ 默认）：编译器可假设浮点环境未被修改
+- `FENV_ACCESS` ON（`#pragma STDC FENV_ACCESS ON`）：编译器不再假设浮点环境未被修改
+- implicit rounding intrinsic 的行为受 `FENV_ACCESS` 状态影响
+- explicit `_rm` intrinsic 不依赖 `FENV_ACCESS` 状态
 
 参考：
 - GCC RISC-V intrinsic 文档：<https://gcc.gnu.org/onlinedocs/gcc/RISC-V-Vector-Loops.html>
