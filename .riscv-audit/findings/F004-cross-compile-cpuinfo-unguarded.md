@@ -63,7 +63,7 @@ CMake 在交叉编译时无条件执行 `cat /proc/cpuinfo` 并用其结果设�
   - `RVV_BF16_FOUND = ON`（行 126）。
   - `MARCH_FLAGS = rv64gcv_zvfh_zfbfmin_zvfbfmin_zvl128b`（行 241）。
   - 包含 `zvfh`，FP16 也被启用。
-  - **后果**：BF16 override 同时启用 FP16，构建正确。
+  - **后果**：静态分析表明该 override 应绕过宿主机 cpuinfo 的 BF16 假阴性，按照变量传播链应选择包含 `v`、`zvfh`、`zvfbfmin` 和目标 VLEN 的 `MARCH_FLAGS`，但实际构建结果仍需交叉编译验证。
 - 若用户只设 `VLLM_RVV_VLEN=128` 但不设 `VLLM_CPU_RVV_BF16=1`：
   - **后果**：用户显式请求了 RVV（`VLLM_RVV_VLEN=128`）但仍生成标量 `rv64gc` 二进制，无 RVV kernel。
 
@@ -92,14 +92,14 @@ CMake 在交叉编译时无条件执行 `cat /proc/cpuinfo` 并用其结果设�
 ### BF16 override 覆盖范围
 
 `VLLM_CPU_RVV_BF16=1` 在以下场景有效：
-- 场景 B（x86 → riscv64）：可正确启用 BF16+FP16+RVV。
+- 场景 B（x86 → riscv64）：静态分析表明应选择包含 `v`、`zvfh`、`zvfbfmin` 和目标 VLEN 的 `MARCH_FLAGS`，但实际构建结果仍需交叉编译验证。
 - 场景 A（macOS → riscv64）：无效，因为 `cat /proc/cpuinfo` 在 override 之前就 FATAL_ERROR。
 
 ## 4. 触发条件
 
 - 交叉编译到 RISC-V（`CMAKE_SYSTEM_PROCESSOR=riscv64`，`CMAKE_CROSSCOMPILING=TRUE`）。
 - 场景 A（macOS 主机）：直接 FATAL_ERROR。
-- 场景 B/C（x86 Linux 主机）：`RVV_FP16_FOUND`/`RVV_BF16_FOUND` 被设为 OFF，用户需手动设 `VLLM_CPU_RVV_BF16=1` 和 `VLLM_RVV_VLEN=128/256`。
+- 场景 B（x86 Linux 主机）：用户已显式设置 `VLLM_RVV_VLEN>0`，但 `RVV_FP16_FOUND`/`RVV_BF16_FOUND` 仍被宿主机 cpuinfo 决定为 OFF，最终选择 `rv64gc`。
 
 ## 5. 调用链与证据
 
@@ -183,14 +183,74 @@ endif()
 优点：用户可一次性指定完整 `-march`（如 `rv64gcv_zvfh_zvfbfmin_zvl128b`），无需逐个扩展配置。
 缺点：用户需了解目标 `-march` 字符串的完整语法。
 
-#### 方案 C：交叉编译时禁止宿主机探测，要求显式声明
+#### 方案 C：交叉编译时禁止宿主机探测，要求显式声明目标能力
+
+当前方案 C 的简单判断 `if(NOT DEFINED VLLM_RVV_VLEN AND NOT VLLM_RVV_MARCH)` 不足以避免 F004：用户只设置 `VLLM_RVV_VLEN=128` 时条件已通过，但没有 FP16/BF16 目标能力信息，后续仍可能选择 `rv64gc`。
+
+重新设计为支持以下三种模式：
+
+##### 模式 1：显式标量构建
+
+```text
+VLLM_RVV_VLEN=0
+```
+
+表示用户明确请求标量 RISC-V 构建。
+
+##### 模式 2：显式完整目标 ISA
+
+```text
+VLLM_RVV_MARCH=<完整 march>
+```
+
+例如：
+
+```text
+rv64gcv_zvfh_zfbfmin_zvfbfmin_zvl256b
+```
+
+此时直接使用用户提供的目标 ISA，不读取宿主机 cpuinfo。
+
+##### 模式 3：结构化声明 RVV 能力
+
+用户必须同时提供：
+
+```text
+VLLM_RVV_VLEN > 0
+```
+
+以及至少一种目标扩展能力，例如：
+
+```text
+VLLM_RVV_FP16=1
+VLLM_RVV_BF16=1
+```
+
+构建系统再据此生成目标 `-march`。
+
+##### 伪代码
 
 ```cmake
 if(CMAKE_CROSSCOMPILING)
-    # 不读 /proc/cpuinfo，不调用 find_isa
-    # 要求用户通过 VLLM_RVV_VLEN + VLLM_CPU_RVV_BF16 或 VLLM_RVV_MARCH 显式指定
-    if(NOT DEFINED VLLM_RVV_VLEN AND NOT VLLM_RVV_MARCH)
-        message(FATAL_ERROR "Cross-compiling requires explicit VLLM_RVV_VLEN or VLLM_RVV_MARCH")
+    if(DEFINED VLLM_RVV_MARCH)
+        # 模式 2：使用完整目标 ISA
+        set(MARCH_FLAGS -march=${VLLM_RVV_MARCH} -mabi=lp64d)
+    elseif(DEFINED VLLM_RVV_VLEN AND VLLM_RVV_VLEN EQUAL 0)
+        # 模式 1：用户明确请求 scalar
+        set(MARCH_FLAGS -march=rv64gc)
+    elseif(DEFINED VLLM_RVV_VLEN AND VLLM_RVV_VLEN GREATER 0
+           AND (VLLM_RVV_FP16 OR VLLM_RVV_BF16))
+        # 模式 3：根据显式目标扩展构造 -march
+        if(VLLM_RVV_BF16)
+            set(MARCH_FLAGS -march=rv64gcv_zvfh_zfbfmin_zvfbfmin_zvl${VLLM_RVV_VLEN}b ...)
+        elseif(VLLM_RVV_FP16)
+            set(MARCH_FLAGS -march=rv64gcv_zvfh_zvl${VLLM_RVV_VLEN}b ...)
+        endif()
+    else()
+        message(FATAL_ERROR
+            "RISC-V cross-compilation requires either an explicit "
+            "VLLM_RVV_MARCH, VLLM_RVV_VLEN=0 for scalar, or "
+            "VLLM_RVV_VLEN>0 with explicit FP16/BF16 target capability")
     endif()
 else()
     # 本机构建：自动探测
@@ -199,7 +259,7 @@ else()
 endif()
 ```
 
-优点：强制用户显式声明，避免用户显式请求 RVV 后仍生成标量二进制。
+优点：覆盖"只设置 VLEN 仍生成标量"的问题；强制用户在交叉编译时显式声明目标扩展能力。
 缺点：用户体验略差，但交叉编译本就需显式配置。
 
 ### 推荐

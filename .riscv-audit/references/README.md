@@ -15,17 +15,28 @@ RVV 浮点向量指令使用 `fcsr.frm` CSR 控制舍入模式。
 
 ## RISC-V BF16 Extension
 
-ISA Manual — Zvfbfmin/Zvfbfwa Extension：
+ISA Manual — Zvfbfmin/Zvfbfwma Extension：
 - `vfncvtbf16.f.f.w`：FP32→BF16 缩窄转换，使用 `fcsr.frm` 控制舍入
 - `vfwcvtbf16.f.f.v`：BF16→FP32 宽化转换，精确（无舍入）
 - `zvfbfmin`：BF16 向量加载/存储扩展
-- `zvfbfwa`：BF16 宽化算术扩展
+- `zvfbfwma`：BF16 宽化乘加扩展
 
-参考：<https://docs.riscv.org/reference/isa/v20260120/unpriv/zvfbfmin-zvfbfwa-ext.html>
+参考：<https://docs.riscv.org/reference/isa/v20260120/unpriv/zvfbfmin-zvfbfwma-ext.html>
 
 ## RISC-V Vector C Intrinsics Specification
 
-GCC/Clang RVV intrinsic API：
+### 官方规范（首要来源）
+
+**RISC-V Vector C Intrinsics Specification v1.0** 是 implicit/explicit rounding intrinsic 语义的权威来源。
+
+参考：<https://github.com/riscv-non-isa/rvv-intrinsic-doc>
+
+### ISA 规范与 intrinsic 规范的区别
+
+- **ISA 规范**（V Extension、BF16 Extension）：描述 RVV 指令使用 `fcsr.frm` 的硬件语义。
+- **Vector C Intrinsics 规范**：描述 implicit 和 explicit `_rm` intrinsic 的语言接口语义，以及编译器需要承担的浮点环境管理责任。
+
+两者不应混淆：ISA 指令的硬件行为不等于 C intrinsic 的可观察语义。
 
 ### 隐式舍入 intrinsic（非 `_rm` 变体）
 
@@ -52,7 +63,10 @@ GCC/Clang RVV intrinsic API：
 - implicit rounding intrinsic 的行为受 `FENV_ACCESS` 状态影响
 - explicit `_rm` intrinsic 不依赖 `FENV_ACCESS` 状态
 
-参考：
+### 辅助来源（GCC/LLVM 文档）
+
+GCC 和 LLVM 文档作为辅助来源，不应取代正式规范：
+
 - GCC RISC-V intrinsic 文档：<https://gcc.gnu.org/onlinedocs/gcc/RISC-V-Vector-Loops.html>
 - Clang RISC-V intrinsic 文档：<https://llvm.org/docs/RISCV/RISCVVectorInstrinsics.html>
 

@@ -2,7 +2,7 @@
 
 ## 1. 问题标题
 
-RVV 缩窄浮点转换（FP32→FP16/BF16）使用非 `_rm` intrinsic 形式，舍入模式依赖 `fcsr.frm` 而非显式编码。
+RVV 缩窄浮点转换（FP32→FP16/BF16）使用非 `_rm` intrinsic 形式（implicit rounding），未通过 `_rm` intrinsic 显式请求舍入模式。
 
 ## 2. 涉及位置
 
@@ -62,7 +62,7 @@ C/C++ 标准 `FENV_ACCESS` 的默认状态影响编译器对浮点环境的假�
 - RISC-V 架构（rv64gcv），`__riscv_v_min_vlen` 定义为 128 或 256。
 - FP16 路径：文件在 RVV 编译时包含，`vfncvt_f_f_w_f16` 在 `FP16Vec` 构造函数中调用。
 - BF16 路径：`__riscv_zvfbfmin` 定义时，`vfncvtbf16_f_f_w_bf16` 在 `BF16Vec` 构造函数中调用。
-- **潜在触发**：调用前有线程代码改变 `fcsr.frm`（如 `fesetround()` 或其他 RVV 指令的副作用）。当前未确认 vLLM 中是否存在此类代码路径。
+- **潜在触发来源**：`fesetround()`；直接写入 `frm`/`fcsr` CSR；外部库、运行时或调用方合法修改线程浮点环境；未正确恢复浮点环境的代码路径。当前尚未确认 vLLM 自身或其依赖中存在这样的实际调用路径。
 
 ## 5. 调用链与证据
 
@@ -98,9 +98,9 @@ C/C++ 标准 `FENV_ACCESS` 的默认状态影响编译器对浮点环境的假�
 | x86 标量 | `_cvtss_sh` | **显式** `_MM_FROUND_TO_NEAREST_INT \| _MM_FROUND_NO_EXC` | `cpu_types_x86.hpp:964-968` |
 | ARM | `convert_float_half`（ATen 库） | 隐式（ATen 内部使用 NEON RTE） | `cpu_types_arm.hpp:936-943` |
 | 标量 fallback | `float_to_fp16`（位操作） | **显式** RTE（位操作实现 round-half-to-even） | `float_convert.hpp:22-78` |
-| **RISC-V** | `__riscv_vfncvt_f_f_w_f16`（非 `_rm`） | **隐式**，读 `fcsr.frm`（默认 RNE） | `cpu_types_riscv_impl.hpp:940,943` |
+| **RISC-V** | `__riscv_vfncvt_f_f_w_f16`（非 `_rm`） | implicit rounding；默认环境下为默认舍入语义，启用浮点环境访问时遵循动态 `frm` | `cpu_types_riscv_impl.hpp:940,943` |
 
-**观察**：x86 和标量路径显式固定为 RTE。ARM 通过 ATen 隐式使用 RTE。RISC-V 使用非 `_rm` intrinsic，默认 `fcsr.frm=RNE` 时行为与 RTE 一致，但依赖浮点环境状态。
+**观察**：x86 和标量路径显式固定为 RTE。ARM 通过 ATen 隐式使用 RTE。RISC-V 使用 implicit rounding intrinsic，在默认浮点环境下使用规范规定的默认舍入语义；启用浮点环境访问时遵循动态 `frm`。
 
 #### FP32→BF16
 
@@ -113,13 +113,13 @@ C/C++ 标准 `FENV_ACCESS` 的默认状态影响编译器对浮点环境的假�
 | x86 标量 (无 AVX-512 BF16) | `*(ptr + 1)` 位别名 | **截断** | `cpu_types_x86.hpp:1001-1006` |
 | ARM | `convert_float_bfloat16`（ATen）或 `vcvth_bf16_f32` | 隐式（硬件 RTE） | `cpu_types_arm.hpp:952-959,976-983` |
 | 标量 fallback | `float_to_bf16`（`bits >> 16`） | **截断**（无舍入） | `float_convert.hpp:11-14` |
-| **RISC-V (zvfbfmin)** | `__riscv_vfncvtbf16_f_f_w_bf16`（非 `_rm`） | **隐式**，读 `fcsr.frm`（默认 RNE） | `cpu_types_riscv_impl.hpp:982,985` |
+| **RISC-V (zvfbfmin)** | `__riscv_vfncvtbf16_f_f_w_bf16`（非 `_rm`） | implicit rounding；默认环境下为默认舍入语义，启用浮点环境访问时遵循动态 `frm` | `cpu_types_riscv_impl.hpp:982,985` |
 | RISC-V (fallback) | `float_to_bf16` | **截断** | `cpu_types_riscv_impl.hpp:988-991` |
 
 **关键观察**：FP32→BF16 的舍入语义在跨架构间**本就不一致**：
 - 有 BF16 硬件指令的路径（x86 AVX-512 BF16、ARM、RISC-V zvfbfmin）使用 RTE。
 - 无 BF16 硬件指令的 fallback 路径（x86 AVX2/AVX-512F、标量）使用**截断**。
-- RISC-V 的非 `_rm` intrinsic 在默认 `fcsr.frm=RNE` 时与 RTE 一致，但与 x86/ARM 的隐式 RTE 不同——x86/ARM 的硬件指令固定编码 RTE，而 RISC-V 的非 `_rm` intrinsic 在运行时读 `fcsr.frm`。
+- RISC-V 的 implicit rounding intrinsic 在默认浮点环境下使用规范规定的默认舍入语义；与 x86/ARM 的隐式 RTE 不同——x86/ARM 的硬件指令固定使用 RTE，而 RISC-V 的 implicit intrinsic 在启用浮点环境访问时遵循动态 `frm`。
 
 ## 6. 潜在影响
 
@@ -166,33 +166,73 @@ C/C++ 标准 `FENV_ACCESS` 的默认状态影响编译器对浮点环境的假�
 
 ### 最小独立验证程序
 
-编写独立 C 程序，不依赖完整 vLLM 编译。程序应包含两组函数：
+编写独立 C 程序，不依赖完整 vLLM 编译。程序应包含四类测试函数：
 
 ```cpp
-// implicit rounding
-void convert_implicit(...)
+// FENV_ACCESS OFF
+void convert_fp16_implicit_default(...);   // implicit rounding, 默认浮点环境
+void convert_fp16_explicit_rne(...);       // explicit _rm(...RNE...)
 
-// explicit RNE
-void convert_explicit_rne(...)
+// FENV_ACCESS ON
+#pragma STDC FENV_ACCESS ON
+void convert_fp16_implicit_dynamic(...);   // implicit rounding, 动态浮点环境
+void convert_fp16_explicit_rne_dynamic(...); // explicit _rm(...RNE...)
 ```
 
-分别测试 `FP32 → FP16` 和 `FP32 → BF16` 两种转换。
+BF16 同样准备对应四类函数。
 
-#### 测试要求
+#### 测试覆盖矩阵
 
-1. 选择位于 FP16/BF16 舍入边界附近的 FP32 输入（如恰好位于两个可表示 FP16/BF16 值中间的值）。
-2. 将 `fcsr.frm` 分别设置为：RNE、RTZ、RDN、RUP。
-3. 比较 implicit intrinsic 的输出是否随 `frm` 变化。
-4. 比较 explicit `_rm(...RNE...)` 的输出是否始终保持 RNE。
-5. 使用反汇编检查 `_rm` 调用附近是否出现 `frrm`、`fsrm`、`fsrmi` 或其他 `frm` 保存、设置、恢复逻辑。
-6. 检查 implicit intrinsic 周围是否依赖当前 `frm`。
-7. 分别测试默认编译和显式浮点环境访问配置（`#pragma STDC FENV_ACCESS ON`）。
-8. 记录 GCC 与 Clang 是否生成不同实现。
+至少覆盖以下组合：
+
+1. 转换类型：FP32→FP16、FP32→BF16
+2. 舍入模式：RNE、RTZ、RDN、RUP
+3. 编译器：GCC、Clang
+4. 优化等级：`-O0`、vLLM 接近实际使用的优化等级
+5. `FENV_ACCESS`：OFF（默认）、ON
+
+#### 反汇编重点检查
+
+检查以下指令和模式：
+
+- `frrm`、`fsrm`、`fsrmi`
+- `csrr`、`csrw`、`csrrw`
+- explicit `_rm` 调用前后是否存在 `frm` 保存、设置和恢复
+- implicit 调用周围是否存在编译器生成的浮点环境管理
+- GCC 与 Clang 的实现是否不同
+- `FENV_ACCESS` OFF/ON 是否影响生成代码
+
+不再检查不存在的"向量指令 `rm=000/111` 编码"。
 
 ### 预期结果
 
-- 若 implicit intrinsic 输出不随 `frm` 变化：说明编译器在默认浮点环境下已按规范处理，问题机制不成立。
-- 若 implicit intrinsic 输出随 `frm` 变化，而 explicit `_rm` 固定 RNE：机制确认，需进一步验证 vLLM 是否有路径修改 `frm`。
+#### `FENV_ACCESS` OFF
+
+- 观察 implicit intrinsic 是否始终使用默认 RNE 语义。
+- 输出不随手工修改 `frm` 变化，可能是符合规范的行为。
+- **不据此否定问题机制**——implicit 与 explicit intrinsic 的规范语义差异不依赖于 `FENV_ACCESS` OFF 下的运行结果。
+
+#### `FENV_ACCESS` ON
+
+- implicit intrinsic 应遵循当前动态浮点环境和 `frm`。
+- 使用 `fesetround()` 或等价方式改变舍入模式后，implicit 结果应可能随 RNE、RTZ、RDN、RUP 变化。
+- explicit `_rm(..., __RISCV_FRM_RNE, ...)` 应始终使用 RNE。
+- 若两者在非 RNE 环境下产生不同结果，则确认 implicit 和 explicit 舍入语义存在可观察差异。
+
+### 机制与验证的关系
+
+F001 的"机制"定义为：
+
+- 源码使用 implicit rounding intrinsic；
+- 对应 explicit `_rm` intrinsic 存在；
+- 两者在浮点环境语义上不同。
+
+这三项已可由源码和规范确认，不依赖于运行结果。
+
+实际验证用于判断的是：这种差异在当前 GCC/Clang、vLLM 编译参数和实际运行环境中是否能够产生可观察影响。因此：
+
+- implicit 输出不变 → 当前编译配置下未观察到动态舍入影响，但不能否定 implicit 与 explicit intrinsic 的规范语义差异。
+- implicit 输出随 `frm` 变化 → 机制在当前环境下可观察，需进一步验证 vLLM 是否有路径修改 `frm`。
 
 ## 10. 修复思路
 

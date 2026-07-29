@@ -6,7 +6,7 @@
 
 ## 1. 问题标题
 
-RVV 浮点转整数（FP32→INT32）使用非 `_rm` intrinsic 形式，舍入模式依赖 `fcsr.frm`。
+RVV 浮点转整数（FP32→INT32）使用非 `_rm` intrinsic 形式（implicit rounding），未通过 `_rm` intrinsic 显式请求舍入模式。
 
 ## 2. 涉及位置
 
@@ -16,7 +16,7 @@ RVV 浮点转整数（FP32→INT32）使用非 `_rm` intrinsic 形式，舍入�
 
 ## 3. 问题描述
 
-`vfcvt.x.f.v` 将 FP32 转为 INT32，需要舍入。非 `_rm` 变体读 `fcsr.frm` 动态舍入模式。若 `frm` 被改变，相同输入得到不同 INT32 结果。
+`vfcvt.x.f.v` 将 FP32 转为 INT32，需要舍入。非 `_rm` 变体属于 implicit rounding intrinsic，在启用浮点环境访问时遵循当前 `fcsr.frm`。若 `frm` 被改变，相同输入可能得到不同 INT32 结果。
 
 #47983 作者在 Spacemit X100 实测，`frm` 从 RNE 改为其他模式时，42.2% 的 INT8 值发生变化（提交者自报结果，未独立复现）。
 
@@ -25,7 +25,7 @@ RVV 浮点转整数（FP32→INT32）使用非 `_rm` intrinsic 形式，舍入�
 - RISC-V 架构，启用 RVV
 - `exp()` 路径：softmax 等依赖 exp 的计算
 - `INT8Vec16` 构造：INT8 量化路径
-- 调用前有线程代码改变 `fcsr.frm`
+- 调用前有线程代码改变 `fcsr.frm`（如 `fesetround()`、直接写入 `frm`/`fcsr` CSR、外部库合法修改线程浮点环境）
 
 ## 5. 调用链与证据
 
@@ -34,7 +34,7 @@ RVV 浮点转整数（FP32→INT32）使用非 `_rm` intrinsic 形式，舍入�
 ```
 softmax → FP32Vec8/16::exp()
   → x_scaled = x * inv_ln2
-  → n_int = __riscv_vfcvt_x_f_v_i32(x_scaled)  // 行 521/787，读 fcsr.frm
+  → n_int = __riscv_vfcvt_x_f_v_i32(x_scaled)  // 行 521/787，implicit rounding
   → r = x_scaled - vfcvt_f_x_v_f32(n_int)       // 行 523/789，INT32→FP32 精确
   → poly = ... (多项式近似)
   → return poly * scale
@@ -44,7 +44,7 @@ softmax → FP32Vec8/16::exp()
 
 ```
 FP32 计算结果 → INT8Vec16(vec)
-  → i32_vec = __riscv_vfcvt_x_f_v_i32(vec.reg)  // 行 886，读 fcsr.frm
+  → i32_vec = __riscv_vfcvt_x_f_v_i32(vec.reg)  // 行 886，implicit rounding
   → i16_vec = vnclip_wx_i16(i32_vec, 0, __RISCV_VXRM_RNU)  // 行 888，显式整数舍入
   → reg = vnclip_wx_i8(i16_vec, 0, __RISCV_VXRM_RNU)        // 行 889，显式整数舍入
 ```
