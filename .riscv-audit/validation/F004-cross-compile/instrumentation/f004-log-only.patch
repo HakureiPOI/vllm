@@ -1,0 +1,48 @@
+diff --git a/cmake/cpu_extension.cmake b/cmake/cpu_extension.cmake
+index 64df94e94..84714c3c3 100644
+--- a/cmake/cpu_extension.cmake
++++ b/cmake/cpu_extension.cmake
+@@ -99,7 +99,16 @@ if (MACOSX_FOUND AND CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64")
+     check_sysctl(hw.optional.arm.FEAT_BF16 ARM_BF16_FOUND)
+     check_sysctl(hw.optional.arm.FEAT_I8MM ARM_I8MM_FOUND)
+ else()
+-    find_isa(${CPUINFO} "Power11" POWER11_FOUND)
++    # [F004] Instrumentation: host/target info and cpuinfo status
++message(STATUS "[F004] CMAKE_CROSSCOMPILING=${CMAKE_CROSSCOMPILING}")
++message(STATUS "[F004] CMAKE_HOST_SYSTEM_NAME=${CMAKE_HOST_SYSTEM_NAME}")
++message(STATUS "[F004] CMAKE_HOST_SYSTEM_PROCESSOR=${CMAKE_HOST_SYSTEM_PROCESSOR}")
++message(STATUS "[F004] CMAKE_SYSTEM_NAME=${CMAKE_SYSTEM_NAME}")
++message(STATUS "[F004] CMAKE_SYSTEM_PROCESSOR=${CMAKE_SYSTEM_PROCESSOR}")
++message(STATUS "[F004] CPUINFO_RET=${CPUINFO_RET}")
++message(STATUS "[F004] MACOSX_FOUND=${MACOSX_FOUND}")
++
++find_isa(${CPUINFO} "Power11" POWER11_FOUND)
+     find_isa(${CPUINFO} "POWER10" POWER10_FOUND)
+     find_isa(${CPUINFO} "POWER9" POWER9_FOUND)
+     find_isa(${CPUINFO} "asimd" ASIMD_FOUND) # Check for ARM NEON support
+@@ -128,6 +137,12 @@ else()
+     endif()
+ endif()
+ 
++# [F004] Instrumentation: capability flags after find_isa and overrides
++message(STATUS "[F004] RVV_FP16_FOUND=${RVV_FP16_FOUND}")
++message(STATUS "[F004] RVV_BF16_FOUND=${RVV_BF16_FOUND}")
++message(STATUS "[F004] ENABLE_RVV_BF16=${ENABLE_RVV_BF16}")
++message(STATUS "[F004] VLLM_RVV_VLEN=${VLLM_RVV_VLEN}")
++
+ if (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|amd64" OR ENABLE_X86_ISA)
+     set(ENABLE_X86_ISA ON)
+     if (NOT (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND
+@@ -252,7 +267,11 @@ elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "riscv64")
+     endif()
+     list(APPEND CXX_COMPILE_FLAGS ${MARCH_FLAGS})
+ else()
+-    message(FATAL_ERROR "vLLM CPU backend requires X86, Power9+ ISA, S390X ISA, ARMv8 or RISC-V support.")
++    # [F004] Instrumentation: final MARCH_FLAGS
++message(STATUS "[F004] MARCH_FLAGS=${MARCH_FLAGS}")
++message(STATUS "[F004] CXX_COMPILE_FLAGS=${CXX_COMPILE_FLAGS}")
++
++message(FATAL_ERROR "vLLM CPU backend requires X86, Power9+ ISA, S390X ISA, ARMv8 or RISC-V support.")
+ endif()
+ 
+ 

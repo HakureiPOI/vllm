@@ -1,0 +1,74 @@
+[
+{
+  "directory": "/root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T1-vlen128/build",
+  "command": "/usr/bin/riscv64-linux-gnu-g++ -DPy_LIMITED_API=3 -DTORCH_EXTENSION_NAME=_C -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -D_C_EXPORTS -I/root/work/vllm-f004-validation/csrc -isystem /usr/include/python3.12 -isystem /root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/include -isystem /root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -O3 -DNDEBUG -std=gnu++20 -fPIC -fopenmp -DVLLM_CPU_EXTENSION -march=rv64gc -o CMakeFiles/_C.dir/csrc/cpu/sgl-kernels/gemm_int4.cpp.o -c /root/work/vllm-f004-validation/csrc/cpu/sgl-kernels/gemm_int4.cpp",
+  "file": "/root/work/vllm-f004-validation/csrc/cpu/sgl-kernels/gemm_int4.cpp",
+  "output": "CMakeFiles/_C.dir/csrc/cpu/sgl-kernels/gemm_int4.cpp.o"
+},
+{
+  "directory": "/root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T1-vlen128/build",
+  "command": "/usr/bin/riscv64-linux-gnu-g++ -DPy_LIMITED_API=3 -DTORCH_EXTENSION_NAME=_C -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -D_C_EXPORTS -I/root/work/vllm-f004-validation/csrc -isystem /usr/include/python3.12 -isystem /root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/include -isystem /root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -O3 -DNDEBUG -std=gnu++20 -fPIC -fopenmp -DVLLM_CPU_EXTENSION -march=rv64gc -o CMakeFiles/_C.dir/csrc/cpu/activation.cpp.o -c /root/work/vllm-f004-validation/csrc/cpu/activation.cpp",
+  "file": "/root/work/vllm-f004-validation/csrc/cpu/activation.cpp",
+  "output": "CMakeFiles/_C.dir/csrc/cpu/activation.cpp.o"
+},
+{
+  "directory": "/root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T1-vlen128/build",
+  "command": "/usr/bin/riscv64-linux-gnu-g++ -DPy_LIMITED_API=3 -DTORCH_EXTENSION_NAME=_C -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -D_C_EXPORTS -I/root/work/vllm-f004-validation/csrc -isystem /usr/include/python3.12 -isystem /root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/include -isystem /root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -O3 -DNDEBUG -std=gnu++20 -fPIC -fopenmp -DVLLM_CPU_EXTENSION -march=rv64gc -o CMakeFiles/_C.dir/csrc/cpu/sgl-kernels/fla.cpp.o -c /root/work/vllm-f004-validation/csrc/cpu/sgl-kernels/fla.cpp",
+  "file": "/root/work/vllm-f004-validation/csrc/cpu/sgl-kernels/fla.cpp",
+  "output": "CMakeFiles/_C.dir/csrc/cpu/sgl-kernels/fla.cpp.o"
+},
+{
+  "directory": "/root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T1-vlen128/build",
+  "command": "/usr/bin/riscv64-linux-gnu-g++ -DPy_LIMITED_API=3 -DTORCH_EXTENSION_NAME=_C -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -D_C_EXPORTS -I/root/work/vllm-f004-validation/csrc -isystem /usr/include/python3.12 -isystem /root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/include -isystem /root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -O3 -DNDEBUG -std=gnu++20 -fPIC -fopenmp -DVLLM_CPU_EXTENSION -march=rv64gc -o CMakeFiles/_C.dir/csrc/cpu/utils.cpp.o -c /root/work/vllm-f004-validation/csrc/cpu/utils.cpp",
+  "file": "/root/work/vllm-f004-validation/csrc/cpu/utils.cpp",
+  "output": "CMakeFiles/_C.dir/csrc/cpu/utils.cpp.o"
+},
+{
+  "directory": "/root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T1-vlen128/build",
+  "command": "/usr/bin/riscv64-linux-gnu-g++ -DPy_LIMITED_API=3 -DTORCH_EXTENSION_NAME=_C -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -D_C_EXPORTS -I/root/work/vllm-f004-validation/csrc -isystem /usr/include/python3.12 -isystem /root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/include -isystem /root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -O3 -DNDEBUG -std=gnu++20 -fPIC -fopenmp -DVLLM_CPU_EXTENSION -march=rv64gc -o CMakeFiles/_C.dir/csrc/cpu/spec_decode_utils.cpp.o -c /root/work/vllm-f004-validation/csrc/cpu/spec_decode_utils.cpp",
+  "file": "/root/work/vllm-f004-validation/csrc/cpu/spec_decode_utils.cpp",
+  "output": "CMakeFiles/_C.dir/csrc/cpu/spec_decode_utils.cpp.o"
+},
+{
+  "directory": "/root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T1-vlen128/build",
+  "command": "/usr/bin/riscv64-linux-gnu-g++ -DPy_LIMITED_API=3 -DTORCH_EXTENSION_NAME=_C -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -D_C_EXPORTS -I/root/work/vllm-f004-validation/csrc -isystem /usr/include/python3.12 -isystem /root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/include -isystem /root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -O3 -DNDEBUG -std=gnu++20 -fPIC -fopenmp -DVLLM_CPU_EXTENSION -march=rv64gc -o CMakeFiles/_C.dir/csrc/cpu/layernorm.cpp.o -c /root/work/vllm-f004-validation/csrc/cpu/layernorm.cpp",
+  "file": "/root/work/vllm-f004-validation/csrc/cpu/layernorm.cpp",
+  "output": "CMakeFiles/_C.dir/csrc/cpu/layernorm.cpp.o"
+},
+{
+  "directory": "/root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T1-vlen128/build",
+  "command": "/usr/bin/riscv64-linux-gnu-g++ -DPy_LIMITED_API=3 -DTORCH_EXTENSION_NAME=_C -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -D_C_EXPORTS -I/root/work/vllm-f004-validation/csrc -isystem /usr/include/python3.12 -isystem /root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/include -isystem /root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -O3 -DNDEBUG -std=gnu++20 -fPIC -fopenmp -DVLLM_CPU_EXTENSION -march=rv64gc -o CMakeFiles/_C.dir/csrc/cpu/mla_decode.cpp.o -c /root/work/vllm-f004-validation/csrc/cpu/mla_decode.cpp",
+  "file": "/root/work/vllm-f004-validation/csrc/cpu/mla_decode.cpp",
+  "output": "CMakeFiles/_C.dir/csrc/cpu/mla_decode.cpp.o"
+},
+{
+  "directory": "/root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T1-vlen128/build",
+  "command": "/usr/bin/riscv64-linux-gnu-g++ -DPy_LIMITED_API=3 -DTORCH_EXTENSION_NAME=_C -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -D_C_EXPORTS -I/root/work/vllm-f004-validation/csrc -isystem /usr/include/python3.12 -isystem /root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/include -isystem /root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -O3 -DNDEBUG -std=gnu++20 -fPIC -fopenmp -DVLLM_CPU_EXTENSION -march=rv64gc -o CMakeFiles/_C.dir/csrc/cpu/pos_encoding.cpp.o -c /root/work/vllm-f004-validation/csrc/cpu/pos_encoding.cpp",
+  "file": "/root/work/vllm-f004-validation/csrc/cpu/pos_encoding.cpp",
+  "output": "CMakeFiles/_C.dir/csrc/cpu/pos_encoding.cpp.o"
+},
+{
+  "directory": "/root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T1-vlen128/build",
+  "command": "/usr/bin/riscv64-linux-gnu-g++ -DPy_LIMITED_API=3 -DTORCH_EXTENSION_NAME=_C -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -D_C_EXPORTS -I/root/work/vllm-f004-validation/csrc -isystem /usr/include/python3.12 -isystem /root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/include -isystem /root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -O3 -DNDEBUG -std=gnu++20 -fPIC -fopenmp -DVLLM_CPU_EXTENSION -march=rv64gc -o CMakeFiles/_C.dir/csrc/cpu/mamba_cpu.cpp.o -c /root/work/vllm-f004-validation/csrc/cpu/mamba_cpu.cpp",
+  "file": "/root/work/vllm-f004-validation/csrc/cpu/mamba_cpu.cpp",
+  "output": "CMakeFiles/_C.dir/csrc/cpu/mamba_cpu.cpp.o"
+},
+{
+  "directory": "/root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T1-vlen128/build",
+  "command": "/usr/bin/riscv64-linux-gnu-g++ -DPy_LIMITED_API=3 -DTORCH_EXTENSION_NAME=_C -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -D_C_EXPORTS -I/root/work/vllm-f004-validation/csrc -isystem /usr/include/python3.12 -isystem /root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/include -isystem /root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -O3 -DNDEBUG -std=gnu++20 -fPIC -fopenmp -DVLLM_CPU_EXTENSION -march=rv64gc -o CMakeFiles/_C.dir/csrc/moe/dynamic_4bit_int_moe_cpu.cpp.o -c /root/work/vllm-f004-validation/csrc/moe/dynamic_4bit_int_moe_cpu.cpp",
+  "file": "/root/work/vllm-f004-validation/csrc/moe/dynamic_4bit_int_moe_cpu.cpp",
+  "output": "CMakeFiles/_C.dir/csrc/moe/dynamic_4bit_int_moe_cpu.cpp.o"
+},
+{
+  "directory": "/root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T1-vlen128/build",
+  "command": "/usr/bin/riscv64-linux-gnu-g++ -DPy_LIMITED_API=3 -DTORCH_EXTENSION_NAME=_C -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -D_C_EXPORTS -I/root/work/vllm-f004-validation/csrc -isystem /usr/include/python3.12 -isystem /root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/include -isystem /root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -O3 -DNDEBUG -std=gnu++20 -fPIC -fopenmp -DVLLM_CPU_EXTENSION -march=rv64gc -o CMakeFiles/_C.dir/csrc/cpu/cpu_attn.cpp.o -c /root/work/vllm-f004-validation/csrc/cpu/cpu_attn.cpp",
+  "file": "/root/work/vllm-f004-validation/csrc/cpu/cpu_attn.cpp",
+  "output": "CMakeFiles/_C.dir/csrc/cpu/cpu_attn.cpp.o"
+},
+{
+  "directory": "/root/work/vllm-f004-validation/.riscv-audit/validation/F004-cross-compile/results/20260729T074037Z/T1-vlen128/build",
+  "command": "/usr/bin/riscv64-linux-gnu-g++ -DPy_LIMITED_API=3 -DTORCH_EXTENSION_NAME=_C -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -D_C_EXPORTS -I/root/work/vllm-f004-validation/csrc -isystem /usr/include/python3.12 -isystem /root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/include -isystem /root/work/.venv-vllm-f004/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -O3 -DNDEBUG -std=gnu++20 -fPIC -fopenmp -DVLLM_CPU_EXTENSION -march=rv64gc -o CMakeFiles/_C.dir/csrc/cpu/torch_bindings.cpp.o -c /root/work/vllm-f004-validation/csrc/cpu/torch_bindings.cpp",
+  "file": "/root/work/vllm-f004-validation/csrc/cpu/torch_bindings.cpp",
+  "output": "CMakeFiles/_C.dir/csrc/cpu/torch_bindings.cpp.o"
+}
+]

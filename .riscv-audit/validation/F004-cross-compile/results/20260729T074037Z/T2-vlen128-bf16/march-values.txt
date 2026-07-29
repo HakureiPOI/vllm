@@ -1,0 +1,2 @@
+-march=rv64gc
+-march=rv64gcv_zvfh_zfbfmin_zvfbfmin_zvl128b
