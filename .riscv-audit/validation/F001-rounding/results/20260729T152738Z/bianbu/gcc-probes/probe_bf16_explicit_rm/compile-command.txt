@@ -1,0 +1,1 @@
+gcc -march=rv64gcv_zvfh_zvfbfmin -std=c11 -O2 -fno-lto -c /tmp/f001-rounding-remediation-20260729T152738Z/evidence/bianbu/gcc-probes/probe_bf16_explicit_rm/source.c -o /tmp/f001-rounding-remediation-20260729T152738Z/evidence/bianbu/gcc-probes/probe_bf16_explicit_rm/probe_bf16_explicit_rm.o 

@@ -1,0 +1,1 @@
+gcc -march=rv64gcv_zvfh 

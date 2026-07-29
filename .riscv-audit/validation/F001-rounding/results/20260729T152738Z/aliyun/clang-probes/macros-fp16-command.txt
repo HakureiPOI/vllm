@@ -1,0 +1,1 @@
+clang --target=riscv64-linux-gnu -march=rv64gcv_zvfh -dM -E -x c /dev/null 

@@ -1,0 +1,5 @@
+GNU objdump (GNU Binutils for Ubuntu) 2.42
+Copyright (C) 2024 Free Software Foundation, Inc.
+这个程序是自由软件；您可以遵循 GNU 通用公共授权版本 3 或
+(您自行选择的) 稍后版本再发布它。
+这个程序不含任何担保。

@@ -1,0 +1,664 @@
+
+/tmp/f001-rounding-remediation-20260729T152738Z/evidence/bianbu/isa/O3/test_fp16_isa：     文件格式 elf64-littleriscv
+
+
+Disassembly of section .plt:
+
+0000000000000840 <.plt>:
+ 840:	00002397          	auipc	t2,0x2
+ 844:	41c30333          	sub	t1,t1,t3
+ 848:	7483be03          	ld	t3,1864(t2) # 2f88 <.got>
+ 84c:	fd430313          	addi	t1,t1,-44
+ 850:	74838293          	addi	t0,t2,1864
+ 854:	00135313          	srli	t1,t1,0x1
+ 858:	0082b283          	ld	t0,8(t0)
+ 85c:	000e0067          	jr	t3
+
+0000000000000860 <fegetround@plt>:
+ 860:	00002e17          	auipc	t3,0x2
+ 864:	738e3e03          	ld	t3,1848(t3) # 2f98 <fegetround@GLIBC_2.27>
+ 868:	000e0367          	jalr	t1,t3
+ 86c:	00000013          	nop
+
+0000000000000870 <__libc_start_main@plt>:
+ 870:	00002e17          	auipc	t3,0x2
+ 874:	730e3e03          	ld	t3,1840(t3) # 2fa0 <__libc_start_main@GLIBC_2.34>
+ 878:	000e0367          	jalr	t1,t3
+ 87c:	00000013          	nop
+
+0000000000000880 <fwrite@plt>:
+ 880:	00002e17          	auipc	t3,0x2
+ 884:	728e3e03          	ld	t3,1832(t3) # 2fa8 <fwrite@GLIBC_2.27>
+ 888:	000e0367          	jalr	t1,t3
+ 88c:	00000013          	nop
+
+0000000000000890 <__fprintf_chk@plt>:
+ 890:	00002e17          	auipc	t3,0x2
+ 894:	720e3e03          	ld	t3,1824(t3) # 2fb0 <__fprintf_chk@GLIBC_2.27>
+ 898:	000e0367          	jalr	t1,t3
+ 89c:	00000013          	nop
+
+00000000000008a0 <__printf_chk@plt>:
+ 8a0:	00002e17          	auipc	t3,0x2
+ 8a4:	718e3e03          	ld	t3,1816(t3) # 2fb8 <__printf_chk@GLIBC_2.27>
+ 8a8:	000e0367          	jalr	t1,t3
+ 8ac:	00000013          	nop
+
+00000000000008b0 <fesetround@plt>:
+ 8b0:	00002e17          	auipc	t3,0x2
+ 8b4:	710e3e03          	ld	t3,1808(t3) # 2fc0 <fesetround@GLIBC_2.27>
+ 8b8:	000e0367          	jalr	t1,t3
+ 8bc:	00000013          	nop
+
+00000000000008c0 <puts@plt>:
+ 8c0:	00002e17          	auipc	t3,0x2
+ 8c4:	708e3e03          	ld	t3,1800(t3) # 2fc8 <puts@GLIBC_2.27>
+ 8c8:	000e0367          	jalr	t1,t3
+ 8cc:	00000013          	nop
+
+Disassembly of section .text:
+
+00000000000008d0 <main>:
+ 8d0:	712d                	addi	sp,sp,-288
+ 8d2:	ee06                	sd	ra,280(sp)
+ 8d4:	ea22                	sd	s0,272(sp)
+ 8d6:	f8bff0ef          	jal	860 <fegetround@plt>
+ 8da:	842a                	mv	s0,a0
+ 8dc:	f0aa                	sd	a0,96(sp)
+ 8de:	6d2000ef          	jal	fb0 <read_frm>
+ 8e2:	0005079b          	sext.w	a5,a0
+ 8e6:	ecbe                	sd	a5,88(sp)
+ 8e8:	6d6000ef          	jal	fbe <read_fflags>
+ 8ec:	0005071b          	sext.w	a4,a0
+ 8f0:	57fd                	li	a5,-1
+ 8f2:	e8ba                	sd	a4,80(sp)
+ 8f4:	54f40263          	beq	s0,a5,e38 <main+0x568>
+ 8f8:	f9d2                	sd	s4,240(sp)
+ 8fa:	00000517          	auipc	a0,0x0
+ 8fe:	72650513          	addi	a0,a0,1830 # 1020 <_IO_stdin_used+0x50>
+ 902:	f5d6                	sd	s5,232(sp)
+ 904:	00002a17          	auipc	s4,0x2
+ 908:	6e4a3a03          	ld	s4,1764(s4) # 2fe8 <stderr@GLIBC_2.27>
+ 90c:	e9e2                	sd	s8,208(sp)
+ 90e:	4c01                	li	s8,0
+ 910:	e626                	sd	s1,264(sp)
+ 912:	e24a                	sd	s2,256(sp)
+ 914:	fdce                	sd	s3,248(sp)
+ 916:	f1da                	sd	s6,224(sp)
+ 918:	edde                	sd	s7,216(sp)
+ 91a:	e5e6                	sd	s9,200(sp)
+ 91c:	e1ea                	sd	s10,192(sp)
+ 91e:	fd6e                	sd	s11,184(sp)
+ 920:	b522                	fsd	fs0,168(sp)
+ 922:	f9fff0ef          	jal	8c0 <puts@plt>
+ 926:	00000517          	auipc	a0,0x0
+ 92a:	73a50513          	addi	a0,a0,1850 # 1060 <_IO_stdin_used+0x90>
+ 92e:	f93ff0ef          	jal	8c0 <puts@plt>
+ 932:	00000517          	auipc	a0,0x0
+ 936:	74e50513          	addi	a0,a0,1870 # 1080 <_IO_stdin_used+0xb0>
+ 93a:	f87ff0ef          	jal	8c0 <puts@plt>
+ 93e:	00000517          	auipc	a0,0x0
+ 942:	78250513          	addi	a0,a0,1922 # 10c0 <_IO_stdin_used+0xf0>
+ 946:	f7bff0ef          	jal	8c0 <puts@plt>
+ 94a:	00000617          	auipc	a2,0x0
+ 94e:	7ae60613          	addi	a2,a2,1966 # 10f8 <_IO_stdin_used+0x128>
+ 952:	00000597          	auipc	a1,0x0
+ 956:	7ae58593          	addi	a1,a1,1966 # 1100 <_IO_stdin_used+0x130>
+ 95a:	4509                	li	a0,2
+ 95c:	f45ff0ef          	jal	8a0 <__printf_chk@plt>
+ 960:	00000517          	auipc	a0,0x0
+ 964:	7b050513          	addi	a0,a0,1968 # 1110 <_IO_stdin_used+0x140>
+ 968:	f59ff0ef          	jal	8c0 <puts@plt>
+ 96c:	6746                	ld	a4,80(sp)
+ 96e:	00000597          	auipc	a1,0x0
+ 972:	7ba58593          	addi	a1,a1,1978 # 1128 <_IO_stdin_used+0x158>
+ 976:	66e6                	ld	a3,88(sp)
+ 978:	4509                	li	a0,2
+ 97a:	7606                	ld	a2,96(sp)
+ 97c:	f25ff0ef          	jal	8a0 <__printf_chk@plt>
+ 980:	00000517          	auipc	a0,0x0
+ 984:	7d850513          	addi	a0,a0,2008 # 1158 <_IO_stdin_used+0x188>
+ 988:	f39ff0ef          	jal	8c0 <puts@plt>
+ 98c:	00002797          	auipc	a5,0x2
+ 990:	2c478793          	addi	a5,a5,708 # 2c50 <tests>
+ 994:	ed3e                	sd	a5,152(sp)
+ 996:	8abe                	mv	s5,a5
+ 998:	00002497          	auipc	s1,0x2
+ 99c:	39048493          	addi	s1,s1,912 # 2d28 <modes>
+ 9a0:	8dd6                	mv	s11,s5
+ 9a2:	8ca6                	mv	s9,s1
+ 9a4:	e926                	sd	s1,144(sp)
+ 9a6:	000ca903          	lw	s2,0(s9)
+ 9aa:	854a                	mv	a0,s2
+ 9ac:	f05ff0ef          	jal	8b0 <fesetround@plt>
+ 9b0:	842a                	mv	s0,a0
+ 9b2:	2c051b63          	bnez	a0,c88 <main+0x3b8>
+ 9b6:	eabff0ef          	jal	860 <fegetround@plt>
+ 9ba:	e52a                	sd	a0,136(sp)
+ 9bc:	5f4000ef          	jal	fb0 <read_frm>
+ 9c0:	0005079b          	sext.w	a5,a0
+ 9c4:	f4be                	sd	a5,104(sp)
+ 9c6:	54a000ef          	jal	f10 <write_fflags.constprop.0>
+ 9ca:	5f4000ef          	jal	fbe <read_fflags>
+ 9ce:	000aa407          	flw	fs0,0(s5)
+ 9d2:	0005079b          	sext.w	a5,a0
+ 9d6:	f8be                	sd	a5,112(sp)
+ 9d8:	20840553          	fmv.s	fa0,fs0
+ 9dc:	590000ef          	jal	f6c <convert_fp16_ambient_isa>
+ 9e0:	8baa                	mv	s7,a0
+ 9e2:	5dc000ef          	jal	fbe <read_fflags>
+ 9e6:	0005079b          	sext.w	a5,a0
+ 9ea:	e13e                	sd	a5,128(sp)
+ 9ec:	5c4000ef          	jal	fb0 <read_frm>
+ 9f0:	00050b1b          	sext.w	s6,a0
+ 9f4:	51c000ef          	jal	f10 <write_fflags.constprop.0>
+ 9f8:	5c6000ef          	jal	fbe <read_fflags>
+ 9fc:	0005099b          	sext.w	s3,a0
+ a00:	20840553          	fmv.s	fa0,fs0
+ a04:	584000ef          	jal	f88 <convert_fp16_manual_rne_isa>
+ a08:	84aa                	mv	s1,a0
+ a0a:	5b4000ef          	jal	fbe <read_fflags>
+ a0e:	00050d1b          	sext.w	s10,a0
+ a12:	59e000ef          	jal	fb0 <read_frm>
+ a16:	2481                	sext.w	s1,s1
+ a18:	000b879b          	sext.w	a5,s7
+ a1c:	00050b9b          	sext.w	s7,a0
+ a20:	fcbe                	sd	a5,120(sp)
+ a22:	67aa                	ld	a5,136(sp)
+ a24:	30f90e63          	beq	s2,a5,d40 <main+0x470>
+ a28:	2c05                	addiw	s8,s8,1
+ a2a:	4405                	li	s0,1
+ a2c:	7506                	ld	a0,96(sp)
+ a2e:	e83ff0ef          	jal	8b0 <fesetround@plt>
+ a32:	892a                	mv	s2,a0
+ a34:	36051e63          	bnez	a0,db0 <main+0x4e0>
+ a38:	6546                	ld	a0,80(sp)
+ a3a:	58c000ef          	jal	fc6 <write_fflags>
+ a3e:	572000ef          	jal	fb0 <read_frm>
+ a42:	2501                	sext.w	a0,a0
+ a44:	67e6                	ld	a5,88(sp)
+ a46:	32a78563          	beq	a5,a0,d70 <main+0x4a0>
+ a4a:	000a3503          	ld	a0,0(s4)
+ a4e:	00001617          	auipc	a2,0x1
+ a52:	88a60613          	addi	a2,a2,-1910 # 12d8 <_IO_stdin_used+0x308>
+ a56:	4589                	li	a1,2
+ a58:	e39ff0ef          	jal	890 <__fprintf_chk@plt>
+ a5c:	554000ef          	jal	fb0 <read_frm>
+ a60:	0005091b          	sext.w	s2,a0
+ a64:	55a000ef          	jal	fbe <read_fflags>
+ a68:	2c05                	addiw	s8,s8,1
+ a6a:	008cb603          	ld	a2,8(s9)
+ a6e:	2501                	sext.w	a0,a0
+ a70:	008ab683          	ld	a3,8(s5)
+ a74:	00000797          	auipc	a5,0x0
+ a78:	56478793          	addi	a5,a5,1380 # fd8 <_IO_stdin_used+0x8>
+ a7c:	004aa703          	lw	a4,4(s5)
+ a80:	640a                	ld	s0,128(sp)
+ a82:	e0be                	sd	a5,64(sp)
+ a84:	78e6                	ld	a7,120(sp)
+ a86:	fc2a                	sd	a0,56(sp)
+ a88:	7846                	ld	a6,112(sp)
+ a8a:	f84a                	sd	s2,48(sp)
+ a8c:	77a6                	ld	a5,104(sp)
+ a8e:	f45e                	sd	s7,40(sp)
+ a90:	f06a                	sd	s10,32(sp)
+ a92:	00001597          	auipc	a1,0x1
+ a96:	87e58593          	addi	a1,a1,-1922 # 1310 <_IO_stdin_used+0x340>
+ a9a:	ec26                	sd	s1,24(sp)
+ a9c:	4509                	li	a0,2
+ a9e:	e84e                	sd	s3,16(sp)
+ aa0:	e45a                	sd	s6,8(sp)
+ aa2:	e022                	sd	s0,0(sp)
+ aa4:	dfdff0ef          	jal	8a0 <__printf_chk@plt>
+ aa8:	0ce1                	addi	s9,s9,24
+ aaa:	0d89                	addi	s11,s11,2
+ aac:	00002797          	auipc	a5,0x2
+ ab0:	2dc78793          	addi	a5,a5,732 # 2d88 <_DYNAMIC>
+ ab4:	eefc99e3          	bne	s9,a5,9a6 <main+0xd6>
+ ab8:	0ae1                	addi	s5,s5,24
+ aba:	64ca                	ld	s1,144(sp)
+ abc:	00002797          	auipc	a5,0x2
+ ac0:	26c78793          	addi	a5,a5,620 # 2d28 <modes>
+ ac4:	ecfa9ae3          	bne	s5,a5,998 <main+0xc8>
+ ac8:	fce2                	sd	s8,120(sp)
+ aca:	00001517          	auipc	a0,0x1
+ ace:	9a650513          	addi	a0,a0,-1626 # 1470 <_IO_stdin_used+0x4a0>
+ ad2:	f4a6                	sd	s1,104(sp)
+ ad4:	dedff0ef          	jal	8c0 <puts@plt>
+ ad8:	77a6                	ld	a5,104(sp)
+ ada:	4d01                	li	s10,0
+ adc:	00002d97          	auipc	s11,0x2
+ ae0:	50cdbd83          	ld	s11,1292(s11) # 2fe8 <stderr@GLIBC_2.27>
+ ae4:	8c3e                	mv	s8,a5
+ ae6:	4981                	li	s3,0
+ ae8:	a0e9                	j	bb2 <main+0x2e2>
+ aea:	4c6000ef          	jal	fb0 <read_frm>
+ aee:	0005091b          	sext.w	s2,a0
+ af2:	41e000ef          	jal	f10 <write_fflags.constprop.0>
+ af6:	4c8000ef          	jal	fbe <read_fflags>
+ afa:	00050b9b          	sext.w	s7,a0
+ afe:	44a000ef          	jal	f48 <convert_fp16_ambient_isa.constprop.0>
+ b02:	8a2a                	mv	s4,a0
+ b04:	4ba000ef          	jal	fbe <read_fflags>
+ b08:	0005079b          	sext.w	a5,a0
+ b0c:	f8be                	sd	a5,112(sp)
+ b0e:	402000ef          	jal	f10 <write_fflags.constprop.0>
+ b12:	4ac000ef          	jal	fbe <read_fflags>
+ b16:	00050b1b          	sext.w	s6,a0
+ b1a:	3fe000ef          	jal	f18 <convert_fp16_manual_rne_isa.constprop.0>
+ b1e:	84aa                	mv	s1,a0
+ b20:	49e000ef          	jal	fbe <read_fflags>
+ b24:	00050c9b          	sext.w	s9,a0
+ b28:	488000ef          	jal	fb0 <read_frm>
+ b2c:	2481                	sext.w	s1,s1
+ b2e:	010c2783          	lw	a5,16(s8)
+ b32:	000a071b          	sext.w	a4,s4
+ b36:	f4ba                	sd	a4,104(sp)
+ b38:	00050a9b          	sext.w	s5,a0
+ b3c:	1cf90363          	beq	s2,a5,d02 <main+0x432>
+ b40:	2d05                	addiw	s10,s10,1
+ b42:	4405                	li	s0,1
+ b44:	7506                	ld	a0,96(sp)
+ b46:	d6bff0ef          	jal	8b0 <fesetround@plt>
+ b4a:	8a2a                	mv	s4,a0
+ b4c:	1c051c63          	bnez	a0,d24 <main+0x454>
+ b50:	6546                	ld	a0,80(sp)
+ b52:	474000ef          	jal	fc6 <write_fflags>
+ b56:	45a000ef          	jal	fb0 <read_frm>
+ b5a:	2501                	sext.w	a0,a0
+ b5c:	67e6                	ld	a5,88(sp)
+ b5e:	16a78a63          	beq	a5,a0,cd2 <main+0x402>
+ b62:	000db503          	ld	a0,0(s11)
+ b66:	00000617          	auipc	a2,0x0
+ b6a:	77260613          	addi	a2,a2,1906 # 12d8 <_IO_stdin_used+0x308>
+ b6e:	4589                	li	a1,2
+ b70:	d21ff0ef          	jal	890 <__fprintf_chk@plt>
+ b74:	44a000ef          	jal	fbe <read_fflags>
+ b78:	2d05                	addiw	s10,s10,1
+ b7a:	008c3603          	ld	a2,8(s8)
+ b7e:	2501                	sext.w	a0,a0
+ b80:	00000797          	auipc	a5,0x0
+ b84:	45878793          	addi	a5,a5,1112 # fd8 <_IO_stdin_used+0x8>
+ b88:	78c6                	ld	a7,112(sp)
+ b8a:	f43e                	sd	a5,40(sp)
+ b8c:	7826                	ld	a6,104(sp)
+ b8e:	f02a                	sd	a0,32(sp)
+ b90:	87de                	mv	a5,s7
+ b92:	ec56                	sd	s5,24(sp)
+ b94:	e866                	sd	s9,16(sp)
+ b96:	874a                	mv	a4,s2
+ b98:	e426                	sd	s1,8(sp)
+ b9a:	86ce                	mv	a3,s3
+ b9c:	e05a                	sd	s6,0(sp)
+ b9e:	00001597          	auipc	a1,0x1
+ ba2:	98258593          	addi	a1,a1,-1662 # 1520 <_IO_stdin_used+0x550>
+ ba6:	4509                	li	a0,2
+ ba8:	cf9ff0ef          	jal	8a0 <__printf_chk@plt>
+ bac:	47a9                	li	a5,10
+ bae:	02f98963          	beq	s3,a5,be0 <main+0x310>
+ bb2:	000c2503          	lw	a0,0(s8)
+ bb6:	2985                	addiw	s3,s3,1
+ bb8:	cf9ff0ef          	jal	8b0 <fesetround@plt>
+ bbc:	842a                	mv	s0,a0
+ bbe:	f20506e3          	beqz	a0,aea <main+0x21a>
+ bc2:	008c3683          	ld	a3,8(s8)
+ bc6:	00001617          	auipc	a2,0x1
+ bca:	92260613          	addi	a2,a2,-1758 # 14e8 <_IO_stdin_used+0x518>
+ bce:	000db503          	ld	a0,0(s11)
+ bd2:	4589                	li	a1,2
+ bd4:	2d05                	addiw	s10,s10,1
+ bd6:	cbbff0ef          	jal	890 <__fprintf_chk@plt>
+ bda:	47a9                	li	a5,10
+ bdc:	fcf99be3          	bne	s3,a5,bb2 <main+0x2e2>
+ be0:	67ea                	ld	a5,152(sp)
+ be2:	0c61                	addi	s8,s8,24
+ be4:	0789                	addi	a5,a5,2
+ be6:	ed3e                	sd	a5,152(sp)
+ be8:	00002797          	auipc	a5,0x2
+ bec:	1a078793          	addi	a5,a5,416 # 2d88 <_DYNAMIC>
+ bf0:	eefc1be3          	bne	s8,a5,ae6 <main+0x216>
+ bf4:	77e6                	ld	a5,120(sp)
+ bf6:	7506                	ld	a0,96(sp)
+ bf8:	00fd043b          	addw	s0,s10,a5
+ bfc:	cb5ff0ef          	jal	8b0 <fesetround@plt>
+ c00:	84aa                	mv	s1,a0
+ c02:	20051a63          	bnez	a0,e16 <main+0x546>
+ c06:	6546                	ld	a0,80(sp)
+ c08:	3be000ef          	jal	fc6 <write_fflags>
+ c0c:	3a4000ef          	jal	fb0 <read_frm>
+ c10:	2501                	sext.w	a0,a0
+ c12:	67e6                	ld	a5,88(sp)
+ c14:	1ea78963          	beq	a5,a0,e06 <main+0x536>
+ c18:	00002797          	auipc	a5,0x2
+ c1c:	3d07b783          	ld	a5,976(a5) # 2fe8 <stderr@GLIBC_2.27>
+ c20:	6388                	ld	a0,0(a5)
+ c22:	00000617          	auipc	a2,0x0
+ c26:	6b660613          	addi	a2,a2,1718 # 12d8 <_IO_stdin_used+0x308>
+ c2a:	4589                	li	a1,2
+ c2c:	4485                	li	s1,1
+ c2e:	c63ff0ef          	jal	890 <__fprintf_chk@plt>
+ c32:	9c25                	addw	s0,s0,s1
+ c34:	00000917          	auipc	s2,0x0
+ c38:	3a490913          	addi	s2,s2,932 # fd8 <_IO_stdin_used+0x8>
+ c3c:	1c040063          	beqz	s0,dfc <main+0x52c>
+ c40:	370000ef          	jal	fb0 <read_frm>
+ c44:	0005049b          	sext.w	s1,a0
+ c48:	376000ef          	jal	fbe <read_fflags>
+ c4c:	0005079b          	sext.w	a5,a0
+ c50:	8726                	mv	a4,s1
+ c52:	86ca                	mv	a3,s2
+ c54:	8622                	mv	a2,s0
+ c56:	00001597          	auipc	a1,0x1
+ c5a:	9da58593          	addi	a1,a1,-1574 # 1630 <_IO_stdin_used+0x660>
+ c5e:	4509                	li	a0,2
+ c60:	c41ff0ef          	jal	8a0 <__printf_chk@plt>
+ c64:	342a                	fld	fs0,168(sp)
+ c66:	00803533          	snez	a0,s0
+ c6a:	64b2                	ld	s1,264(sp)
+ c6c:	6912                	ld	s2,256(sp)
+ c6e:	79ee                	ld	s3,248(sp)
+ c70:	7a4e                	ld	s4,240(sp)
+ c72:	7aae                	ld	s5,232(sp)
+ c74:	7b0e                	ld	s6,224(sp)
+ c76:	6bee                	ld	s7,216(sp)
+ c78:	6c4e                	ld	s8,208(sp)
+ c7a:	6cae                	ld	s9,200(sp)
+ c7c:	6d0e                	ld	s10,192(sp)
+ c7e:	7dea                	ld	s11,184(sp)
+ c80:	60f2                	ld	ra,280(sp)
+ c82:	6452                	ld	s0,272(sp)
+ c84:	6115                	addi	sp,sp,288
+ c86:	8082                	ret
+ c88:	008cb683          	ld	a3,8(s9)
+ c8c:	00000617          	auipc	a2,0x0
+ c90:	5e460613          	addi	a2,a2,1508 # 1270 <_IO_stdin_used+0x2a0>
+ c94:	000a3503          	ld	a0,0(s4)
+ c98:	4589                	li	a1,2
+ c9a:	bf7ff0ef          	jal	890 <__fprintf_chk@plt>
+ c9e:	7506                	ld	a0,96(sp)
+ ca0:	c11ff0ef          	jal	8b0 <fesetround@plt>
+ ca4:	842a                	mv	s0,a0
+ ca6:	12051d63          	bnez	a0,de0 <main+0x510>
+ caa:	6546                	ld	a0,80(sp)
+ cac:	31a000ef          	jal	fc6 <write_fflags>
+ cb0:	300000ef          	jal	fb0 <read_frm>
+ cb4:	2501                	sext.w	a0,a0
+ cb6:	67e6                	ld	a5,88(sp)
+ cb8:	10a78a63          	beq	a5,a0,dcc <main+0x4fc>
+ cbc:	000a3503          	ld	a0,0(s4)
+ cc0:	00000617          	auipc	a2,0x0
+ cc4:	61860613          	addi	a2,a2,1560 # 12d8 <_IO_stdin_used+0x308>
+ cc8:	4589                	li	a1,2
+ cca:	bc7ff0ef          	jal	890 <__fprintf_chk@plt>
+ cce:	2c09                	addiw	s8,s8,2
+ cd0:	bbe1                	j	aa8 <main+0x1d8>
+ cd2:	2ec000ef          	jal	fbe <read_fflags>
+ cd6:	2501                	sext.w	a0,a0
+ cd8:	67c6                	ld	a5,80(sp)
+ cda:	e8a794e3          	bne	a5,a0,b62 <main+0x292>
+ cde:	e80a1be3          	bnez	s4,b74 <main+0x2a4>
+ ce2:	2dc000ef          	jal	fbe <read_fflags>
+ ce6:	2501                	sext.w	a0,a0
+ ce8:	008c3603          	ld	a2,8(s8)
+ cec:	00000797          	auipc	a5,0x0
+ cf0:	2fc78793          	addi	a5,a5,764 # fe8 <_IO_stdin_used+0x18>
+ cf4:	e8040ae3          	beqz	s0,b88 <main+0x2b8>
+ cf8:	00000797          	auipc	a5,0x0
+ cfc:	2e078793          	addi	a5,a5,736 # fd8 <_IO_stdin_used+0x8>
+ d00:	b561                	j	b88 <main+0x2b8>
+ d02:	e32a9fe3          	bne	s5,s2,b40 <main+0x270>
+ d06:	016be7b3          	or	a5,s7,s6
+ d0a:	e2079be3          	bnez	a5,b40 <main+0x270>
+ d0e:	67ea                	ld	a5,152(sp)
+ d10:	0107d783          	lhu	a5,16(a5)
+ d14:	e2e796e3          	bne	a5,a4,b40 <main+0x270>
+ d18:	6791                	lui	a5,0x4
+ d1a:	c0078793          	addi	a5,a5,-1024 # 3c00 <__global_pointer$+0x400>
+ d1e:	e2f491e3          	bne	s1,a5,b40 <main+0x270>
+ d22:	b50d                	j	b44 <main+0x274>
+ d24:	000db503          	ld	a0,0(s11)
+ d28:	00000617          	auipc	a2,0x0
+ d2c:	57860613          	addi	a2,a2,1400 # 12a0 <_IO_stdin_used+0x2d0>
+ d30:	4589                	li	a1,2
+ d32:	4a05                	li	s4,1
+ d34:	b5dff0ef          	jal	890 <__fprintf_chk@plt>
+ d38:	6566                	ld	a0,88(sp)
+ d3a:	27e000ef          	jal	fb8 <write_frm>
+ d3e:	bd09                	j	b50 <main+0x280>
+ d40:	010ca783          	lw	a5,16(s9)
+ d44:	7726                	ld	a4,104(sp)
+ d46:	cef711e3          	bne	a4,a5,a28 <main+0x158>
+ d4a:	cceb1fe3          	bne	s6,a4,a28 <main+0x158>
+ d4e:	77c6                	ld	a5,112(sp)
+ d50:	0137e7b3          	or	a5,a5,s3
+ d54:	cc079ae3          	bnez	a5,a28 <main+0x158>
+ d58:	cd6b98e3          	bne	s7,s6,a28 <main+0x158>
+ d5c:	010dd783          	lhu	a5,16(s11)
+ d60:	7766                	ld	a4,120(sp)
+ d62:	cce793e3          	bne	a5,a4,a28 <main+0x158>
+ d66:	010ad783          	lhu	a5,16(s5)
+ d6a:	ca979fe3          	bne	a5,s1,a28 <main+0x158>
+ d6e:	b97d                	j	a2c <main+0x15c>
+ d70:	24e000ef          	jal	fbe <read_fflags>
+ d74:	2501                	sext.w	a0,a0
+ d76:	67c6                	ld	a5,80(sp)
+ d78:	cca799e3          	bne	a5,a0,a4a <main+0x17a>
+ d7c:	ce0910e3          	bnez	s2,a5c <main+0x18c>
+ d80:	230000ef          	jal	fb0 <read_frm>
+ d84:	0005091b          	sext.w	s2,a0
+ d88:	236000ef          	jal	fbe <read_fflags>
+ d8c:	2501                	sext.w	a0,a0
+ d8e:	008cb603          	ld	a2,8(s9)
+ d92:	00000797          	auipc	a5,0x0
+ d96:	25678793          	addi	a5,a5,598 # fe8 <_IO_stdin_used+0x18>
+ d9a:	008ab683          	ld	a3,8(s5)
+ d9e:	004aa703          	lw	a4,4(s5)
+ da2:	cc040fe3          	beqz	s0,a80 <main+0x1b0>
+ da6:	00000797          	auipc	a5,0x0
+ daa:	23278793          	addi	a5,a5,562 # fd8 <_IO_stdin_used+0x8>
+ dae:	b9c9                	j	a80 <main+0x1b0>
+ db0:	000a3503          	ld	a0,0(s4)
+ db4:	00000617          	auipc	a2,0x0
+ db8:	4ec60613          	addi	a2,a2,1260 # 12a0 <_IO_stdin_used+0x2d0>
+ dbc:	4589                	li	a1,2
+ dbe:	4905                	li	s2,1
+ dc0:	ad1ff0ef          	jal	890 <__fprintf_chk@plt>
+ dc4:	6566                	ld	a0,88(sp)
+ dc6:	1f2000ef          	jal	fb8 <write_frm>
+ dca:	b1bd                	j	a38 <main+0x168>
+ dcc:	1f2000ef          	jal	fbe <read_fflags>
+ dd0:	2501                	sext.w	a0,a0
+ dd2:	67c6                	ld	a5,80(sp)
+ dd4:	eea794e3          	bne	a5,a0,cbc <main+0x3ec>
+ dd8:	ee041be3          	bnez	s0,cce <main+0x3fe>
+ ddc:	2c05                	addiw	s8,s8,1
+ dde:	b1e9                	j	aa8 <main+0x1d8>
+ de0:	000a3503          	ld	a0,0(s4)
+ de4:	00000617          	auipc	a2,0x0
+ de8:	4bc60613          	addi	a2,a2,1212 # 12a0 <_IO_stdin_used+0x2d0>
+ dec:	4589                	li	a1,2
+ dee:	4405                	li	s0,1
+ df0:	aa1ff0ef          	jal	890 <__fprintf_chk@plt>
+ df4:	6566                	ld	a0,88(sp)
+ df6:	1c2000ef          	jal	fb8 <write_frm>
+ dfa:	bd45                	j	caa <main+0x3da>
+ dfc:	00000917          	auipc	s2,0x0
+ e00:	1ec90913          	addi	s2,s2,492 # fe8 <_IO_stdin_used+0x18>
+ e04:	bd35                	j	c40 <main+0x370>
+ e06:	1b8000ef          	jal	fbe <read_fflags>
+ e0a:	0005079b          	sext.w	a5,a0
+ e0e:	6746                	ld	a4,80(sp)
+ e10:	e0f714e3          	bne	a4,a5,c18 <main+0x348>
+ e14:	bd39                	j	c32 <main+0x362>
+ e16:	00002797          	auipc	a5,0x2
+ e1a:	1d27b783          	ld	a5,466(a5) # 2fe8 <stderr@GLIBC_2.27>
+ e1e:	6388                	ld	a0,0(a5)
+ e20:	00000617          	auipc	a2,0x0
+ e24:	48060613          	addi	a2,a2,1152 # 12a0 <_IO_stdin_used+0x2d0>
+ e28:	4589                	li	a1,2
+ e2a:	4485                	li	s1,1
+ e2c:	a65ff0ef          	jal	890 <__fprintf_chk@plt>
+ e30:	6566                	ld	a0,88(sp)
+ e32:	186000ef          	jal	fb8 <write_frm>
+ e36:	bbc1                	j	c06 <main+0x336>
+ e38:	00002797          	auipc	a5,0x2
+ e3c:	1b07b783          	ld	a5,432(a5) # 2fe8 <stderr@GLIBC_2.27>
+ e40:	6394                	ld	a3,0(a5)
+ e42:	02900613          	li	a2,41
+ e46:	4585                	li	a1,1
+ e48:	00000517          	auipc	a0,0x0
+ e4c:	1a850513          	addi	a0,a0,424 # ff0 <_IO_stdin_used+0x20>
+ e50:	a31ff0ef          	jal	880 <fwrite@plt>
+ e54:	4509                	li	a0,2
+ e56:	b52d                	j	c80 <main+0x3b0>
+
+0000000000000e58 <_start>:
+ e58:	022000ef          	jal	e7a <load_gp>
+ e5c:	87aa                	mv	a5,a0
+ e5e:	00002517          	auipc	a0,0x2
+ e62:	18253503          	ld	a0,386(a0) # 2fe0 <_GLOBAL_OFFSET_TABLE_+0x10>
+ e66:	6582                	ld	a1,0(sp)
+ e68:	0030                	addi	a2,sp,8
+ e6a:	ff017113          	andi	sp,sp,-16
+ e6e:	4681                	li	a3,0
+ e70:	4701                	li	a4,0
+ e72:	880a                	mv	a6,sp
+ e74:	9fdff0ef          	jal	870 <__libc_start_main@plt>
+ e78:	9002                	ebreak
+
+0000000000000e7a <load_gp>:
+ e7a:	00003197          	auipc	gp,0x3
+ e7e:	98618193          	addi	gp,gp,-1658 # 3800 <__global_pointer$>
+ e82:	8082                	ret
+	...
+
+0000000000000e86 <deregister_tm_clones>:
+ e86:	00002797          	auipc	a5,0x2
+ e8a:	18278793          	addi	a5,a5,386 # 3008 <__TMC_END__>
+ e8e:	00002517          	auipc	a0,0x2
+ e92:	17a50513          	addi	a0,a0,378 # 3008 <__TMC_END__>
+ e96:	00a78863          	beq	a5,a0,ea6 <deregister_tm_clones+0x20>
+ e9a:	00002797          	auipc	a5,0x2
+ e9e:	13e7b783          	ld	a5,318(a5) # 2fd8 <_ITM_deregisterTMCloneTable@Base>
+ ea2:	c391                	beqz	a5,ea6 <deregister_tm_clones+0x20>
+ ea4:	8782                	jr	a5
+ ea6:	8082                	ret
+
+0000000000000ea8 <register_tm_clones>:
+ ea8:	00002517          	auipc	a0,0x2
+ eac:	16050513          	addi	a0,a0,352 # 3008 <__TMC_END__>
+ eb0:	00002597          	auipc	a1,0x2
+ eb4:	15858593          	addi	a1,a1,344 # 3008 <__TMC_END__>
+ eb8:	8d89                	sub	a1,a1,a0
+ eba:	4035d793          	srai	a5,a1,0x3
+ ebe:	91fd                	srli	a1,a1,0x3f
+ ec0:	95be                	add	a1,a1,a5
+ ec2:	8585                	srai	a1,a1,0x1
+ ec4:	c599                	beqz	a1,ed2 <register_tm_clones+0x2a>
+ ec6:	00002797          	auipc	a5,0x2
+ eca:	1327b783          	ld	a5,306(a5) # 2ff8 <_ITM_registerTMCloneTable@Base>
+ ece:	c391                	beqz	a5,ed2 <register_tm_clones+0x2a>
+ ed0:	8782                	jr	a5
+ ed2:	8082                	ret
+
+0000000000000ed4 <__do_global_dtors_aux>:
+ ed4:	1141                	addi	sp,sp,-16
+ ed6:	e022                	sd	s0,0(sp)
+ ed8:	00002417          	auipc	s0,0x2
+ edc:	13040413          	addi	s0,s0,304 # 3008 <__TMC_END__>
+ ee0:	00044783          	lbu	a5,0(s0)
+ ee4:	e406                	sd	ra,8(sp)
+ ee6:	e385                	bnez	a5,f06 <__do_global_dtors_aux+0x32>
+ ee8:	00002797          	auipc	a5,0x2
+ eec:	1087b783          	ld	a5,264(a5) # 2ff0 <__cxa_finalize@GLIBC_2.27>
+ ef0:	c791                	beqz	a5,efc <__do_global_dtors_aux+0x28>
+ ef2:	00002517          	auipc	a0,0x2
+ ef6:	10e53503          	ld	a0,270(a0) # 3000 <__dso_handle>
+ efa:	9782                	jalr	a5
+ efc:	f8bff0ef          	jal	e86 <deregister_tm_clones>
+ f00:	4785                	li	a5,1
+ f02:	00f40023          	sb	a5,0(s0)
+ f06:	60a2                	ld	ra,8(sp)
+ f08:	6402                	ld	s0,0(sp)
+ f0a:	0141                	addi	sp,sp,16
+ f0c:	8082                	ret
+
+0000000000000f0e <frame_dummy>:
+ f0e:	bf69                	j	ea8 <register_tm_clones>
+
+0000000000000f10 <write_fflags.constprop.0>:
+ f10:	4781                	li	a5,0
+ f12:	00179073          	fsflags	a5
+ f16:	8082                	ret
+
+0000000000000f18 <convert_fp16_manual_rne_isa.constprop.0>:
+ f18:	00000797          	auipc	a5,0x0
+ f1c:	0bc7a787          	flw	fa5,188(a5) # fd4 <_IO_stdin_used+0x4>
+ f20:	4285                	li	t0,1
+ f22:	0d02f2d7          	vsetvli	t0,t0,e32,m1,ta,ma
+ f26:	4207d0d7          	vfmv.s.f	v1,fa5
+ f2a:	0cf2f2d7          	vsetvli	t0,t0,e16,mf2,ta,ma
+ f2e:	00202373          	frrm	t1
+ f32:	00205073          	fsrmi	zero,0
+ f36:	4a1a1157          	vfncvt.f.f.w	v2,v1
+ f3a:	00231073          	fsrm	t1
+ f3e:	42202557          	vmv.x.s	a0,v2
+ f42:	1542                	slli	a0,a0,0x30
+ f44:	9141                	srli	a0,a0,0x30
+ f46:	8082                	ret
+
+0000000000000f48 <convert_fp16_ambient_isa.constprop.0>:
+ f48:	00000797          	auipc	a5,0x0
+ f4c:	08c7a787          	flw	fa5,140(a5) # fd4 <_IO_stdin_used+0x4>
+ f50:	4285                	li	t0,1
+ f52:	0d02f2d7          	vsetvli	t0,t0,e32,m1,ta,ma
+ f56:	4207d0d7          	vfmv.s.f	v1,fa5
+ f5a:	0cf2f2d7          	vsetvli	t0,t0,e16,mf2,ta,ma
+ f5e:	4a1a1157          	vfncvt.f.f.w	v2,v1
+ f62:	42202557          	vmv.x.s	a0,v2
+ f66:	1542                	slli	a0,a0,0x30
+ f68:	9141                	srli	a0,a0,0x30
+ f6a:	8082                	ret
+
+0000000000000f6c <convert_fp16_ambient_isa>:
+ f6c:	4285                	li	t0,1
+ f6e:	0d02f2d7          	vsetvli	t0,t0,e32,m1,ta,ma
+ f72:	420550d7          	vfmv.s.f	v1,fa0
+ f76:	0cf2f2d7          	vsetvli	t0,t0,e16,mf2,ta,ma
+ f7a:	4a1a1157          	vfncvt.f.f.w	v2,v1
+ f7e:	42202557          	vmv.x.s	a0,v2
+ f82:	1542                	slli	a0,a0,0x30
+ f84:	9141                	srli	a0,a0,0x30
+ f86:	8082                	ret
+
+0000000000000f88 <convert_fp16_manual_rne_isa>:
+ f88:	4285                	li	t0,1
+ f8a:	0d02f2d7          	vsetvli	t0,t0,e32,m1,ta,ma
+ f8e:	420550d7          	vfmv.s.f	v1,fa0
+ f92:	0cf2f2d7          	vsetvli	t0,t0,e16,mf2,ta,ma
+ f96:	00202373          	frrm	t1
+ f9a:	00205073          	fsrmi	zero,0
+ f9e:	4a1a1157          	vfncvt.f.f.w	v2,v1
+ fa2:	00231073          	fsrm	t1
+ fa6:	42202557          	vmv.x.s	a0,v2
+ faa:	1542                	slli	a0,a0,0x30
+ fac:	9141                	srli	a0,a0,0x30
+ fae:	8082                	ret
+
+0000000000000fb0 <read_frm>:
+ fb0:	00202573          	frrm	a0
+ fb4:	2501                	sext.w	a0,a0
+ fb6:	8082                	ret
+
+0000000000000fb8 <write_frm>:
+ fb8:	00251073          	fsrm	a0
+ fbc:	8082                	ret
+
+0000000000000fbe <read_fflags>:
+ fbe:	00102573          	frflags	a0
+ fc2:	2501                	sext.w	a0,a0
+ fc4:	8082                	ret
+
+0000000000000fc6 <write_fflags>:
+ fc6:	00151073          	fsflags	a0
+ fca:	8082                	ret

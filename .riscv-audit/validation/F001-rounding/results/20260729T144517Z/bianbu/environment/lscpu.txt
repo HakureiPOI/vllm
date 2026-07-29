@@ -1,0 +1,14 @@
+架构：              riscv64
+字节序：            Little Endian
+CPU:                8
+在线 CPU 列表：     0-7
+型号名称：          Spacemit(R) X60
+每个核的线程数：    1
+每个座的核数：      8
+座：                1
+CPU(s) scaling MHz: 100%
+CPU 最大 MHz：      1600.0000
+CPU 最小 MHz：      614.4000
+L1d 缓存：          256 KiB (8 instances)
+L1i 缓存：          256 KiB (8 instances)
+L2 缓存：           1 MiB (2 instances)

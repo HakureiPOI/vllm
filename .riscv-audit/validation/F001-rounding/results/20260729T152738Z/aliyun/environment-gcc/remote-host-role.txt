@@ -1,0 +1,1 @@
+aliyun-x86_64-riscv64-cross-gcc

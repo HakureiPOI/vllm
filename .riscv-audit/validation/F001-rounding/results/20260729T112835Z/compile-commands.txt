@@ -1,0 +1,30 @@
+compile_commands.txt
+=== bianbu (native RISC-V) ===
+
+# O0 implicit + manual_rne
+gcc -x c /tmp/test_fp16_isa.c -o /tmp/test_fp16_isa_o0 -march=rv64gcv_zvfh -O0 -lm -frounding-math
+
+# O3 implicit + manual_rne
+gcc -x c /tmp/test_fp16_isa.c -o /tmp/test_fp16_isa_o3 -march=rv64gcv_zvfh -O3 -lm -frounding-math
+
+# Disassembly
+objdump -drwC /tmp/test_fp16_isa_o0
+objdump -drwC /tmp/test_fp16_isa_o3
+
+=== aliyun (x86 cross-compile, not run) ===
+
+# FP16 implicit API test (FAILED - GCC 13.x doesn't support vfloat16m1_t)
+riscv64-linux-gnu-gcc -x c /tmp/test_xc.c -c -o /dev/null -march=rv64gcv_zvfh -O0
+
+# FP16 explicit _rm API test (FAILED - __RISCV_FRM_RNE not available)
+riscv64-linux-gnu-gcc -x c /tmp/test_xc_rm.c -c -o /dev/null -march=rv64gcv_zvfh -O0
+
+=== blocked items ===
+
+# FP16 C intrinsic API: blocked (GCC 13.x doesn't support vfloat16m1_t)
+# FP16 explicit _rm API: blocked (__RISCV_FRM_RNE not declared)
+# BF16 C intrinsic API: blocked (same GCC limitation + no zvfbfmin in hardware)
+# BF16 explicit _rm API: blocked (same as FP16)
+# Clang RISC-V: blocked (not available on bianbu, only x86 on aliyun)
+# FENV_ACCESS ON via C intrinsic: blocked (no C intrinsic available)
+# FENV_ACCESS ON via inline asm: N/A (inline asm doesn't use C intrinsic fenv semantics)

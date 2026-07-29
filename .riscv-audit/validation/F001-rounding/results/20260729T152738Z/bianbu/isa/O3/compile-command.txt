@@ -1,0 +1,1 @@
+gcc -std=c11 -O3 -DNDEBUG -fno-lto -frounding-math -march=rv64gcv_zvfh src/test_fp16_isa.c -o /tmp/f001-rounding-remediation-20260729T152738Z/evidence/bianbu/isa/O3/test_fp16_isa -lm 

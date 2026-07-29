@@ -1,0 +1,62 @@
+F001 environment summary: bianbu
+================================
+
+Role
+----
+RISC-V native build and runtime host for the ISA-equivalent FP32-to-FP16
+experiment; native GCC C intrinsic compile probes.
+
+Remediation evidence
+--------------------
+results/20260729T152738Z/bianbu/environment/
+results/20260729T152738Z/bianbu/isa/
+results/20260729T152738Z/bianbu/gcc-probes/
+
+Host
+----
+Linux 6.6.63-cloud, riscv64
+Spacemit X60
+
+The captured /proc/cpuinfo ISA line advertises v, zvfh and zvfhmin. It does not
+advertise zvfbfmin. This is an observation about the current kernel-exported
+cpuinfo, not proof that the underlying hardware cannot implement zvfbfmin.
+
+Compiler
+--------
+/usr/bin/gcc
+gcc (Bianbu 13.2.0-23ubuntu4bb4) 13.2.0
+
+ISA runtime compile march
+-------------------------
+rv64gcv_zvfh
+
+The march was selected explicitly after checking the cpuinfo ISA line and
+confirming compiler acceptance. It was not inferred from preprocessor macros
+alone.
+
+GCC RVV header
+--------------
+/usr/lib/gcc/riscv64-linux-gnu/13/include/riscv_vector.h
+SHA256:
+9201ab7df8abdf4794ffa0f78a0d12224bdddbb98c86c455904c56d9b2903a20
+
+API probe boundary
+------------------
+With the exact commands and headers recorded in the remediation evidence:
+
+- FP16 implicit probe: compile exit 1
+- FP16 explicit _rm probe: compile exit 1
+- BF16 implicit probe: compile exit 1
+- BF16 explicit _rm probe: compile exit 1
+
+The FP16 diagnostics report unavailable vfloat16m1_t/vfloat16m2_t and
+intrinsics. The explicit probe also reports __RISCV_FRM_RNE unavailable.
+The BF16 diagnostics report unavailable vbfloat16 types and intrinsics.
+
+These results apply only to this tested GCC installation, flags and header.
+They do not establish a universal claim about all GCC 13 builds.
+
+Runtime boundary
+----------------
+Only the FP32-to-FP16 bare ISA and manual CSR RNE paths were executed. No BF16
+instruction was executed.

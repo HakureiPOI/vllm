@@ -1,0 +1,24 @@
+Repository state recorded for F001 evidence closure
+===================================================
+
+HEAD: 8d4a0e429e64c7d5b32021525dc78ae6806db804
+Branch: validation/f001-rounding
+
+git status --short:
+?? .riscv-audit/reviews/
+?? .riscv-audit/validation/F001-rounding/
+
+Formal source diff scope:
+csrc/
+vllm/
+cmake/
+CMakeLists.txt
+setup.py
+pyproject.toml
+
+Formal source diff result:
+no output
+
+The validation package is untracked at this HEAD. HEAD identifies the formal
+source baseline; package and evidence identity is established by manifest and
+remote-generated SHA-256 records.

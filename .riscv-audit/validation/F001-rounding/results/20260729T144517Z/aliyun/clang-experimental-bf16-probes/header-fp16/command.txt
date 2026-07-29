@@ -1,0 +1,1 @@
+clang --target=riscv64-linux-gnu -menable-experimental-extensions -march=rv64gcv_zvfh -E -H /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/clang-experimental-bf16-probes/header-fp16/header-probe.c 

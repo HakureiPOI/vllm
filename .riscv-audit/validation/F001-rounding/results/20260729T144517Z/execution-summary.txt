@@ -1,0 +1,79 @@
+F001 remediation execution summary
+==================================
+
+UTC result identifier
+---------------------
+20260729T144517Z
+
+Repository
+----------
+HEAD: 8d4a0e429e64c7d5b32021525dc78ae6806db804
+Branch: validation/f001-rounding
+
+Remote roles
+------------
+bianbu: riscv64 native GCC build, O0/O3 runtime, disassembly, GCC probes
+aliyun: x86_64 host, RISC-V GCC cross probes, Clang RISC-V probes
+
+Remote work directories
+-----------------------
+/tmp/f001-rounding-remediation-20260729T144517Z
+
+No pre-existing result directory was overwritten. The first-run directory
+results/20260729T112835Z was not modified.
+
+ISA build and run
+-----------------
+Compiler: /usr/bin/gcc, Bianbu GCC 13.2.0
+March: rv64gcv_zvfh
+March source: explicit after bianbu cpuinfo zvfh observation and compiler acceptance
+
+O0 compile exit: 0
+O0 run exit: 0
+O0 functional records: 36, all PASS
+O0 stability records: 40, all PASS
+
+O3 compile exit: 0
+O3 run exit: 0
+O3 functional records: 36, all PASS
+O3 stability records: 40, all PASS
+
+Probe result matrix
+-------------------
+bianbu GCC 13.2:
+  FP16 implicit: 1
+  FP16 explicit _rm: 1
+  BF16 implicit: 1
+  BF16 explicit _rm: 1
+
+aliyun RISC-V GCC 13.3:
+  FP16 implicit: 1
+  FP16 explicit _rm: 1
+  BF16 implicit: 1
+  BF16 explicit _rm: 1
+
+aliyun Clang 18, --target=riscv64-linux-gnu:
+  FP16 implicit: 0
+  FP16 explicit _rm: 0
+  BF16 implicit with unversioned zvfbfmin: 1
+  BF16 explicit _rm with unversioned zvfbfmin: 1
+
+aliyun Clang 18, experimental zvfbfmin1p0:
+  FP16 implicit: 0
+  FP16 explicit _rm: 0
+  BF16 implicit: 1
+  BF16 explicit _rm: 1
+
+Artifact policy
+---------------
+Remote binaries and object files were not copied into the repository. The
+repository contains their SHA-256 text records and disassembly only.
+
+Scope
+-----
+ISA-equivalent FP32-to-FP16 mechanism validation.
+Clang FP16 C intrinsic compile/codegen observation.
+No C intrinsic runtime validation.
+No vLLM path execution.
+No BF16 runtime.
+F001 not upgraded to confirmed.

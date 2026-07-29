@@ -1,0 +1,1 @@
+clang --target=riscv64-linux-gnu -menable-experimental-extensions -march=rv64gcv_zvfh -dM -E -x c /dev/null 

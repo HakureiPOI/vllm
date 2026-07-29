@@ -1,0 +1,1 @@
+clang: error: invalid arch name 'rv64gcv_zvfh_zvfbfmin', requires '-menable-experimental-extensions' for experimental extension 'zvfbfmin'

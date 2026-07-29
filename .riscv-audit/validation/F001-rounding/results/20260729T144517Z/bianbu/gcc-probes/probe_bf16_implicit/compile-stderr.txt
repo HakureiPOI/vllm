@@ -1,0 +1,19 @@
+/tmp/f001-rounding-remediation-20260729T144517Z/evidence/bianbu/gcc-probes/probe_bf16_implicit/source.c:4:1: error: unknown type name ‘vbfloat16m1_t’; did you mean ‘vfloat64m1_t’?
+    4 | vbfloat16m1_t probe_bf16_m1(vfloat32m2_t source, size_t vl) {
+      | ^~~~~~~~~~~~~
+      | vfloat64m1_t
+/tmp/f001-rounding-remediation-20260729T144517Z/evidence/bianbu/gcc-probes/probe_bf16_implicit/source.c: In function ‘probe_bf16_m1’:
+/tmp/f001-rounding-remediation-20260729T144517Z/evidence/bianbu/gcc-probes/probe_bf16_implicit/source.c:5:12: warning: implicit declaration of function ‘__riscv_vfncvtbf16_f_f_w_bf16m1’; did you mean ‘__riscv_vfncvt_rod_f_f_w_f32m1’? [-Wimplicit-function-declaration]
+    5 |     return __riscv_vfncvtbf16_f_f_w_bf16m1(source, vl);
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |            __riscv_vfncvt_rod_f_f_w_f32m1
+/tmp/f001-rounding-remediation-20260729T144517Z/evidence/bianbu/gcc-probes/probe_bf16_implicit/source.c: At top level:
+/tmp/f001-rounding-remediation-20260729T144517Z/evidence/bianbu/gcc-probes/probe_bf16_implicit/source.c:8:1: error: unknown type name ‘vbfloat16m2_t’; did you mean ‘vfloat64m2_t’?
+    8 | vbfloat16m2_t probe_bf16_m2(vfloat32m4_t source, size_t vl) {
+      | ^~~~~~~~~~~~~
+      | vfloat64m2_t
+/tmp/f001-rounding-remediation-20260729T144517Z/evidence/bianbu/gcc-probes/probe_bf16_implicit/source.c: In function ‘probe_bf16_m2’:
+/tmp/f001-rounding-remediation-20260729T144517Z/evidence/bianbu/gcc-probes/probe_bf16_implicit/source.c:9:12: warning: implicit declaration of function ‘__riscv_vfncvtbf16_f_f_w_bf16m2’; did you mean ‘__riscv_vfncvt_rod_f_f_w_f32m2’? [-Wimplicit-function-declaration]
+    9 |     return __riscv_vfncvtbf16_f_f_w_bf16m2(source, vl);
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |            __riscv_vfncvt_rod_f_f_w_f32m2

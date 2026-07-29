@@ -1,0 +1,542 @@
+F001 remediation evidence manifest
+UTC timestamp: 20260729T144517Z
+Repository HEAD: 8d4a0e429e64c7d5b32021525dc78ae6806db804
+Branch: validation/f001-rounding
+Remote host roles: bianbu=RISC-V runtime and native GCC probe; aliyun=x86_64 cross GCC and Clang probe
+
+Primary document and source SHA256:
+05da2b9d86d25db61c1e944afe4e65b8067d3bd17946565cd3a8d2f1c05a559e */d/Project/fork/vllm/.riscv-audit/validation/F001-rounding/src/test_fp16_isa.c
+8eb73d563dc309474c6240d9d4ed0a0b67e2403ff7d95381a0034c84e7fa3bec */d/Project/fork/vllm/.riscv-audit/validation/F001-rounding/src/probes/probe_bf16_explicit_rm.c
+651b63bad379ca3b5036f652805749bb31cb7d2a6f37fc0a3f724a8b69405ac4 */d/Project/fork/vllm/.riscv-audit/validation/F001-rounding/src/probes/probe_bf16_implicit.c
+455d719a36fa08ec92ed1a1075c9703aa42037af486b39aebac35501b412399f */d/Project/fork/vllm/.riscv-audit/validation/F001-rounding/src/probes/probe_fp16_explicit_rm.c
+276f0f834c345bd98efc077c39e5da2ced45eb3f8602515f29e03118c61a7d73 */d/Project/fork/vllm/.riscv-audit/validation/F001-rounding/src/probes/probe_fp16_implicit.c
+38ce4da555d139b84c9cd6360ab9d5ceac920df8131120a3cd6231c3af9bffcd */d/Project/fork/vllm/.riscv-audit/validation/F001-rounding/scripts/build_fp16_isa.sh
+15b95aa50973478db5700d356ffadc5a3acc33a9d23cdb7311f0bfd9d6fcf99e */d/Project/fork/vllm/.riscv-audit/validation/F001-rounding/scripts/create_manifest.sh
+76161c76ad35db95a1b1715468d6cf8cd1f5cd905c2ae087173b999f3f668b15 */d/Project/fork/vllm/.riscv-audit/validation/F001-rounding/scripts/extract_environment.sh
+9c582eee8afc4e3af339f962ffafd1a841b16d5df4870928bdc3a8c1fe5234e9 */d/Project/fork/vllm/.riscv-audit/validation/F001-rounding/scripts/probe_intrinsics.sh
+bfe70eb2a90564dc8f1c8cc2e6b8a8db412c997abdee44622d30bdf39bfe4eeb */d/Project/fork/vllm/.riscv-audit/validation/F001-rounding/scripts/run_fp16_isa.sh
+092e480bf2163479cd4d82650f10c662bc96118caba3e745d1ffac94d5e158d5 */d/Project/fork/vllm/.riscv-audit/validation/F001-rounding/README.md
+2b3d703d1a588fef0fbc2ee462c46df2a3d1f92f525b323c130c9afc9fbc1e0f */d/Project/fork/vllm/.riscv-audit/validation/F001-rounding/REPORT.md
+
+Compiler paths and versions:
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/compiler-path.txt
+  /usr/bin/clang
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/compiler-version.txt
+  Ubuntu clang version 18.1.3 (1ubuntu1)
+  Target: x86_64-pc-linux-gnu
+  Thread model: posix
+  InstalledDir: /usr/bin
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/compiler-path.txt
+  /usr/bin/clang
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/compiler-version.txt
+  Ubuntu clang version 18.1.3 (1ubuntu1)
+  Target: x86_64-pc-linux-gnu
+  Thread model: posix
+  InstalledDir: /usr/bin
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-clang/compiler-path.txt
+  /usr/bin/clang
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-clang/compiler-version.txt
+  Ubuntu clang version 18.1.3 (1ubuntu1)
+  Target: x86_64-pc-linux-gnu
+  Thread model: posix
+  InstalledDir: /usr/bin
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-gcc/compiler-path.txt
+  /usr/bin/riscv64-linux-gnu-gcc
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-gcc/compiler-version.txt
+  riscv64-linux-gnu-gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+  Copyright (C) 2023 Free Software Foundation, Inc.
+  This is free software; see the source for copying conditions.  There is NO
+  warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/compiler-path.txt
+  /usr/bin/riscv64-linux-gnu-gcc
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/compiler-version.txt
+  riscv64-linux-gnu-gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+  Copyright (C) 2023 Free Software Foundation, Inc.
+  This is free software; see the source for copying conditions.  There is NO
+  warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/environment/compiler-path.txt
+  /usr/bin/gcc
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/environment/compiler-version.txt
+  gcc (Bianbu 13.2.0-23ubuntu4bb4) 13.2.0
+  Copyright (C) 2023 Free Software Foundation, Inc.
+  This is free software; see the source for copying conditions.  There is NO
+  warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/compiler-path.txt
+  /usr/bin/gcc
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/compiler-version.txt
+  gcc (Bianbu 13.2.0-23ubuntu4bb4) 13.2.0
+  Copyright (C) 2023 Free Software Foundation, Inc.
+  This is free software; see the source for copying conditions.  There is NO
+  warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/compiler-path.txt
+  /usr/bin/gcc
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/compiler-version.txt
+  gcc (Bianbu 13.2.0-23ubuntu4bb4) 13.2.0
+  Copyright (C) 2023 Free Software Foundation, Inc.
+  This is free software; see the source for copying conditions.  There is NO
+  warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  
+
+Header paths and SHA256:
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/header-bf16/header-path.txt
+  /usr/lib/llvm-18/lib/clang/18/include/riscv_vector.h
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/header-bf16/header-sha256.txt
+  8dc1b13e12396ee0b014b656cf2187f7a499ef7643aa1ed5de459e937fc70fdf  /usr/lib/llvm-18/lib/clang/18/include/riscv_vector.h
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/header-fp16/header-path.txt
+  /usr/lib/llvm-18/lib/clang/18/include/riscv_vector.h
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/header-fp16/header-sha256.txt
+  8dc1b13e12396ee0b014b656cf2187f7a499ef7643aa1ed5de459e937fc70fdf  /usr/lib/llvm-18/lib/clang/18/include/riscv_vector.h
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/header-bf16/header-path.txt
+  
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/header-fp16/header-path.txt
+  /usr/lib/llvm-18/lib/clang/18/include/riscv_vector.h
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/header-fp16/header-sha256.txt
+  8dc1b13e12396ee0b014b656cf2187f7a499ef7643aa1ed5de459e937fc70fdf  /usr/lib/llvm-18/lib/clang/18/include/riscv_vector.h
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/header-bf16/header-path.txt
+  /usr/lib/gcc-cross/riscv64-linux-gnu/13/include/riscv_vector.h
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/header-bf16/header-sha256.txt
+  9201ab7df8abdf4794ffa0f78a0d12224bdddbb98c86c455904c56d9b2903a20  /usr/lib/gcc-cross/riscv64-linux-gnu/13/include/riscv_vector.h
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/header-fp16/header-path.txt
+  /usr/lib/gcc-cross/riscv64-linux-gnu/13/include/riscv_vector.h
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/header-fp16/header-sha256.txt
+  9201ab7df8abdf4794ffa0f78a0d12224bdddbb98c86c455904c56d9b2903a20  /usr/lib/gcc-cross/riscv64-linux-gnu/13/include/riscv_vector.h
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/header-bf16/header-path.txt
+  /usr/lib/gcc/riscv64-linux-gnu/13/include/riscv_vector.h
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/header-bf16/header-sha256.txt
+  9201ab7df8abdf4794ffa0f78a0d12224bdddbb98c86c455904c56d9b2903a20  /usr/lib/gcc/riscv64-linux-gnu/13/include/riscv_vector.h
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/header-fp16/header-path.txt
+  /usr/lib/gcc/riscv64-linux-gnu/13/include/riscv_vector.h
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/header-fp16/header-sha256.txt
+  9201ab7df8abdf4794ffa0f78a0d12224bdddbb98c86c455904c56d9b2903a20  /usr/lib/gcc/riscv64-linux-gnu/13/include/riscv_vector.h
+
+Compile and run exit codes:
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/macros-bf16-exit-code.txt
+  0
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/macros-fp16-exit-code.txt
+  0
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_bf16_explicit_rm/compile-exit-code.txt
+  1
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_bf16_implicit/compile-exit-code.txt
+  1
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_fp16_explicit_rm/compile-exit-code.txt
+  0
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_fp16_implicit/compile-exit-code.txt
+  0
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/macros-bf16-exit-code.txt
+  1
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/macros-fp16-exit-code.txt
+  0
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_bf16_explicit_rm/compile-exit-code.txt
+  1
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_bf16_implicit/compile-exit-code.txt
+  1
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_fp16_explicit_rm/compile-exit-code.txt
+  0
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_fp16_implicit/compile-exit-code.txt
+  0
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/macros-bf16-exit-code.txt
+  0
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/macros-fp16-exit-code.txt
+  0
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_bf16_explicit_rm/compile-exit-code.txt
+  1
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_bf16_implicit/compile-exit-code.txt
+  1
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_fp16_explicit_rm/compile-exit-code.txt
+  1
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_fp16_implicit/compile-exit-code.txt
+  1
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/macros-bf16-exit-code.txt
+  0
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/macros-fp16-exit-code.txt
+  0
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_bf16_explicit_rm/compile-exit-code.txt
+  1
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_bf16_implicit/compile-exit-code.txt
+  1
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_fp16_explicit_rm/compile-exit-code.txt
+  1
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_fp16_implicit/compile-exit-code.txt
+  1
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/O0/compile-exit-code.txt
+  0
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/O0/run-exit-code.txt
+  0
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/O3/compile-exit-code.txt
+  0
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/O3/run-exit-code.txt
+  0
+
+Remote binary and object SHA256 records:
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_fp16_explicit_rm/object-sha256.txt
+  848d49293af3bf0d72688e2ad91bdf3f9f9d8f520c3987b5bb04dc61bb11c77d  /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/clang-experimental-bf16-probes/probe_fp16_explicit_rm/probe_fp16_explicit_rm.o
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_fp16_implicit/object-sha256.txt
+  30de46814f5de7c5153bdd72662cf52458ce17e31be739f97afdf99c32ec31ba  /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/clang-experimental-bf16-probes/probe_fp16_implicit/probe_fp16_implicit.o
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_fp16_explicit_rm/object-sha256.txt
+  848d49293af3bf0d72688e2ad91bdf3f9f9d8f520c3987b5bb04dc61bb11c77d  /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/clang-probes/probe_fp16_explicit_rm/probe_fp16_explicit_rm.o
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_fp16_implicit/object-sha256.txt
+  30de46814f5de7c5153bdd72662cf52458ce17e31be739f97afdf99c32ec31ba  /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/clang-probes/probe_fp16_implicit/probe_fp16_implicit.o
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/O0/binary-sha256.txt
+  46f8c1a63bc0368ff6613c423501789be67f0d1d5d066d050408106283c95b2c  /tmp/f001-rounding-remediation-20260729T144517Z/evidence/bianbu/isa/O0/test_fp16_isa
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/O3/binary-sha256.txt
+  91a8b4631799953a5f1f2a96024fc37ed5c8dd6129c44c9abbc832c6bba783fd  /tmp/f001-rounding-remediation-20260729T144517Z/evidence/bianbu/isa/O3/test_fp16_isa
+
+CPU and environment evidence:
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-clang/cpuinfo-summary.txt
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-clang/lscpu.txt
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-clang/remote-host-role.txt
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-clang/uname.txt
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-gcc/cpuinfo-summary.txt
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-gcc/lscpu.txt
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-gcc/remote-host-role.txt
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-gcc/uname.txt
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/environment/cpuinfo-summary.txt
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/environment/lscpu.txt
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/environment/remote-host-role.txt
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/environment/uname.txt
+
+Full compile commands:
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/macros-bf16-command.txt
+  clang --target=riscv64-linux-gnu -menable-experimental-extensions -march=rv64gcv_zvfh_zvfbfmin1p0 -dM -E -x c /dev/null 
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/macros-fp16-command.txt
+  clang --target=riscv64-linux-gnu -menable-experimental-extensions -march=rv64gcv_zvfh -dM -E -x c /dev/null 
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_bf16_explicit_rm/compile-command.txt
+  clang --target=riscv64-linux-gnu -menable-experimental-extensions -march=rv64gcv_zvfh_zvfbfmin1p0 -std=c11 -O2 -fno-lto -c /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/clang-experimental-bf16-probes/probe_bf16_explicit_rm/source.c -o /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/clang-experimental-bf16-probes/probe_bf16_explicit_rm/probe_bf16_explicit_rm.o 
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_bf16_implicit/compile-command.txt
+  clang --target=riscv64-linux-gnu -menable-experimental-extensions -march=rv64gcv_zvfh_zvfbfmin1p0 -std=c11 -O2 -fno-lto -c /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/clang-experimental-bf16-probes/probe_bf16_implicit/source.c -o /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/clang-experimental-bf16-probes/probe_bf16_implicit/probe_bf16_implicit.o 
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_fp16_explicit_rm/compile-command.txt
+  clang --target=riscv64-linux-gnu -menable-experimental-extensions -march=rv64gcv_zvfh -std=c11 -O2 -fno-lto -c /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/clang-experimental-bf16-probes/probe_fp16_explicit_rm/source.c -o /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/clang-experimental-bf16-probes/probe_fp16_explicit_rm/probe_fp16_explicit_rm.o 
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_fp16_implicit/compile-command.txt
+  clang --target=riscv64-linux-gnu -menable-experimental-extensions -march=rv64gcv_zvfh -std=c11 -O2 -fno-lto -c /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/clang-experimental-bf16-probes/probe_fp16_implicit/source.c -o /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/clang-experimental-bf16-probes/probe_fp16_implicit/probe_fp16_implicit.o 
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/macros-bf16-command.txt
+  clang --target=riscv64-linux-gnu -march=rv64gcv_zvfh_zvfbfmin -dM -E -x c /dev/null 
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/macros-fp16-command.txt
+  clang --target=riscv64-linux-gnu -march=rv64gcv_zvfh -dM -E -x c /dev/null 
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_bf16_explicit_rm/compile-command.txt
+  clang --target=riscv64-linux-gnu -march=rv64gcv_zvfh_zvfbfmin -std=c11 -O2 -fno-lto -c /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/clang-probes/probe_bf16_explicit_rm/source.c -o /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/clang-probes/probe_bf16_explicit_rm/probe_bf16_explicit_rm.o 
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_bf16_implicit/compile-command.txt
+  clang --target=riscv64-linux-gnu -march=rv64gcv_zvfh_zvfbfmin -std=c11 -O2 -fno-lto -c /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/clang-probes/probe_bf16_implicit/source.c -o /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/clang-probes/probe_bf16_implicit/probe_bf16_implicit.o 
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_fp16_explicit_rm/compile-command.txt
+  clang --target=riscv64-linux-gnu -march=rv64gcv_zvfh -std=c11 -O2 -fno-lto -c /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/clang-probes/probe_fp16_explicit_rm/source.c -o /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/clang-probes/probe_fp16_explicit_rm/probe_fp16_explicit_rm.o 
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_fp16_implicit/compile-command.txt
+  clang --target=riscv64-linux-gnu -march=rv64gcv_zvfh -std=c11 -O2 -fno-lto -c /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/clang-probes/probe_fp16_implicit/source.c -o /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/clang-probes/probe_fp16_implicit/probe_fp16_implicit.o 
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/macros-bf16-command.txt
+  riscv64-linux-gnu-gcc -march=rv64gcv_zvfh_zvfbfmin -dM -E -x c /dev/null 
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/macros-fp16-command.txt
+  riscv64-linux-gnu-gcc -march=rv64gcv_zvfh -dM -E -x c /dev/null 
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_bf16_explicit_rm/compile-command.txt
+  riscv64-linux-gnu-gcc -march=rv64gcv_zvfh_zvfbfmin -std=c11 -O2 -fno-lto -c /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/gcc-probes/probe_bf16_explicit_rm/source.c -o /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/gcc-probes/probe_bf16_explicit_rm/probe_bf16_explicit_rm.o 
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_bf16_implicit/compile-command.txt
+  riscv64-linux-gnu-gcc -march=rv64gcv_zvfh_zvfbfmin -std=c11 -O2 -fno-lto -c /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/gcc-probes/probe_bf16_implicit/source.c -o /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/gcc-probes/probe_bf16_implicit/probe_bf16_implicit.o 
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_fp16_explicit_rm/compile-command.txt
+  riscv64-linux-gnu-gcc -march=rv64gcv_zvfh -std=c11 -O2 -fno-lto -c /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/gcc-probes/probe_fp16_explicit_rm/source.c -o /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/gcc-probes/probe_fp16_explicit_rm/probe_fp16_explicit_rm.o 
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_fp16_implicit/compile-command.txt
+  riscv64-linux-gnu-gcc -march=rv64gcv_zvfh -std=c11 -O2 -fno-lto -c /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/gcc-probes/probe_fp16_implicit/source.c -o /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/gcc-probes/probe_fp16_implicit/probe_fp16_implicit.o 
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/macros-bf16-command.txt
+  gcc -march=rv64gcv_zvfh_zvfbfmin -dM -E -x c /dev/null 
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/macros-fp16-command.txt
+  gcc -march=rv64gcv_zvfh -dM -E -x c /dev/null 
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_bf16_explicit_rm/compile-command.txt
+  gcc -march=rv64gcv_zvfh_zvfbfmin -std=c11 -O2 -fno-lto -c /tmp/f001-rounding-remediation-20260729T144517Z/evidence/bianbu/gcc-probes/probe_bf16_explicit_rm/source.c -o /tmp/f001-rounding-remediation-20260729T144517Z/evidence/bianbu/gcc-probes/probe_bf16_explicit_rm/probe_bf16_explicit_rm.o 
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_bf16_implicit/compile-command.txt
+  gcc -march=rv64gcv_zvfh_zvfbfmin -std=c11 -O2 -fno-lto -c /tmp/f001-rounding-remediation-20260729T144517Z/evidence/bianbu/gcc-probes/probe_bf16_implicit/source.c -o /tmp/f001-rounding-remediation-20260729T144517Z/evidence/bianbu/gcc-probes/probe_bf16_implicit/probe_bf16_implicit.o 
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_fp16_explicit_rm/compile-command.txt
+  gcc -march=rv64gcv_zvfh -std=c11 -O2 -fno-lto -c /tmp/f001-rounding-remediation-20260729T144517Z/evidence/bianbu/gcc-probes/probe_fp16_explicit_rm/source.c -o /tmp/f001-rounding-remediation-20260729T144517Z/evidence/bianbu/gcc-probes/probe_fp16_explicit_rm/probe_fp16_explicit_rm.o 
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_fp16_implicit/compile-command.txt
+  gcc -march=rv64gcv_zvfh -std=c11 -O2 -fno-lto -c /tmp/f001-rounding-remediation-20260729T144517Z/evidence/bianbu/gcc-probes/probe_fp16_implicit/source.c -o /tmp/f001-rounding-remediation-20260729T144517Z/evidence/bianbu/gcc-probes/probe_fp16_implicit/probe_fp16_implicit.o 
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/O0/compile-command.txt
+  gcc -std=c11 -O0 -fno-lto -frounding-math -march=rv64gcv_zvfh src/test_fp16_isa.c -o /tmp/f001-rounding-remediation-20260729T144517Z/evidence/bianbu/isa/O0/test_fp16_isa -lm 
+.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/O3/compile-command.txt
+  gcc -std=c11 -O3 -DNDEBUG -fno-lto -frounding-math -march=rv64gcv_zvfh src/test_fp16_isa.c -o /tmp/f001-rounding-remediation-20260729T144517Z/evidence/bianbu/isa/O3/test_fp16_isa -lm 
+
+All evidence file SHA256:
+9d5c72f6a93b4e3d90395c6f44d6b2076a5fdc8b759eb9273c274c6a34007490 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/bf16-march.txt
+cb5cc056207569d14e7d36292504dce89204505b88dff2378bcc9ca66e323877 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/clang-resource-dir.txt
+16b3ef826ecf124d208084db50f59e6385196332c3c07333ea09c6c0e65281c4 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/clang-target-crt1-path.txt
+435b6706aaee2e65656ea0999bb54bc1cadb439bceccc374820fd3c7732b1d18 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/clang-target-preprocess-stderr.txt
+8fd2d42f98e10b955c78691269f22650ea90aae36dde23ecc3f4111892269077 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/clang-target-preprocess-stdout.txt
+883ece2f203ad71f232d36dec9413e1ad67228ddbe9f5c4c37a18c5a2c929dd6 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/clang-targets.txt
+a05041e0afc38e8987bf23a51701ca4abaf748031ead11504a3d8d7fd6dd071e *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/compiler-path.txt
+7329529a1ae2f3073ced5503adb3d210af9c4a15151389e800ce42430d0fc6fc *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/compiler-prefix.txt
+ecc46147803c4c7ed75d18e18cc5b2953da38886e1ef2129ba839562d30ba5bb *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/compiler-search-dirs.txt
+3635b8631d4ebcd8ed7586f4e01e7a6b44407de9d38db6e01daca9c242ed7a53 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/compiler-version.txt
+01e8407bf94c36fa09a23e5a28ed8bc7fad6a43a61307c577a91f85249becad1 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/fp16-march.txt
+e0a8ee23ee80002bc893b04484a573975ca8d24d8e5936164a887be033d74424 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/header-bf16/command.txt
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/header-bf16/exit-code.txt
+7807e4b56e054a07e87c4c60ad86994ac29101773bb53c403acb790ae064ac6a *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/header-bf16/header-path.txt
+140f6dbababd1bd652cf4563e4c191a6a145fa04718db8bbedb9e2c7aee0c47c *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/header-bf16/header-probe.c
+c8efa5f97b61402bee4cd2d2c24015bcfef6735c00d6f8a753d66e93830e4128 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/header-bf16/header-sha256.txt
+23298b1bc3e141224baf67570fede8c999d7d10ffcd4ab542275eaa3b8393449 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/header-bf16/stderr.txt
+8aaea2862f5ae812d7881e07ac1f9b3006bb0362b971d7c383565103c7180863 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/header-bf16/stdout.txt
+a2b3ed0c082dd24710767d8c12ec0b0e62b09b62cb02344be8a9380da35ebb3c *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/header-fp16/command.txt
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/header-fp16/exit-code.txt
+7807e4b56e054a07e87c4c60ad86994ac29101773bb53c403acb790ae064ac6a *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/header-fp16/header-path.txt
+140f6dbababd1bd652cf4563e4c191a6a145fa04718db8bbedb9e2c7aee0c47c *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/header-fp16/header-probe.c
+c8efa5f97b61402bee4cd2d2c24015bcfef6735c00d6f8a753d66e93830e4128 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/header-fp16/header-sha256.txt
+23298b1bc3e141224baf67570fede8c999d7d10ffcd4ab542275eaa3b8393449 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/header-fp16/stderr.txt
+2b2db6b8cdd6c8482ae05c80ba55c71236bc36eeae2d434b3f9733afd41cdb1a *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/header-fp16/stdout.txt
+bf2f4d662db668cee58f3d0c6a4c833cbbabdcfba7658eb48e3380ac44923521 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/label.txt
+debce72fad8698a096db84b728d929f88ce34bea79ae4090fff84462ce3d061d *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/macros-bf16.txt
+bc8e4d9d3db4ab5a118fb0c7efec7b89af3128c6f35dfd37ee8ae07a5edc8356 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/macros-bf16-command.txt
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/macros-bf16-exit-code.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/macros-bf16-stderr.txt
+225e9cbbb8fb8111a71f0827f22006799d4b401e19b7da35c13cd9f16998ec92 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/macros-fp16.txt
+0012c6bee88a339cf6abc88f6e20aeb6a99eb41a5a0e5f7fac04b27c290b56bf *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/macros-fp16-command.txt
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/macros-fp16-exit-code.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/macros-fp16-stderr.txt
+01d538d0f8ff2bbc6bd4994c5f455694b4ce94a2501b9a2697b969c473d46e88 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_bf16_explicit_rm/compile-command.txt
+4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_bf16_explicit_rm/compile-exit-code.txt
+e4774dc0f068141bbf941a96bf0239cdf94ec1728e145cc86bc388727dc01299 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_bf16_explicit_rm/compile-stderr.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_bf16_explicit_rm/compile-stdout.txt
+8eb73d563dc309474c6240d9d4ed0a0b67e2403ff7d95381a0034c84e7fa3bec *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_bf16_explicit_rm/source.c
+cfea196ccc6a1ac9ea8dd3c8dd6fa0c73d233e402e43351224dd2c285e9a1fc5 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_bf16_explicit_rm/source-sha256.txt
+83a0555698bb91906c64801f4467957f215fc690a88b8f406cabc1ca572a85e7 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_bf16_implicit/compile-command.txt
+4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_bf16_implicit/compile-exit-code.txt
+7cba6ea769387217fea4903a35599179e57986d372100055bf2e40fdca29f6d5 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_bf16_implicit/compile-stderr.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_bf16_implicit/compile-stdout.txt
+651b63bad379ca3b5036f652805749bb31cb7d2a6f37fc0a3f724a8b69405ac4 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_bf16_implicit/source.c
+3e76b782cbeee02981b93d2d98ef6c7812867cd3a0809804bdb34b5f1ed3a435 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_bf16_implicit/source-sha256.txt
+8ffe998bbad07e286c01377ef741a8f8488c8889747b1d1c2d023bf6c8c47c09 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_fp16_explicit_rm/compile-command.txt
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_fp16_explicit_rm/compile-exit-code.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_fp16_explicit_rm/compile-stderr.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_fp16_explicit_rm/compile-stdout.txt
+605c8378ec340ba2a91c79422b272b625853a4e1d3d6b872a78df564511e5b9b *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_fp16_explicit_rm/disasm.txt
+13484eeae14fe26d41477ada578de51bd6cffdeeed0f25909f57a3ec55946002 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_fp16_explicit_rm/object-sha256.txt
+455d719a36fa08ec92ed1a1075c9703aa42037af486b39aebac35501b412399f *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_fp16_explicit_rm/source.c
+3fc810abdf75ca2e6953d6bfc53dfd08a3b7cc6051a792305ee0f03c1eb5e57e *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_fp16_explicit_rm/source-sha256.txt
+28828985e165ad8836c433c1f2a0dff60851f022064a5eea1944c58582e992a0 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_fp16_implicit/compile-command.txt
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_fp16_implicit/compile-exit-code.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_fp16_implicit/compile-stderr.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_fp16_implicit/compile-stdout.txt
+30813ed195a1dba6ebd41d281485c9818b2cd97047788167e95a3b3cc97f5fd3 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_fp16_implicit/disasm.txt
+faa6e077189793571e36db8a9ca0544e405eb04456239afc3aaf97c7e89205ef *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_fp16_implicit/object-sha256.txt
+276f0f834c345bd98efc077c39e5da2ced45eb3f8602515f29e03118c61a7d73 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_fp16_implicit/source.c
+b3ad5e414e2e158213a39adf4a54be034ccb2dc6bef89ec8c13bf18f44924a12 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-experimental-bf16-probes/probe_fp16_implicit/source-sha256.txt
+9ac9eb6828dfaf2f80429f7cbce06240faa57a66b7cb93b39d418810c65c9138 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/bf16-march.txt
+cb5cc056207569d14e7d36292504dce89204505b88dff2378bcc9ca66e323877 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/clang-resource-dir.txt
+883ece2f203ad71f232d36dec9413e1ad67228ddbe9f5c4c37a18c5a2c929dd6 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/clang-targets.txt
+a05041e0afc38e8987bf23a51701ca4abaf748031ead11504a3d8d7fd6dd071e *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/compiler-path.txt
+a181ace9232e3f974a52319bbc9323709e8d753562048d3b9e7b63f0c3a3f753 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/compiler-prefix.txt
+ecc46147803c4c7ed75d18e18cc5b2953da38886e1ef2129ba839562d30ba5bb *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/compiler-search-dirs.txt
+3635b8631d4ebcd8ed7586f4e01e7a6b44407de9d38db6e01daca9c242ed7a53 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/compiler-version.txt
+01e8407bf94c36fa09a23e5a28ed8bc7fad6a43a61307c577a91f85249becad1 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/fp16-march.txt
+498a4f5fe04d3a876ad6c8f08e64d2d6ad1b87484b4db6b4a3a0d8728d9ecb9a *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/header-bf16/command.txt
+4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/header-bf16/exit-code.txt
+01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/header-bf16/header-path.txt
+140f6dbababd1bd652cf4563e4c191a6a145fa04718db8bbedb9e2c7aee0c47c *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/header-bf16/header-probe.c
+578740c6ce9f868ab50d2db1810a6c5d78a78d327003e770052f410d21896639 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/header-bf16/stderr.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/header-bf16/stdout.txt
+8c76b3c28a5628de061cb011f8e5ab2896c5e9b0b468f99e52b4f01db3f08a03 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/header-fp16/command.txt
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/header-fp16/exit-code.txt
+7807e4b56e054a07e87c4c60ad86994ac29101773bb53c403acb790ae064ac6a *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/header-fp16/header-path.txt
+140f6dbababd1bd652cf4563e4c191a6a145fa04718db8bbedb9e2c7aee0c47c *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/header-fp16/header-probe.c
+c8efa5f97b61402bee4cd2d2c24015bcfef6735c00d6f8a753d66e93830e4128 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/header-fp16/header-sha256.txt
+23298b1bc3e141224baf67570fede8c999d7d10ffcd4ab542275eaa3b8393449 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/header-fp16/stderr.txt
+657855b960f377478c2bd7cfc4429d4c22e54067e302ccd8a8b97e50695812a8 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/header-fp16/stdout.txt
+bf0a8d8ac9a34f686ffb739a21a72963cea627a5b4143efeb0f2f2306ef061ae *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/label.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/macros-bf16.txt
+86aeebdd3e658a2423e735202f567b12359496096ddda2bc93aff81dc983e462 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/macros-bf16-command.txt
+4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/macros-bf16-exit-code.txt
+578740c6ce9f868ab50d2db1810a6c5d78a78d327003e770052f410d21896639 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/macros-bf16-stderr.txt
+225e9cbbb8fb8111a71f0827f22006799d4b401e19b7da35c13cd9f16998ec92 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/macros-fp16.txt
+ff08c68210dc937d7fe9acb4f49241cafc18bc67beb5b136a48d01f4c9743792 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/macros-fp16-command.txt
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/macros-fp16-exit-code.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/macros-fp16-stderr.txt
+9a987ec4798be5a7e4f6135712bece552ae2b7305a06242812a336e324702359 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_bf16_explicit_rm/compile-command.txt
+4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_bf16_explicit_rm/compile-exit-code.txt
+578740c6ce9f868ab50d2db1810a6c5d78a78d327003e770052f410d21896639 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_bf16_explicit_rm/compile-stderr.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_bf16_explicit_rm/compile-stdout.txt
+8eb73d563dc309474c6240d9d4ed0a0b67e2403ff7d95381a0034c84e7fa3bec *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_bf16_explicit_rm/source.c
+5955d6d75a07317df8881cfe1e41d1aee5328ada34e2962f8f6e35f3f2c91d7c *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_bf16_explicit_rm/source-sha256.txt
+79c6634a41221072c738dccb0810cb2b23437a696bf338305bbfcbd6064466be *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_bf16_implicit/compile-command.txt
+4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_bf16_implicit/compile-exit-code.txt
+578740c6ce9f868ab50d2db1810a6c5d78a78d327003e770052f410d21896639 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_bf16_implicit/compile-stderr.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_bf16_implicit/compile-stdout.txt
+651b63bad379ca3b5036f652805749bb31cb7d2a6f37fc0a3f724a8b69405ac4 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_bf16_implicit/source.c
+9470bbc1e16de22f5c75eb70630406a2120a2ce5e658d82397c8caac87993a06 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_bf16_implicit/source-sha256.txt
+3ed32c89193203d5e26cf509679ed762b8391cb65873c676f07bb000fec23b51 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_fp16_explicit_rm/compile-command.txt
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_fp16_explicit_rm/compile-exit-code.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_fp16_explicit_rm/compile-stderr.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_fp16_explicit_rm/compile-stdout.txt
+ef01451478c62bc1c008073c65a4f1e184a0dcd7761a2c368145b8bd2b86fbcd *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_fp16_explicit_rm/disasm.txt
+39e4791da48d1c8960bfe46a80739f2f13943dc9229071c8957ae25193a4501b *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_fp16_explicit_rm/object-sha256.txt
+455d719a36fa08ec92ed1a1075c9703aa42037af486b39aebac35501b412399f *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_fp16_explicit_rm/source.c
+bacba6527e8e8a6b0fd8264dda2e3ed74923e8b53af4f088a61d1e4bd070ddcc *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_fp16_explicit_rm/source-sha256.txt
+5b1746618097d2418d051775c6e2ff9733b5f024bfc515ac85e0559b2581205a *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_fp16_implicit/compile-command.txt
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_fp16_implicit/compile-exit-code.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_fp16_implicit/compile-stderr.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_fp16_implicit/compile-stdout.txt
+e63c8e97ae96d480c72a47c2d04f77672959c557444b131baef657706fe1c763 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_fp16_implicit/disasm.txt
+751b78569b786cb97c7bff74e841e1dae3622e2ea4e5c6806e3044da9f2a46ff *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_fp16_implicit/object-sha256.txt
+276f0f834c345bd98efc077c39e5da2ced45eb3f8602515f29e03118c61a7d73 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_fp16_implicit/source.c
+d6786afa4a9d2541a794e1ff794f4499cc6c1a144f045d0809c04bbef0caa0e6 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/clang-probes/probe_fp16_implicit/source-sha256.txt
+59cd282f70566d33b68e111e63b76d6f3679c33777028cae0530a4f3975f675b *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-clang/captured-at-utc.txt
+883ece2f203ad71f232d36dec9413e1ad67228ddbe9f5c4c37a18c5a2c929dd6 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-clang/clang-targets.txt
+3635b8631d4ebcd8ed7586f4e01e7a6b44407de9d38db6e01daca9c242ed7a53 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-clang/clang-version.txt
+d3d5b682f3f5ef5b24a79ed8cf4b8c5868fc950dad48cab1be0e3c060a77f8ee *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-clang/cmake-version.txt
+5027c3e3905f65ad7ef4010377a23882a931f2af0bcd1acd2498fdbcc0eb7eda *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-clang/compiler-invocation.txt
+a05041e0afc38e8987bf23a51701ca4abaf748031ead11504a3d8d7fd6dd071e *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-clang/compiler-path.txt
+3635b8631d4ebcd8ed7586f4e01e7a6b44407de9d38db6e01daca9c242ed7a53 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-clang/compiler-version.txt
+a5dc2069c7457038f9c47d666701847f4e2bf0be459f05e6d04880d24d4dd591 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-clang/cpuinfo-summary.txt
+f2550fa9f19b92f2a7332e4716b3657f5b212e278f948cccb2addd51221ed0ac *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-clang/lscpu.txt
+4f9416d650bd28343244b868dfebdb11e70d7b32423536cb87b8c31fde62f993 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-clang/ninja-version.txt
+f97ebfdfb0802fc047afc33698023476667156e772204aebc176247d7ee3e097 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-clang/remote-host-role.txt
+7f6d26de9d048cc762a943a2db8d55bcb40cfc97b89bc49b332387309f829319 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-clang/uname.txt
+41d7d852f1669c734ae0f96825a7c43aba5ca9b66ad41d30e6cda5afaceb4ff3 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-gcc/captured-at-utc.txt
+883ece2f203ad71f232d36dec9413e1ad67228ddbe9f5c4c37a18c5a2c929dd6 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-gcc/clang-targets.txt
+3635b8631d4ebcd8ed7586f4e01e7a6b44407de9d38db6e01daca9c242ed7a53 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-gcc/clang-version.txt
+d3d5b682f3f5ef5b24a79ed8cf4b8c5868fc950dad48cab1be0e3c060a77f8ee *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-gcc/cmake-version.txt
+5dbc98193eb7b6843bd5e909795771903165c5fd481c7c265622f32ea45a2462 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-gcc/compiler-invocation.txt
+d2fb3d3dade0ad9f64dd2daca47cbc842804880a6b22da806915bf8424dafa99 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-gcc/compiler-path.txt
+feeaf39955a477b2b8faf9c46cbb0d307cc54f7dfea2323eca2b49441d7c92de *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-gcc/compiler-version.txt
+a5dc2069c7457038f9c47d666701847f4e2bf0be459f05e6d04880d24d4dd591 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-gcc/cpuinfo-summary.txt
+f2550fa9f19b92f2a7332e4716b3657f5b212e278f948cccb2addd51221ed0ac *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-gcc/lscpu.txt
+4f9416d650bd28343244b868dfebdb11e70d7b32423536cb87b8c31fde62f993 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-gcc/ninja-version.txt
+a7071b6c283d510e23774007b29095c15fb479fd248f41a95192d91115b350b5 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-gcc/remote-host-role.txt
+7f6d26de9d048cc762a943a2db8d55bcb40cfc97b89bc49b332387309f829319 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/environment-gcc/uname.txt
+9ac9eb6828dfaf2f80429f7cbce06240faa57a66b7cb93b39d418810c65c9138 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/bf16-march.txt
+d2fb3d3dade0ad9f64dd2daca47cbc842804880a6b22da806915bf8424dafa99 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/compiler-path.txt
+d693b783870d9d62f72cf6e065d3062b620cf941cf113dced688304695ee73b1 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/compiler-prefix.txt
+e7fcd01e6eb17363aa68ff3f871b06fa6e9b9514e4fa4c616ecfdac6b70ef76c *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/compiler-search-dirs.txt
+feeaf39955a477b2b8faf9c46cbb0d307cc54f7dfea2323eca2b49441d7c92de *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/compiler-version.txt
+01e8407bf94c36fa09a23e5a28ed8bc7fad6a43a61307c577a91f85249becad1 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/fp16-march.txt
+fdb9bf10cc22ab1b2dce2f2374b701d5a32692590b97efdba2c084ea49eb98c1 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/header-bf16/command.txt
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/header-bf16/exit-code.txt
+901995b949c413e4b199e0af40e3684b5a9d58e5c7a84f1822560b7d413fd265 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/header-bf16/header-path.txt
+140f6dbababd1bd652cf4563e4c191a6a145fa04718db8bbedb9e2c7aee0c47c *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/header-bf16/header-probe.c
+268e60c527344dbb0239dd13d52e5463517ebd8e48ed8c9bdcc34e8ec0500230 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/header-bf16/header-sha256.txt
+d80f80e917a0b4af694c5f5a1993b498b35bd9f07ec5dea1f529ada92f6285fc *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/header-bf16/stderr.txt
+88d64ade4c611eef2e5a0ce7d8b22a683c1c3e9a0d1f3e449c408d45fd6fbc3b *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/header-bf16/stdout.txt
+26f9d1a5e0146a9d69e06151162c209e438a663a57b535698a616535b36a647b *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/header-fp16/command.txt
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/header-fp16/exit-code.txt
+901995b949c413e4b199e0af40e3684b5a9d58e5c7a84f1822560b7d413fd265 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/header-fp16/header-path.txt
+140f6dbababd1bd652cf4563e4c191a6a145fa04718db8bbedb9e2c7aee0c47c *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/header-fp16/header-probe.c
+268e60c527344dbb0239dd13d52e5463517ebd8e48ed8c9bdcc34e8ec0500230 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/header-fp16/header-sha256.txt
+d80f80e917a0b4af694c5f5a1993b498b35bd9f07ec5dea1f529ada92f6285fc *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/header-fp16/stderr.txt
+ed7a99b6e26c0d42009e9065ba35719f070bd57c3f2f56b56858eff0f944a5de *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/header-fp16/stdout.txt
+abcfd8b9e19b1e0cb92f5caf067a29048dfbdc9d7f9aa09b19bf7f1d3ef17ead *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/label.txt
+f53f8f80a883c27892d5fa1cd13eba9d0e0986b82463f337eeeebc17b93870b0 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/macros-bf16.txt
+98aceff13ea3668aab13a6073e86d4042e481da36854238e4d34034a63625ace *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/macros-bf16-command.txt
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/macros-bf16-exit-code.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/macros-bf16-stderr.txt
+5b6a824a1c41f8fad8d84efcd0aebec8ca3481980aba176d947d6a1dbe63ee37 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/macros-fp16.txt
+4ad19719a2f260e76fb534c0df67a117ffa8c62c1f351e7f7382649271e84a0d *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/macros-fp16-command.txt
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/macros-fp16-exit-code.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/macros-fp16-stderr.txt
+ee35ef57b2381e102a8aec6120e33ac9c40de932da132f8e8f6727875cdc21d5 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_bf16_explicit_rm/compile-command.txt
+4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_bf16_explicit_rm/compile-exit-code.txt
+3568fb54c51a738a61bd00289bdbb646703f683045c0cc6d77335c955ab785f7 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_bf16_explicit_rm/compile-stderr.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_bf16_explicit_rm/compile-stdout.txt
+8eb73d563dc309474c6240d9d4ed0a0b67e2403ff7d95381a0034c84e7fa3bec *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_bf16_explicit_rm/source.c
+5f4ae353cde8de6f3f36bd3f9a1429d23e296bc1cf63b5867130f895a1a1d4df *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_bf16_explicit_rm/source-sha256.txt
+561948184c69de6378710f5dfd6a02dd168b5b5eea798ca1515b844ffeaa777c *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_bf16_implicit/compile-command.txt
+4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_bf16_implicit/compile-exit-code.txt
+e3eb56d9557ff94eb12e7ead5f2c581981d59eaa29a9d82e6c65e0547aefb996 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_bf16_implicit/compile-stderr.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_bf16_implicit/compile-stdout.txt
+651b63bad379ca3b5036f652805749bb31cb7d2a6f37fc0a3f724a8b69405ac4 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_bf16_implicit/source.c
+4ba5a28775e6b200ccad57a19d86b8f0f5aac935a8b74b96fce311fad4bc82ad *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_bf16_implicit/source-sha256.txt
+7269f0ccf49c9715ef93b58bf10588eaa2da4e5052e0d41a00e935d349d2e760 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_fp16_explicit_rm/compile-command.txt
+4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_fp16_explicit_rm/compile-exit-code.txt
+1679c6dd8c8eab272b30cf03fafc5ea9435fbb81c1e74a317bf7c19d72a4b4ed *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_fp16_explicit_rm/compile-stderr.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_fp16_explicit_rm/compile-stdout.txt
+455d719a36fa08ec92ed1a1075c9703aa42037af486b39aebac35501b412399f *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_fp16_explicit_rm/source.c
+e62300cba1067a1231617414637e447ca08ad2d7f55c12801c76509e13ce61b3 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_fp16_explicit_rm/source-sha256.txt
+c7675cb5211c74441e1ee9941def567416d08b501161284366e7c2de7b2ef0e3 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_fp16_implicit/compile-command.txt
+4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_fp16_implicit/compile-exit-code.txt
+8600a20803e82141b735155d1b64a316a9a38d9099153e11743fa785c1b00054 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_fp16_implicit/compile-stderr.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_fp16_implicit/compile-stdout.txt
+276f0f834c345bd98efc077c39e5da2ced45eb3f8602515f29e03118c61a7d73 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_fp16_implicit/source.c
+61972e91093330ca3d226aa4da0c314ce671efcf54125d4d670ad6d0d194f752 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/aliyun/gcc-probes/probe_fp16_implicit/source-sha256.txt
+25462ddbe308703235e697c1ce95aa9f2180db407ae23a7bb6cbed85c4de16c4 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/environment/captured-at-utc.txt
+d3d5b682f3f5ef5b24a79ed8cf4b8c5868fc950dad48cab1be0e3c060a77f8ee *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/environment/cmake-version.txt
+253d7a2d7a686b0c524c9451db626373e662282319be536f40fffb61e8d7f87d *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/environment/compiler-invocation.txt
+03bead4187cf1c5ae2900e2aaeafb256b351af8e3c8b980892a16c6cea81e4f3 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/environment/compiler-path.txt
+08a7d10329d11c2d9d523641f0626b5bd32e11bd0dcfd872c6033cc7ebf39576 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/environment/compiler-version.txt
+6ce852cb618012a611663f51a3bb9265db4dcb7423d4f3851a53362064b9750a *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/environment/cpuinfo-summary.txt
+08e50943004c603810c71b2aa39eb8541956c55a2c285f13bf3a5b2d4aa81f30 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/environment/lscpu.txt
+4f9416d650bd28343244b868dfebdb11e70d7b32423536cb87b8c31fde62f993 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/environment/ninja-version.txt
+ed98056a03000d01f55ffe74666897822b1c07c23ecb83886e6bf221e342240f *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/environment/remote-host-role.txt
+40aa36cf7175946fa22bf0ca9d52793d72a2893705372c7d65c10869dc9c6971 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/environment/uname.txt
+9ac9eb6828dfaf2f80429f7cbce06240faa57a66b7cb93b39d418810c65c9138 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/bf16-march.txt
+03bead4187cf1c5ae2900e2aaeafb256b351af8e3c8b980892a16c6cea81e4f3 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/compiler-path.txt
+c97f865fd10dd73ff70257bbb9b802d957c8b747f2ac1f062309bfa56dc8ba29 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/compiler-prefix.txt
+569ef270333cee5deb82680bd37a312e34c601bfc787feb02a76c692ba157fa7 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/compiler-search-dirs.txt
+08a7d10329d11c2d9d523641f0626b5bd32e11bd0dcfd872c6033cc7ebf39576 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/compiler-version.txt
+01e8407bf94c36fa09a23e5a28ed8bc7fad6a43a61307c577a91f85249becad1 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/fp16-march.txt
+7fa11fb15118a14816a3226f63ef84c42b7922e72ee6601c9f85c2e9e9057f4c *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/header-bf16/command.txt
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/header-bf16/exit-code.txt
+a0bb7743fa545421a670c38079a5e7cfac04700310ba813a484eda7084e45115 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/header-bf16/header-path.txt
+140f6dbababd1bd652cf4563e4c191a6a145fa04718db8bbedb9e2c7aee0c47c *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/header-bf16/header-probe.c
+d55c279ecddd6a60d107c222c817424916cbbd02cc809dbb3b257e1c0f345562 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/header-bf16/header-sha256.txt
+d351b43c2dcabad65e07da6fce718230a685c2a9df9b95fc26a4f277ac213bef *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/header-bf16/stderr.txt
+a83cf78424bdf4ad5b0b7fac45ac6de95a444ecaded1564510fca9ce2335feab *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/header-bf16/stdout.txt
+1d21e2b481d1d32890ad44c89762fd2555858af7a9d048ab126c1304caee6326 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/header-fp16/command.txt
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/header-fp16/exit-code.txt
+a0bb7743fa545421a670c38079a5e7cfac04700310ba813a484eda7084e45115 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/header-fp16/header-path.txt
+140f6dbababd1bd652cf4563e4c191a6a145fa04718db8bbedb9e2c7aee0c47c *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/header-fp16/header-probe.c
+d55c279ecddd6a60d107c222c817424916cbbd02cc809dbb3b257e1c0f345562 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/header-fp16/header-sha256.txt
+d351b43c2dcabad65e07da6fce718230a685c2a9df9b95fc26a4f277ac213bef *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/header-fp16/stderr.txt
+7fceeb63762d3ee40ca5964cf92d571c42bdc3bf78737bfc49c2cf884c2ee330 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/header-fp16/stdout.txt
+fed06c7ffc6ebd498efd2ef956160ec42b2c48685241615f35248ef2b6fe002e *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/label.txt
+64cb7ad9dc36a04b7eadb69f6ccb5c81e2b6e240eb01296bf8974ba9a1d6391f *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/macros-bf16.txt
+90573e796a56b0b5ed267e3d6aafa811d019391727f3f4bbe1a00545faec1b22 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/macros-bf16-command.txt
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/macros-bf16-exit-code.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/macros-bf16-stderr.txt
+4f4741afaedeefa6cf73ebfa5d522955e2f39d28259118ed6dcd2f18492aa4ef *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/macros-fp16.txt
+f6f12f4191464c0052d8a8369b3864496be16c72bc6a8b6425b7accdb8503df6 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/macros-fp16-command.txt
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/macros-fp16-exit-code.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/macros-fp16-stderr.txt
+4b7f3654200cef5bd3d97cf6d0b14ecc345f6a8f87b868b271329095eec7e158 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_bf16_explicit_rm/compile-command.txt
+4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_bf16_explicit_rm/compile-exit-code.txt
+dae2e5468bfd7d98014fe56642462e2468b776866a68e7dcdf1e2c5a19ed3be6 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_bf16_explicit_rm/compile-stderr.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_bf16_explicit_rm/compile-stdout.txt
+8eb73d563dc309474c6240d9d4ed0a0b67e2403ff7d95381a0034c84e7fa3bec *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_bf16_explicit_rm/source.c
+52a79d8f4f90c895d3e781b2b637e5212c2477daf45a2c181ddee344f3096efb *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_bf16_explicit_rm/source-sha256.txt
+6131f21d0e55dbecf22467dd054d000462ba6e8f19127f84beebd1c79620a26c *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_bf16_implicit/compile-command.txt
+4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_bf16_implicit/compile-exit-code.txt
+f9deebf2a84056ef89c4c1b26ef481e3dbc295b6f10c4e790ab00ed7634ab46c *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_bf16_implicit/compile-stderr.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_bf16_implicit/compile-stdout.txt
+651b63bad379ca3b5036f652805749bb31cb7d2a6f37fc0a3f724a8b69405ac4 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_bf16_implicit/source.c
+73ed8a178792932058e2009a3c4963130278aad9a92108bdf49729947bf18d1a *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_bf16_implicit/source-sha256.txt
+b0f5a208e895fe2629393d925a0c3c7642b4fabf87344a319f34fd0b25c33051 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_fp16_explicit_rm/compile-command.txt
+4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_fp16_explicit_rm/compile-exit-code.txt
+7319d2c0d606ca4a20d22222fc4b17e42455e5c8d0ab0c2f554b918b09af487b *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_fp16_explicit_rm/compile-stderr.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_fp16_explicit_rm/compile-stdout.txt
+455d719a36fa08ec92ed1a1075c9703aa42037af486b39aebac35501b412399f *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_fp16_explicit_rm/source.c
+eeca2518ba7dc3f6a56d7465827f786203cb5460a6573c724d2b57d20c8f8dd1 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_fp16_explicit_rm/source-sha256.txt
+5d14cc3d062b2ea8b472f009f2a0660882d4b0e89d982eb27db0832ca3a49aaf *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_fp16_implicit/compile-command.txt
+4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_fp16_implicit/compile-exit-code.txt
+e14c973ae9f5ce75abae3b0e0e4904394ff1cf5a064cf28fe98b6294fbe7c3f7 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_fp16_implicit/compile-stderr.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_fp16_implicit/compile-stdout.txt
+276f0f834c345bd98efc077c39e5da2ced45eb3f8602515f29e03118c61a7d73 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_fp16_implicit/source.c
+32e73f1fb3858abad8cf7f89834258ccf0dd2af33e0379a647d680b3ad206384 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/gcc-probes/probe_fp16_implicit/source-sha256.txt
+03bead4187cf1c5ae2900e2aaeafb256b351af8e3c8b980892a16c6cea81e4f3 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/compiler-path.txt
+08a7d10329d11c2d9d523641f0626b5bd32e11bd0dcfd872c6033cc7ebf39576 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/compiler-version.txt
+01e8407bf94c36fa09a23e5a28ed8bc7fad6a43a61307c577a91f85249becad1 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/march.txt
+df4d2499903cd1e7bd10f58696138eb7589126babcec172d18e4f61bff6d2d5d *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/march-source.txt
+48b1ecb4e359e66b6efb2f81c55fdff757823bc0db50c42ab9e804fe3c422dc2 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/O0/binary-sha256.txt
+eb3f31b9c22b951a4dc25324e0e0a0351a72b0585fcc59221abc91d9f72272d8 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/O0/compile-command.txt
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/O0/compile-exit-code.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/O0/compile-stderr.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/O0/compile-stdout.txt
+a24ad2a0161fecb2d29d469c58f92cf8043b4d562fca2c78d189d28d0d9657d7 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/O0/disasm.txt
+977c720f46dca493ba22d04d3331bfaad3e0386b5045b0e78c212175e72030ad *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/O0/run.txt
+85ec8dd41f7e11726e2d0add18b92b5d0ad626a6353c4dfd7ec03d355fd3737f *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/O0/run-command.txt
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/O0/run-exit-code.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/O0/run-stderr.txt
+e0efa8cc77456e1a220902343b5b5385b0cc97e355a1b06a7c68b9a38ead375b *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/O3/binary-sha256.txt
+543b100231e70db09b16c9282141530797a7b94bc680d84fd940e283342aac26 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/O3/compile-command.txt
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/O3/compile-exit-code.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/O3/compile-stderr.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/O3/compile-stdout.txt
+a700fba40101ff35926133dc257c7822475ab82938b8e0949190d2b30da3fbc1 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/O3/disasm.txt
+0548b6bfbc90d72f0722b4db29cb4155fda287f300227f8ff166b461ec32afd7 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/O3/run.txt
+6d191337d7d843859465e7ad2a2dd94018124ef0c2b3f51d20ae2359aaa1f201 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/O3/run-command.txt
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/O3/run-exit-code.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/O3/run-stderr.txt
+73a5cbdc3139cb5c5c591246598e6f32b96f233102cf619806f3b6aa15b53ec2 *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/bianbu/isa/test-source-sha256.txt
+867b3da34c4c2d123875ba835fbc6f724de56c0db8d9e7b45f93eb35766f9cdd *.riscv-audit/validation/F001-rounding/results/20260729T144517Z/execution-summary.txt

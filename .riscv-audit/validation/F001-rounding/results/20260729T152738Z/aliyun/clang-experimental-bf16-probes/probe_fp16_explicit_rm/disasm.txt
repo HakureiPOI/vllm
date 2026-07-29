@@ -1,0 +1,21 @@
+
+/tmp/f001-rounding-remediation-20260729T152738Z/evidence/aliyun/clang-experimental-bf16-probes/probe_fp16_explicit_rm/probe_fp16_explicit_rm.o:     file format elf64-littleriscv
+
+
+Disassembly of section .text:
+
+0000000000000000 <probe_fp16_m1_rm>:
+   0:	0c857057          	vsetvli	zero,a0,e16,m1,ta,ma
+   4:	00205573          	fsrmi	a0,0
+   8:	4a8a1557          	vfncvt.f.f.w	v10,v8
+   c:	00251073          	fsrm	a0
+  10:	5e050457          	vmv.v.v	v8,v10
+  14:	8082                	ret
+
+0000000000000016 <probe_fp16_m2_rm>:
+  16:	0c957057          	vsetvli	zero,a0,e16,m2,ta,ma
+  1a:	00205573          	fsrmi	a0,0
+  1e:	4a8a1657          	vfncvt.f.f.w	v12,v8
+  22:	00251073          	fsrm	a0
+  26:	5e060457          	vmv.v.v	v8,v12
+  2a:	8082                	ret

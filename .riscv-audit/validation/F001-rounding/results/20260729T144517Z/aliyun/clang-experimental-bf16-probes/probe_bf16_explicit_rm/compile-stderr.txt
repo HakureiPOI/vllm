@@ -1,0 +1,13 @@
+/tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/clang-experimental-bf16-probes/probe_bf16_explicit_rm/source.c:5:12: error: call to undeclared function '__riscv_vfncvtbf16_f_f_w_bf16m1_rm'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    5 |     return __riscv_vfncvtbf16_f_f_w_bf16m1_rm(source, __RISCV_FRM_RNE, vl);
+      |            ^
+/tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/clang-experimental-bf16-probes/probe_bf16_explicit_rm/source.c:5:12: error: returning 'int' from a function with incompatible result type 'vbfloat16m1_t' (aka '__rvv_bfloat16m1_t')
+    5 |     return __riscv_vfncvtbf16_f_f_w_bf16m1_rm(source, __RISCV_FRM_RNE, vl);
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/clang-experimental-bf16-probes/probe_bf16_explicit_rm/source.c:9:12: error: call to undeclared function '__riscv_vfncvtbf16_f_f_w_bf16m2_rm'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    9 |     return __riscv_vfncvtbf16_f_f_w_bf16m2_rm(source, __RISCV_FRM_RNE, vl);
+      |            ^
+/tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/clang-experimental-bf16-probes/probe_bf16_explicit_rm/source.c:9:12: error: returning 'int' from a function with incompatible result type 'vbfloat16m2_t' (aka '__rvv_bfloat16m2_t')
+    9 |     return __riscv_vfncvtbf16_f_f_w_bf16m2_rm(source, __RISCV_FRM_RNE, vl);
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+4 errors generated.

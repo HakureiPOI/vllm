@@ -1,0 +1,1 @@
+clang --target=riscv64-linux-gnu -march=rv64gcv_zvfh -std=c11 -O2 -fno-lto -c /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/clang-probes/probe_fp16_explicit_rm/source.c -o /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/clang-probes/probe_fp16_explicit_rm/probe_fp16_explicit_rm.o 

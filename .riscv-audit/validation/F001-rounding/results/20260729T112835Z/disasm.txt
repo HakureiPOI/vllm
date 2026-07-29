@@ -1,0 +1,85 @@
+=== O0 disasm: convert_fp16_implicit ===
+0000000000000a18 <convert_fp16_implicit>:
+ a18:	7179                	addi	sp,sp,-48
+ a1a:	f422                	sd	s0,40(sp)
+ a1c:	1800                	addi	s0,sp,48
+ a1e:	fca42e27          	fsw	fa0,-36(s0)
+ a22:	fdc42787          	flw	fa5,-36(s0)
+ a26:	4285                	li	t0,1
+ a28:	0d02f2d7          	vsetvli	t0,t0,e32,m1,ta,ma
+ a2c:	4207d0d7          	vfmv.s.f	v1,fa5
+ a30:	0cf2f2d7          	vsetvli	t0,t0,e16,mf2,ta,ma
+ a34:	4a1a1157          	vfncvt.f.f.w	v2,v1
+ a38:	422027d7          	vmv.x.s	a5,v2
+ a3c:	fef41723          	sh	a5,-18(s0)
+ a40:	fee45783          	lhu	a5,-18(s0)
+ a44:	853e                	mv	a0,a5
+ a46:	7422                	ld	s0,40(sp)
+ a48:	6145                	addi	sp,sp,48
+ a4a:	8082                	ret
+
+Note: NO frrm/fsrm/fsrmi/csrr/csrw instructions around vfncvt.f.f.w.
+      The instruction directly uses whatever fcsr.frm is currently set.
+
+=== O0 disasm: convert_fp16_manual_rne ===
+0000000000000a4c <convert_fp16_manual_rne>:
+ a4c:	7179                	addi	sp,sp,-48
+ a4e:	f422                	sd	s0,40(sp)
+ a50:	1800                	addi	s0,sp,48
+ a52:	fca42e27          	fsw	fa0,-36(s0)
+ a56:	fdc42787          	flw	fa5,-36(s0)
+ a5a:	4285                	li	t0,1
+ a5c:	0d02f2d7          	vsetvli	t0,t0,e32,m1,ta,ma
+ a60:	4207d0d7          	vfmv.s.f	v1,fa5
+ a64:	0cf2f2d7          	vsetvli	t0,t0,e16,mf2,ta,ma
+ a68:	00202373          	frrm	t1              # save current frm
+ a6c:	00205073          	fsrmi	zero,0          # set frm = RNE (0)
+ a70:	4a1a1157          	vfncvt.f.f.w	v2,v1      # convert with RNE
+ a74:	00231073          	fsrm	t1              # restore original frm
+ a78:	422027d7          	vmv.x.s	a5,v2
+ a7c:	fef41723          	sh	a5,-18(s0)
+ a80:	fee45783          	lhu	a5,-18(s0)
+ a84:	853e                	mv	a0,a5
+ a86:	7422                	ld	s0,40(sp)
+ a88:	6145                	addi	sp,sp,48
+ a8a:	8082                	ret
+
+Note: frrm/fsrmi/fsrm sequence correctly saves, sets RNE, and restores frm.
+
+=== O3 disasm: convert_fp16_implicit ===
+0000000000000cb0 <convert_fp16_implicit>:
+ cb0:	4285                	li	t0,1
+ cb2:	0d02f2d7          	vsetvli	t0,t0,e32,m1,ta,ma
+ cb6:	420550d7          	vfmv.s.f	v1,fa0
+ cba:	0cf2f2d7          	vsetvli	t0,t0,e16,mf2,ta,ma
+ cbe:	4a1a1157          	vfncvt.f.f.w	v2,v1
+ cc2:	42202557          	vmv.x.s	a0,v2
+ cc6:	1542                	slli	a0,a0,0x30
+ cc8:	9141                	srli	a0,a0,0x30
+ cca:	8082                	ret
+
+Note: Same as O0 but with stack frame eliminated. No CSR management.
+
+=== O3 disasm: convert_fp16_manual_rne ===
+0000000000000ccc <convert_fp16_manual_rne>:
+ ccc:	4285                	li	t0,1
+ cce:	0d02f2d7          	vsetvli	t0,t0,e32,m1,ta,ma
+ cd2:	420550d7          	vfmv.s.f	v1,fa0
+ cd6:	0cf2f2d7          	vsetvli	t0,t0,e16,mf2,ta,ma
+ cda:	00202373          	frrm	t1
+ cde:	00205073          	fsrmi	zero,0
+ ce2:	4a1a1157          	vfncvt.f.f.w	v2,v1
+ ce6:	00231073          	fsrm	t1
+ cea:	42202557          	vmv.x.s	a0,v2
+ cee:	1542                	slli	a0,a0,0x30
+ cf0:	9141                	srli	a0,a0,0x30
+ cf2:	8082                	ret
+
+Note: Same CSR management as O0. O3 adds slli/srli for 16-bit masking.
+
+=== binary hashes ===
+c95b360c4e905236ad286fd51db58ce834171282d8dfa0a5295a42b5e7c524f4  test_fp16_isa_o0
+036e153f19ccc326e1a11347cea4a602e0240beedbe586ed6dcce1d0e898727a  test_fp16_isa_o3
+
+=== source hash ===
+85db8d12af7abf014d1612764b535f1d06286c547084d3164c808e34b1e5ff4e  test_fp16_isa.c

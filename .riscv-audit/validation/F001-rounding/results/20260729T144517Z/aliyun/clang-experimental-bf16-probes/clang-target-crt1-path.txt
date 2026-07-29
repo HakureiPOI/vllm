@@ -1,0 +1,1 @@
+/usr/bin/../lib/gcc-cross/riscv64-linux-gnu/13/../../../../riscv64-linux-gnu/lib/crt1.o

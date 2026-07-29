@@ -1,0 +1,2 @@
+programs: =/usr/bin:/usr/lib/llvm-18/bin:/usr/bin/../lib/gcc-cross/riscv64-linux-gnu/13/../../../../riscv64-linux-gnu/bin
+libraries: =/usr/lib/llvm-18/lib/clang/18:/usr/bin/../lib/gcc-cross/riscv64-linux-gnu/13:/usr/bin/../lib/gcc-cross/riscv64-linux-gnu/13/../../../../lib64:/lib/riscv64-linux-gnu:/lib/../lib64:/usr/lib/riscv64-linux-gnu:/usr/lib/../lib64:/usr/bin/../lib/gcc-cross/riscv64-linux-gnu/13/../../../../riscv64-linux-gnu/lib:/lib:/usr/lib

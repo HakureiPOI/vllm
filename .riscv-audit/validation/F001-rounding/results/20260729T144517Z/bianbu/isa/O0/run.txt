@@ -1,0 +1,86 @@
+TEST_SCOPE ISA-equivalent FP32-to-FP16 bare ISA instruction
+AMBIENT_PATH uses current frm
+MANUAL_PATH saves frm, sets RNE, converts, and restores frm
+FFLAGS_BOUNDARY manual path does not restore fflags
+COMPILER 13.2.0
+OPTIMIZATION unoptimized
+INITIAL_STATE fe_round=0 frm=0 fflags=0x00
+RESULT_COLUMNS requested_mode test_name f32_bits frm_before_ambient ambient_result ambient_fflags frm_before_manual manual_result manual_fflags frm_after_manual frm_after_final_restore status
+RESULT requested_mode=RNE test_name="positive midpoint" f32_bits=0x3f801000 frm_before_ambient=0 ambient_result=0x3c00 ambient_fflags=0x01 frm_before_manual=0 manual_result=0x3c00 manual_fflags=0x01 frm_after_manual=0 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RTZ test_name="positive midpoint" f32_bits=0x3f801000 frm_before_ambient=1 ambient_result=0x3c00 ambient_fflags=0x01 frm_before_manual=1 manual_result=0x3c00 manual_fflags=0x01 frm_after_manual=1 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RDN test_name="positive midpoint" f32_bits=0x3f801000 frm_before_ambient=2 ambient_result=0x3c00 ambient_fflags=0x01 frm_before_manual=2 manual_result=0x3c00 manual_fflags=0x01 frm_after_manual=2 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RUP test_name="positive midpoint" f32_bits=0x3f801000 frm_before_ambient=3 ambient_result=0x3c01 ambient_fflags=0x01 frm_before_manual=3 manual_result=0x3c00 manual_fflags=0x01 frm_after_manual=3 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RNE test_name="negative midpoint" f32_bits=0xbf801000 frm_before_ambient=0 ambient_result=0xbc00 ambient_fflags=0x01 frm_before_manual=0 manual_result=0xbc00 manual_fflags=0x01 frm_after_manual=0 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RTZ test_name="negative midpoint" f32_bits=0xbf801000 frm_before_ambient=1 ambient_result=0xbc00 ambient_fflags=0x01 frm_before_manual=1 manual_result=0xbc00 manual_fflags=0x01 frm_after_manual=1 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RDN test_name="negative midpoint" f32_bits=0xbf801000 frm_before_ambient=2 ambient_result=0xbc01 ambient_fflags=0x01 frm_before_manual=2 manual_result=0xbc00 manual_fflags=0x01 frm_after_manual=2 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RUP test_name="negative midpoint" f32_bits=0xbf801000 frm_before_ambient=3 ambient_result=0xbc00 ambient_fflags=0x01 frm_before_manual=3 manual_result=0xbc00 manual_fflags=0x01 frm_after_manual=3 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RNE test_name="above positive midpoint" f32_bits=0x3f801800 frm_before_ambient=0 ambient_result=0x3c01 ambient_fflags=0x01 frm_before_manual=0 manual_result=0x3c01 manual_fflags=0x01 frm_after_manual=0 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RTZ test_name="above positive midpoint" f32_bits=0x3f801800 frm_before_ambient=1 ambient_result=0x3c00 ambient_fflags=0x01 frm_before_manual=1 manual_result=0x3c01 manual_fflags=0x01 frm_after_manual=1 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RDN test_name="above positive midpoint" f32_bits=0x3f801800 frm_before_ambient=2 ambient_result=0x3c00 ambient_fflags=0x01 frm_before_manual=2 manual_result=0x3c01 manual_fflags=0x01 frm_after_manual=2 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RUP test_name="above positive midpoint" f32_bits=0x3f801800 frm_before_ambient=3 ambient_result=0x3c01 ambient_fflags=0x01 frm_before_manual=3 manual_result=0x3c01 manual_fflags=0x01 frm_after_manual=3 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RNE test_name="below positive midpoint" f32_bits=0x3f800800 frm_before_ambient=0 ambient_result=0x3c00 ambient_fflags=0x01 frm_before_manual=0 manual_result=0x3c00 manual_fflags=0x01 frm_after_manual=0 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RTZ test_name="below positive midpoint" f32_bits=0x3f800800 frm_before_ambient=1 ambient_result=0x3c00 ambient_fflags=0x01 frm_before_manual=1 manual_result=0x3c00 manual_fflags=0x01 frm_after_manual=1 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RDN test_name="below positive midpoint" f32_bits=0x3f800800 frm_before_ambient=2 ambient_result=0x3c00 ambient_fflags=0x01 frm_before_manual=2 manual_result=0x3c00 manual_fflags=0x01 frm_after_manual=2 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RUP test_name="below positive midpoint" f32_bits=0x3f800800 frm_before_ambient=3 ambient_result=0x3c01 ambient_fflags=0x01 frm_before_manual=3 manual_result=0x3c00 manual_fflags=0x01 frm_after_manual=3 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RNE test_name="exact FP16 minimum normal" f32_bits=0x38800000 frm_before_ambient=0 ambient_result=0x0400 ambient_fflags=0x00 frm_before_manual=0 manual_result=0x0400 manual_fflags=0x00 frm_after_manual=0 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RTZ test_name="exact FP16 minimum normal" f32_bits=0x38800000 frm_before_ambient=1 ambient_result=0x0400 ambient_fflags=0x00 frm_before_manual=1 manual_result=0x0400 manual_fflags=0x00 frm_after_manual=1 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RDN test_name="exact FP16 minimum normal" f32_bits=0x38800000 frm_before_ambient=2 ambient_result=0x0400 ambient_fflags=0x00 frm_before_manual=2 manual_result=0x0400 manual_fflags=0x00 frm_after_manual=2 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RUP test_name="exact FP16 minimum normal" f32_bits=0x38800000 frm_before_ambient=3 ambient_result=0x0400 ambient_fflags=0x00 frm_before_manual=3 manual_result=0x0400 manual_fflags=0x00 frm_after_manual=3 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RNE test_name="FP16 maximum finite" f32_bits=0x477fe000 frm_before_ambient=0 ambient_result=0x7bff ambient_fflags=0x00 frm_before_manual=0 manual_result=0x7bff manual_fflags=0x00 frm_after_manual=0 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RTZ test_name="FP16 maximum finite" f32_bits=0x477fe000 frm_before_ambient=1 ambient_result=0x7bff ambient_fflags=0x00 frm_before_manual=1 manual_result=0x7bff manual_fflags=0x00 frm_after_manual=1 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RDN test_name="FP16 maximum finite" f32_bits=0x477fe000 frm_before_ambient=2 ambient_result=0x7bff ambient_fflags=0x00 frm_before_manual=2 manual_result=0x7bff manual_fflags=0x00 frm_after_manual=2 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RUP test_name="FP16 maximum finite" f32_bits=0x477fe000 frm_before_ambient=3 ambient_result=0x7bff ambient_fflags=0x00 frm_before_manual=3 manual_result=0x7bff manual_fflags=0x00 frm_after_manual=3 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RNE test_name="FP16 overflow threshold" f32_bits=0x477ff000 frm_before_ambient=0 ambient_result=0x7c00 ambient_fflags=0x05 frm_before_manual=0 manual_result=0x7c00 manual_fflags=0x05 frm_after_manual=0 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RTZ test_name="FP16 overflow threshold" f32_bits=0x477ff000 frm_before_ambient=1 ambient_result=0x7bff ambient_fflags=0x01 frm_before_manual=1 manual_result=0x7c00 manual_fflags=0x05 frm_after_manual=1 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RDN test_name="FP16 overflow threshold" f32_bits=0x477ff000 frm_before_ambient=2 ambient_result=0x7bff ambient_fflags=0x01 frm_before_manual=2 manual_result=0x7c00 manual_fflags=0x05 frm_after_manual=2 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RUP test_name="FP16 overflow threshold" f32_bits=0x477ff000 frm_before_ambient=3 ambient_result=0x7c00 ambient_fflags=0x05 frm_before_manual=3 manual_result=0x7c00 manual_fflags=0x05 frm_after_manual=3 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RNE test_name="positive zero" f32_bits=0x00000000 frm_before_ambient=0 ambient_result=0x0000 ambient_fflags=0x00 frm_before_manual=0 manual_result=0x0000 manual_fflags=0x00 frm_after_manual=0 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RTZ test_name="positive zero" f32_bits=0x00000000 frm_before_ambient=1 ambient_result=0x0000 ambient_fflags=0x00 frm_before_manual=1 manual_result=0x0000 manual_fflags=0x00 frm_after_manual=1 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RDN test_name="positive zero" f32_bits=0x00000000 frm_before_ambient=2 ambient_result=0x0000 ambient_fflags=0x00 frm_before_manual=2 manual_result=0x0000 manual_fflags=0x00 frm_after_manual=2 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RUP test_name="positive zero" f32_bits=0x00000000 frm_before_ambient=3 ambient_result=0x0000 ambient_fflags=0x00 frm_before_manual=3 manual_result=0x0000 manual_fflags=0x00 frm_after_manual=3 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RNE test_name="negative zero" f32_bits=0x80000000 frm_before_ambient=0 ambient_result=0x8000 ambient_fflags=0x00 frm_before_manual=0 manual_result=0x8000 manual_fflags=0x00 frm_after_manual=0 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RTZ test_name="negative zero" f32_bits=0x80000000 frm_before_ambient=1 ambient_result=0x8000 ambient_fflags=0x00 frm_before_manual=1 manual_result=0x8000 manual_fflags=0x00 frm_after_manual=1 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RDN test_name="negative zero" f32_bits=0x80000000 frm_before_ambient=2 ambient_result=0x8000 ambient_fflags=0x00 frm_before_manual=2 manual_result=0x8000 manual_fflags=0x00 frm_after_manual=2 frm_after_final_restore=0 status=PASS
+RESULT requested_mode=RUP test_name="negative zero" f32_bits=0x80000000 frm_before_ambient=3 ambient_result=0x8000 ambient_fflags=0x00 frm_before_manual=3 manual_result=0x8000 manual_fflags=0x00 frm_after_manual=3 frm_after_final_restore=0 status=PASS
+STABILITY_SCOPE single-process 10-iteration stability check for each optimization-level x rounding-mode x test-path
+STABILITY requested_mode=RNE iteration=1 frm_before=0 ambient_result=0x3c00 manual_result=0x3c00 frm_after=0 status=PASS
+STABILITY requested_mode=RNE iteration=2 frm_before=0 ambient_result=0x3c00 manual_result=0x3c00 frm_after=0 status=PASS
+STABILITY requested_mode=RNE iteration=3 frm_before=0 ambient_result=0x3c00 manual_result=0x3c00 frm_after=0 status=PASS
+STABILITY requested_mode=RNE iteration=4 frm_before=0 ambient_result=0x3c00 manual_result=0x3c00 frm_after=0 status=PASS
+STABILITY requested_mode=RNE iteration=5 frm_before=0 ambient_result=0x3c00 manual_result=0x3c00 frm_after=0 status=PASS
+STABILITY requested_mode=RNE iteration=6 frm_before=0 ambient_result=0x3c00 manual_result=0x3c00 frm_after=0 status=PASS
+STABILITY requested_mode=RNE iteration=7 frm_before=0 ambient_result=0x3c00 manual_result=0x3c00 frm_after=0 status=PASS
+STABILITY requested_mode=RNE iteration=8 frm_before=0 ambient_result=0x3c00 manual_result=0x3c00 frm_after=0 status=PASS
+STABILITY requested_mode=RNE iteration=9 frm_before=0 ambient_result=0x3c00 manual_result=0x3c00 frm_after=0 status=PASS
+STABILITY requested_mode=RNE iteration=10 frm_before=0 ambient_result=0x3c00 manual_result=0x3c00 frm_after=0 status=PASS
+STABILITY requested_mode=RTZ iteration=1 frm_before=1 ambient_result=0x3c00 manual_result=0x3c00 frm_after=1 status=PASS
+STABILITY requested_mode=RTZ iteration=2 frm_before=1 ambient_result=0x3c00 manual_result=0x3c00 frm_after=1 status=PASS
+STABILITY requested_mode=RTZ iteration=3 frm_before=1 ambient_result=0x3c00 manual_result=0x3c00 frm_after=1 status=PASS
+STABILITY requested_mode=RTZ iteration=4 frm_before=1 ambient_result=0x3c00 manual_result=0x3c00 frm_after=1 status=PASS
+STABILITY requested_mode=RTZ iteration=5 frm_before=1 ambient_result=0x3c00 manual_result=0x3c00 frm_after=1 status=PASS
+STABILITY requested_mode=RTZ iteration=6 frm_before=1 ambient_result=0x3c00 manual_result=0x3c00 frm_after=1 status=PASS
+STABILITY requested_mode=RTZ iteration=7 frm_before=1 ambient_result=0x3c00 manual_result=0x3c00 frm_after=1 status=PASS
+STABILITY requested_mode=RTZ iteration=8 frm_before=1 ambient_result=0x3c00 manual_result=0x3c00 frm_after=1 status=PASS
+STABILITY requested_mode=RTZ iteration=9 frm_before=1 ambient_result=0x3c00 manual_result=0x3c00 frm_after=1 status=PASS
+STABILITY requested_mode=RTZ iteration=10 frm_before=1 ambient_result=0x3c00 manual_result=0x3c00 frm_after=1 status=PASS
+STABILITY requested_mode=RDN iteration=1 frm_before=2 ambient_result=0x3c00 manual_result=0x3c00 frm_after=2 status=PASS
+STABILITY requested_mode=RDN iteration=2 frm_before=2 ambient_result=0x3c00 manual_result=0x3c00 frm_after=2 status=PASS
+STABILITY requested_mode=RDN iteration=3 frm_before=2 ambient_result=0x3c00 manual_result=0x3c00 frm_after=2 status=PASS
+STABILITY requested_mode=RDN iteration=4 frm_before=2 ambient_result=0x3c00 manual_result=0x3c00 frm_after=2 status=PASS
+STABILITY requested_mode=RDN iteration=5 frm_before=2 ambient_result=0x3c00 manual_result=0x3c00 frm_after=2 status=PASS
+STABILITY requested_mode=RDN iteration=6 frm_before=2 ambient_result=0x3c00 manual_result=0x3c00 frm_after=2 status=PASS
+STABILITY requested_mode=RDN iteration=7 frm_before=2 ambient_result=0x3c00 manual_result=0x3c00 frm_after=2 status=PASS
+STABILITY requested_mode=RDN iteration=8 frm_before=2 ambient_result=0x3c00 manual_result=0x3c00 frm_after=2 status=PASS
+STABILITY requested_mode=RDN iteration=9 frm_before=2 ambient_result=0x3c00 manual_result=0x3c00 frm_after=2 status=PASS
+STABILITY requested_mode=RDN iteration=10 frm_before=2 ambient_result=0x3c00 manual_result=0x3c00 frm_after=2 status=PASS
+STABILITY requested_mode=RUP iteration=1 frm_before=3 ambient_result=0x3c01 manual_result=0x3c00 frm_after=3 status=PASS
+STABILITY requested_mode=RUP iteration=2 frm_before=3 ambient_result=0x3c01 manual_result=0x3c00 frm_after=3 status=PASS
+STABILITY requested_mode=RUP iteration=3 frm_before=3 ambient_result=0x3c01 manual_result=0x3c00 frm_after=3 status=PASS
+STABILITY requested_mode=RUP iteration=4 frm_before=3 ambient_result=0x3c01 manual_result=0x3c00 frm_after=3 status=PASS
+STABILITY requested_mode=RUP iteration=5 frm_before=3 ambient_result=0x3c01 manual_result=0x3c00 frm_after=3 status=PASS
+STABILITY requested_mode=RUP iteration=6 frm_before=3 ambient_result=0x3c01 manual_result=0x3c00 frm_after=3 status=PASS
+STABILITY requested_mode=RUP iteration=7 frm_before=3 ambient_result=0x3c01 manual_result=0x3c00 frm_after=3 status=PASS
+STABILITY requested_mode=RUP iteration=8 frm_before=3 ambient_result=0x3c01 manual_result=0x3c00 frm_after=3 status=PASS
+STABILITY requested_mode=RUP iteration=9 frm_before=3 ambient_result=0x3c01 manual_result=0x3c00 frm_after=3 status=PASS
+STABILITY requested_mode=RUP iteration=10 frm_before=3 ambient_result=0x3c01 manual_result=0x3c00 frm_after=3 status=PASS
+SUMMARY failures=0 status=PASS final_frm=0 final_fflags=0x00

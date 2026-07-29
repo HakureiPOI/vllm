@@ -1,0 +1,1 @@
+clang --target=riscv64-linux-gnu -march=rv64gcv_zvfh_zvfbfmin -E -H /tmp/f001-rounding-remediation-20260729T144517Z/evidence/aliyun/clang-probes/header-bf16/header-probe.c 

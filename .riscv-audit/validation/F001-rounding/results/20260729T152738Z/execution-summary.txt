@@ -1,0 +1,97 @@
+F001 evidence-closure execution summary
+=======================================
+
+UTC result identifier
+---------------------
+20260729T152738Z
+
+Repository
+----------
+HEAD: 8d4a0e429e64c7d5b32021525dc78ae6806db804
+Branch: validation/f001-rounding
+
+Purpose
+-------
+Close the two remaining review gaps:
+
+1. record fflags readback before and after each conversion and after final state
+   restoration;
+2. bind source, remote binary/object, disassembly and runtime text through
+   remote-generated SHA-256 records and portable remote checksum sets.
+
+ISA build and run
+-----------------
+Host: bianbu, riscv64 Spacemit X60
+Compiler: /usr/bin/gcc, Bianbu GCC 13.2.0
+March: rv64gcv_zvfh
+
+O0 compile exit: 0
+O0 run exit: 0
+O0 functional records: 36, all PASS
+O0 stability records: 40, all PASS
+
+O3 compile exit: 0
+O3 run exit: 0
+O3 functional records: 36, all PASS
+O3 stability records: 40, all PASS
+
+All 152 functional/stability records contain:
+
+- fflags_before_ambient=0x00
+- fflags_before_manual=0x00
+- fflags_after_final_restore=0x00
+- status=PASS
+
+Probe result matrix
+-------------------
+bianbu GCC 13.2:
+  FP16 implicit: 1
+  FP16 explicit _rm: 1
+  BF16 implicit: 1
+  BF16 explicit _rm: 1
+
+aliyun RISC-V GCC 13.3:
+  FP16 implicit: 1
+  FP16 explicit _rm: 1
+  BF16 implicit: 1
+  BF16 explicit _rm: 1
+
+aliyun Clang 18:
+  FP16 implicit: 0
+  FP16 explicit _rm: 0
+  BF16 implicit with unversioned zvfbfmin: 1
+  BF16 explicit _rm with unversioned zvfbfmin: 1
+
+aliyun Clang 18 with experimental zvfbfmin1p0:
+  FP16 implicit: 0
+  FP16 explicit _rm: 0
+  BF16 implicit: 1
+  BF16 explicit _rm: 1
+
+Remote evidence integrity
+-------------------------
+bianbu remote checksum entries: 104
+aliyun remote checksum entries: 218
+
+Both checksum sets passed on their source hosts and passed again after transfer
+to the repository. Paths in the checksum sets are relative to each host
+evidence directory.
+
+No test binary or object file was copied into the repository. For every
+successful binary/object, the package contains:
+
+- compiler and objdump path/version;
+- full compile and disassembly commands;
+- source SHA-256;
+- remote binary/object SHA-256;
+- remote disassembly SHA-256;
+- an artifact-chain file combining those records.
+
+Scope
+-----
+ISA-equivalent FP32-to-FP16 mechanism validation.
+Clang FP16 C intrinsic compile/codegen observation.
+No C intrinsic runtime validation.
+No vLLM path execution.
+No BF16 runtime.
+F001 not upgraded to confirmed.
